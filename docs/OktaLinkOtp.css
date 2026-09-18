@@ -1,0 +1,204 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Link OTP delivery method                                    */
+/* ------------------------------------------------------------------ */
+
+.okta-otp__dropdown-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.okta-otp__dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 0 var(--space-4);
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: #4E4E4E;
+  cursor: pointer;
+  outline: none;
+}
+
+.okta-otp__dropdown-trigger:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-otp__dropdown-trigger--error,
+.okta-otp__dropdown-trigger--error:focus {
+  border-color: #D92D20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+.okta-otp__field-error {
+  display: block;
+  margin-top: 4px;
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* Selected state: two-line trigger */
+
+.okta-otp__dropdown-trigger--selected {
+  height: 68px;
+  padding: var(--space-2) var(--space-4);
+}
+
+.okta-otp__dropdown-selected {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.okta-otp__dropdown-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 16px;
+}
+
+.okta-otp__dropdown-value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Confirmation input ------------------------------------------ */
+
+.okta-otp__confirm-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: calc(var(--space-6) / -2);
+}
+
+.okta-otp__confirm-field {
+  position: relative;
+  width: 100%;
+}
+
+.okta-otp__confirm-input {
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 20px var(--space-4) 6px;
+  background-color: var(--color-neutral-100);
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-otp__confirm-input::placeholder {
+  color: transparent;
+}
+
+.okta-otp__confirm-label {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: #4E4E4E;
+  pointer-events: none;
+  transition: top 150ms ease, font-size 150ms ease, color 150ms ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 32px);
+}
+
+.okta-otp__confirm-input:focus + .okta-otp__confirm-label,
+.okta-otp__confirm-input:not(:placeholder-shown) + .okta-otp__confirm-label {
+  top: 14px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.okta-otp__confirm-input:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-otp__confirm-input--error,
+.okta-otp__confirm-input--error:focus {
+  border-color: #D92D20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+.okta-otp__dropdown-chevron {
+  transition: transform 200ms ease;
+}
+
+.okta-otp__dropdown-chevron--open {
+  transform: rotate(180deg);
+}
+
+.okta-otp__dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: var(--space-2);
+}
+
+.okta-otp__dropdown-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-neutral-0);
+  border: none;
+  border-bottom: 1px solid #E4E4E4;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.okta-otp__dropdown-option:last-child {
+  border-bottom: none;
+}
+
+.okta-otp__dropdown-option:hover {
+  background-color: var(--color-neutral-100);
+}
+
+/* ---- Actions ----------------------------------------------------- */
+
+.okta-otp__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.okta-otp__continue-btn {
+  width: 100%;
+  height: 60px;
+}
+
+.okta-otp__cancel-link {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+  line-height: 24px;
+}
+
+.okta-otp__cancel-link:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,244 @@
+/* ------------------------------------------------------------------ */
+/*  RateCard                                                           */
+/* ------------------------------------------------------------------ */
+
+.ds-rate-card {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  min-height: 0;
+  background-color: var(--color-background-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  font-family: var(--font-family-sans);
+  color: var(--color-text-primary);
+}
+
+/* ---- Primary flag ------------------------------------------------ */
+
+.ds-rate-card__primary-flag {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-brand-secondary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  min-height: 36px;
+}
+
+.ds-rate-card__flag-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.ds-rate-card__flag-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Header ------------------------------------------------------ */
+
+.ds-rate-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4) var(--space-4) var(--space-4);
+  background-color: var(--color-background-primary);
+}
+
+.ds-rate-card__stickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ds-rate-card__data-bucket {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.ds-rate-card__data-amount {
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-none);
+}
+
+/* ---- Price ------------------------------------------------------- */
+
+.ds-rate-card__price-bucket {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ds-rate-card__price-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.ds-rate-card__price {
+  font-size: 2.625rem;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-none);
+}
+
+.ds-rate-card__price-suffix {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-left: 2px;
+}
+
+.ds-rate-card__price-legal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ---- Secondary flag ---------------------------------------------- */
+
+.ds-rate-card__secondary-flag {
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-brand-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+/* ---- Sections ---------------------------------------------------- */
+
+.ds-rate-card__sections {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.ds-rate-card__section {
+  padding: var(--space-4) var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.ds-rate-card__section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-3);
+}
+
+.ds-rate-card__section-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ds-rate-card__feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.ds-rate-card__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+}
+
+.ds-rate-card__check {
+  flex-shrink: 0;
+  color: var(--color-status-success);
+  margin-top: 2px;
+}
+
+.ds-rate-card__feature-tooltip {
+  margin-left: var(--space-1);
+  vertical-align: middle;
+}
+
+/* ---- Tooltip ----------------------------------------------------- */
+
+.ds-rate-card__tooltip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+/* ---- Legal note -------------------------------------------------- */
+
+.ds-rate-card__legal-note {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ---- Promos ------------------------------------------------------ */
+
+.ds-rate-card__promos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  margin-top: auto;
+}
+
+.ds-rate-card__promo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-neutral-100);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.ds-rate-card__promo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  background-color: var(--color-brand-secondary);
+  border-radius: var(--radius-md);
+  color: var(--color-text-inverse);
+  font-size: 1.25rem;
+}
+
+.ds-rate-card__promo-text {
+  flex: 1;
+  line-height: var(--line-height-snug);
+}
+
+.ds-rate-card__chevron {
+  flex-shrink: 0;
+  color: var(--color-brand-primary);
+}
+
+/* ---- CTA --------------------------------------------------------- */
+
+.ds-rate-card__cta {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.ds-rate-card__cta-button {
+  width: 100%;
+}

@@ -1,0 +1,36 @@
+.ds-card {
+  border-radius: var(--radius-xl);
+  background-color: var(--color-neutral-0);
+  color: var(--color-neutral-900);
+}
+
+.ds-card--default {
+  border: var(--border-width-sm) solid var(--color-neutral-200);
+}
+
+.ds-card--outlined {
+  border: var(--border-width-sm) solid var(--color-neutral-300);
+}
+
+.ds-card--elevated {
+  border: var(--border-width-sm) solid transparent;
+  box-shadow: var(--shadow-md);
+}
+
+.ds-card--filled {
+  background-color: var(--color-neutral-100);
+}
+
+/* Padding */
+
+.ds-card--padding-small {
+  padding: var(--space-3);
+}
+
+.ds-card--padding-medium {
+  padding: var(--space-5);
+}
+
+.ds-card--padding-large {
+  padding: var(--space-6);
+}

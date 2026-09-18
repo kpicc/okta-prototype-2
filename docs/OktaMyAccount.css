@@ -1,0 +1,504 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — My Account Dashboard                                        */
+/* ------------------------------------------------------------------ */
+
+.okta-acct__content {
+  max-width: 1104px;
+  margin: 0 auto;
+  padding: 51px 0 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---- Header ------------------------------------------------------ */
+
+.okta-acct__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 57px;
+}
+
+.okta-acct__header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 258px;
+}
+
+.okta-acct__greeting {
+  font-size: 32px;
+  font-weight: var(--font-weight-medium);
+  color: #000;
+  margin: 0;
+  line-height: 34px;
+}
+
+.okta-acct__account-num {
+  font-size: 16px;
+  color: #4E4E4E;
+  margin: 0;
+  line-height: 24px;
+}
+
+.okta-acct__phone-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 351px;
+  padding: 12px 0 0;
+  cursor: pointer;
+}
+
+.okta-acct__phone-value {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: #000;
+  line-height: 24px;
+  padding-left: 24px;
+  flex: 1;
+}
+
+.okta-acct__phone-icon {
+  flex-shrink: 0;
+}
+
+.okta-acct__phone-underline {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #000;
+}
+
+/* ---- Tabs -------------------------------------------------------- */
+
+.okta-acct__tabs {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 57px;
+}
+
+.okta-acct__tab {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 52px;
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.okta-acct__tab-label {
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: #4E4E4E;
+  line-height: 28px;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+
+.okta-acct__tab-bar {
+  width: 164px;
+  height: 8px;
+  border-radius: 0;
+  background-color: #DEDEDE;
+}
+
+.okta-acct__tab--active .okta-acct__tab-bar {
+  background-color: #DB5C05;
+}
+
+.okta-acct__tab:hover .okta-acct__tab-label {
+  color: #191919;
+}
+
+/* ---- Billing card ------------------------------------------------ */
+
+.okta-acct__billing-card {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: 63px 68px;
+  margin-bottom: 57px;
+  overflow: hidden;
+}
+
+.okta-acct__billing-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 147px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.okta-acct__billing-label {
+  font-size: 16px;
+  color: #4E4E4E;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  line-height: 22px;
+}
+
+.okta-acct__billing-value {
+  font-size: 48px;
+  font-weight: var(--font-weight-medium);
+  color: #000;
+  line-height: 48px;
+}
+
+.okta-acct__billing-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 400px;
+  flex-shrink: 0;
+}
+
+.okta-acct__billing-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.okta-acct__billing-key {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: #4E4E4E;
+  line-height: 24px;
+}
+
+.okta-acct__billing-val {
+  font-size: 16px;
+  color: #4E4E4E;
+  line-height: 24px;
+  text-align: right;
+}
+
+.okta-acct__billing-val--bold {
+  font-weight: var(--font-weight-medium);
+}
+
+.okta-acct__billing-divider {
+  height: 1px;
+  background-color: #DEDEDE;
+}
+
+.okta-acct__billing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.okta-acct__pay-btn {
+  width: 100%;
+  height: 64px;
+  background-color: #DB5C05;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.okta-acct__download-btn {
+  width: 100%;
+  height: 64px;
+  background-color: transparent;
+  color: #4E4E4E;
+  border: 2px solid #DB5C05;
+  border-radius: 30px;
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  line-height: 24px;
+  cursor: pointer;
+}
+
+/* ---- Data sections ----------------------------------------------- */
+
+.okta-acct__data-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 57px;
+}
+
+.okta-acct__data-header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.okta-acct__data-title {
+  font-size: 32px;
+  font-weight: var(--font-weight-medium);
+  color: #000;
+  margin: 0;
+  line-height: 34px;
+}
+
+.okta-acct__data-desc {
+  font-size: 16px;
+  color: #4E4E4E;
+  margin: 0;
+  line-height: 24px;
+}
+
+.okta-acct__data-card {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: 36px 48px;
+  overflow: hidden;
+}
+
+.okta-acct__data-info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 632px;
+  flex-shrink: 0;
+}
+
+.okta-acct__data-top {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.okta-acct__data-usage {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.okta-acct__data-amount {
+  font-size: 32px;
+  font-weight: var(--font-weight-medium);
+  color: #000;
+  line-height: 34px;
+}
+
+.okta-acct__data-total {
+  font-size: 16px;
+  color: #4E4E4E;
+  line-height: 24px;
+}
+
+.okta-acct__data-note {
+  font-size: 16px;
+  color: #4E4E4E;
+  margin: 0;
+  line-height: 24px;
+}
+
+.okta-acct__data-note-bold {
+  font-weight: var(--font-weight-medium);
+}
+
+.okta-acct__progress-bar {
+  width: 632px;
+  height: 16px;
+  background-color: #E4E4E4;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.okta-acct__progress-fill {
+  height: 100%;
+  background-color: #DB5C05;
+  border-radius: 4px;
+}
+
+.okta-acct__data-pct {
+  font-size: 16px;
+  color: #4E4E4E;
+  margin: 0;
+  line-height: 24px;
+}
+
+.okta-acct__data-divider {
+  width: 1px;
+  align-self: stretch;
+  background-color: #DEDEDE;
+  flex-shrink: 0;
+}
+
+.okta-acct__data-links {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+}
+
+.okta-acct__data-link {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: #4E4E4E;
+  text-decoration: underline;
+  line-height: 24px;
+}
+
+.okta-acct__data-link:hover {
+  color: #DB5C05;
+}
+
+/* ---- My Plan & Devices ------------------------------------------- */
+
+.okta-acct__plan-row {
+  display: flex;
+  gap: 24px;
+}
+
+.okta-acct__plan-card {
+  width: 540px;
+  min-height: 852px;
+  box-sizing: border-box;
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.okta-acct__plan-top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.okta-acct__plan-label {
+  font-size: 16px;
+  color: #4E4E4E;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  line-height: 22px;
+}
+
+.okta-acct__plan-name {
+  font-size: 32px;
+  font-weight: var(--font-weight-medium);
+  color: #000;
+  margin: 0;
+  line-height: 34px;
+}
+
+.okta-acct__plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.okta-acct__plan-price-value {
+  font-size: 32px;
+  font-weight: var(--font-weight-medium);
+  color: #000;
+  line-height: 34px;
+}
+
+.okta-acct__plan-price-unit {
+  font-size: 16px;
+  color: #4E4E4E;
+  line-height: 24px;
+}
+
+.okta-acct__plan-date {
+  font-size: 14px;
+  color: #4E4E4E;
+  line-height: 20px;
+}
+
+.okta-acct__plan-divider {
+  height: 1px;
+  background-color: #DEDEDE;
+  margin: 15px 0;
+}
+
+.okta-acct__plan-features {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+.okta-acct__plan-feature-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.okta-acct__plan-feature-label {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  line-height: 22px;
+}
+
+.okta-acct__plan-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.okta-acct__plan-feature-item span {
+  font-size: 16px;
+  color: #4E4E4E;
+  line-height: 24px;
+}
+
+.okta-acct__plan-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.okta-acct__plan-upgrade-text {
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  color: #4E4E4E;
+  margin: 0;
+  line-height: 24px;
+}
+
+.okta-acct__plan-cta {
+  width: 100%;
+  max-width: 444px;
+  height: 64px;
+  background-color: #DB5C05;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  line-height: 24px;
+  cursor: pointer;
+}

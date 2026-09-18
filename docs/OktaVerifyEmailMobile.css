@@ -1,0 +1,247 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Verify Email (Mobile)                                       */
+/* ------------------------------------------------------------------ */
+
+.okta-verify-mobile {
+  font-family: var(--font-family-sans);
+  color: var(--color-text-primary);
+  background-color: #F5F5F5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Header ------------------------------------------------------ */
+
+.okta-verify-mobile__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 87px;
+  padding: 16px;
+  background-color: var(--color-neutral-0);
+  box-sizing: border-box;
+}
+
+.okta-verify-mobile__logo {
+  display: block;
+  width: 82px;
+  height: 34px;
+}
+
+.okta-verify-mobile__back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  background-color: #DB5C05;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--font-family-sans);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  line-height: 20px;
+  cursor: pointer;
+}
+
+/* ---- Step tracker ------------------------------------------------ */
+
+.okta-verify-mobile__steps {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 16px;
+  max-width: 290px;
+  margin: 0 auto;
+}
+
+.okta-verify-mobile__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 79px;
+  position: relative;
+  z-index: 1;
+}
+
+.okta-verify-mobile__step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 11.5px;
+  left: calc(50% + 16px);
+  right: -46px;
+  height: 1px;
+  background-color: #D9D9D9;
+  z-index: -1;
+}
+
+.okta-verify-mobile__step--active {
+  width: 81px;
+}
+
+.okta-verify-mobile__step-label {
+  font-size: 14px;
+  color: #666;
+  line-height: 18px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.okta-verify-mobile__step-label--completed {
+  font-weight: var(--font-weight-medium);
+  color: #008000;
+}
+
+.okta-verify-mobile__step-label--active {
+  font-weight: var(--font-weight-medium);
+  color: #000;
+}
+
+.okta-verify-mobile__step-line {
+  display: none;
+}
+
+/* ---- Body / Card ------------------------------------------------- */
+
+.okta-verify-mobile__body {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px 16px;
+}
+
+.okta-verify-mobile__card {
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 390px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.okta-verify-mobile__card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.okta-verify-mobile__card-title {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  line-height: 20px;
+  color: #191919;
+  margin: 0;
+}
+
+.okta-verify-mobile__card-subtitle {
+  border-left: 2px solid #DB5C05;
+  padding-left: 16px;
+}
+
+.okta-verify-mobile__card-subtitle-text {
+  font-size: 14px;
+  line-height: 18px;
+  color: #4E4E4E;
+  margin: 0;
+}
+
+/* ---- Fields ------------------------------------------------------ */
+
+.okta-verify-mobile__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.okta-verify-mobile__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.okta-verify-mobile__field-error {
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-verify-mobile__input {
+  width: 100%;
+  height: 55px;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  background-color: #F5F5F5;
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-verify-mobile__input::placeholder {
+  color: #4E4E4E;
+}
+
+.okta-verify-mobile__input:focus {
+  border-color: #DB5C05;
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-verify-mobile__input--error,
+.okta-verify-mobile__input--error:focus {
+  border-color: #D92D20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+.okta-verify-mobile__resend-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  font-size: 14px;
+  line-height: 18px;
+  text-decoration: none;
+}
+
+.okta-verify-mobile__resend-text {
+  font-size: 14px;
+  color: #4E4E4E;
+  line-height: 18px;
+  margin: 0;
+}
+
+.okta-verify-mobile__resend-link {
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+}
+
+.okta-verify-mobile__resend-row:hover .okta-verify-mobile__resend-link {
+  text-decoration: underline;
+}
+
+/* ---- Actions ----------------------------------------------------- */
+
+.okta-verify-mobile__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.okta-verify-mobile__continue-btn {
+  width: 100%;
+  height: 48px;
+  font-size: 14px !important;
+}

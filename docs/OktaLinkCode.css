@@ -1,0 +1,118 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Link Services: Enter security code                          */
+/* ------------------------------------------------------------------ */
+
+.okta-lcode__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.okta-lcode__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.okta-lcode__field-error {
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-lcode__float-field {
+  position: relative;
+  width: 100%;
+}
+
+.okta-lcode__input {
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 20px var(--space-4) 6px;
+  background-color: var(--color-neutral-100);
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-lcode__input::placeholder {
+  color: transparent;
+}
+
+.okta-lcode__float-label {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: #4E4E4E;
+  pointer-events: none;
+  transition: top 150ms ease, font-size 150ms ease, color 150ms ease;
+}
+
+.okta-lcode__input:focus + .okta-lcode__float-label,
+.okta-lcode__input:not(:placeholder-shown) + .okta-lcode__float-label {
+  top: 14px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.okta-lcode__input:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-lcode__input--error,
+.okta-lcode__input--error:focus {
+  border-color: #D92D20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+.okta-lcode__resend-text {
+  font-size: var(--font-size-base);
+  color: #4E4E4E;
+  line-height: 20px;
+  margin: 0;
+}
+
+.okta-lcode__resend-link {
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+}
+
+.okta-lcode__resend-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Actions ----------------------------------------------------- */
+
+.okta-lcode__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.okta-lcode__continue-btn {
+  width: 100%;
+  height: 60px;
+}
+
+.okta-lcode__cancel-link {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+  line-height: 24px;
+}
+
+.okta-lcode__cancel-link:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon/Outlined/Checkmark">
+<path id="Combined Shape" d="M30.4139 13.9998L16.9998 27.4139L10.5858 20.9998L11.9998 19.5858L16.9998 24.5858L28.9998 12.5858L30.4139 13.9998Z" fill="black"/>
+<mask id="mask0_0_297" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="10" y="12" width="21" height="16">
+<path id="Combined Shape_2" d="M30.4139 13.9998L16.9998 27.4139L10.5858 20.9998L11.9998 19.5858L16.9998 24.5858L28.9998 12.5858L30.4139 13.9998Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_0_297)">
+<rect id="Fill" width="40" height="40" fill="#156BA3"/>
+</g>
+</g>
+</svg>

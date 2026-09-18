@@ -1,0 +1,209 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Account Verification Code Entry                             */
+/* ------------------------------------------------------------------ */
+
+.okta-auth-code {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  font-family: var(--font-family-sans);
+  color: #191919;
+}
+
+/* ---- Header ------------------------------------------------------ */
+
+.okta-auth-code__header {
+  height: 80px;
+  box-sizing: border-box;
+  background: #fff;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.okta-auth-code__header-inner {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.okta-auth-code__logo {
+  width: 100px;
+  height: 36px;
+  cursor: pointer;
+}
+
+.okta-auth-code__back {
+  font-size: 16px !important;
+}
+
+/* ---- Body -------------------------------------------------------- */
+
+.okta-auth-code__body {
+  display: flex;
+  justify-content: center;
+  padding: 40px 120px;
+}
+
+.okta-auth-code__card {
+  width: 384px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 24px;
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 20px;
+}
+
+.okta-auth-code__heading,
+.okta-auth-code__field,
+.okta-auth-code__actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.okta-auth-code__heading {
+  gap: 16px;
+}
+
+.okta-auth-code__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: var(--font-weight-medium);
+  line-height: 28px;
+}
+
+.okta-auth-code__subtitle {
+  margin: 0;
+  padding-left: 16px;
+  border-left: 2px solid #db5c05;
+  color: #4e4e4e;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.okta-auth-code__field {
+  gap: 8px;
+}
+
+.okta-auth-code__input {
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  background: #f5f5f5;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  color: #191919;
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  line-height: 20px;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-auth-code__input::placeholder {
+  color: #4e4e4e;
+}
+
+.okta-auth-code__input:focus {
+  border-color: #db5c05;
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-auth-code__input--error {
+  border-color: #b42318;
+}
+
+.okta-auth-code__input--error:focus {
+  border-color: #b42318;
+  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.15);
+}
+
+.okta-auth-code__error {
+  color: #b42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-auth-code__resend {
+  margin: 8px 0 0;
+  color: #4e4e4e;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.okta-auth-code__resend-link {
+  color: #2f7dc1;
+  text-decoration: underline;
+  font-weight: var(--font-weight-medium);
+}
+
+.okta-auth-code__actions {
+  align-items: center;
+  gap: 20px;
+}
+
+.okta-auth-code__submit {
+  width: 100%;
+  min-height: 48px;
+  font-size: 16px !important;
+}
+
+.okta-auth-code__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #2f7dc1;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.okta-auth-code__link-prefix {
+  color: #4e4e4e;
+  font-weight: var(--font-weight-normal);
+}
+
+.okta-auth-code__link-text {
+  margin-right: 2px;
+}
+
+@media (max-width: 767px) {
+  .okta-auth-code__header {
+    height: 87px;
+  }
+
+  .okta-auth-code__header-inner {
+    padding: 16px;
+  }
+
+  .okta-auth-code__logo {
+    width: 82px;
+    height: 34px;
+  }
+
+  .okta-auth-code__back {
+    height: 32px;
+    padding: 6px 16px !important;
+    font-size: 12px !important;
+  }
+
+  .okta-auth-code__body {
+    padding: 40px 16px 16px;
+  }
+
+  .okta-auth-code__card {
+    width: 100%;
+    max-width: 384px;
+  }
+}

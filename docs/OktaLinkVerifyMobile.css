@@ -1,0 +1,102 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Link Verify (Mobile) overrides                              */
+/* ------------------------------------------------------------------ */
+
+.okta-link-mobile__card--verify {
+  gap: 24px;
+}
+
+.okta-link-mobile__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.okta-link-mobile__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.okta-link-mobile__field-error {
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-link-mobile__input {
+  width: 100%;
+  height: 55px;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  background-color: #F5F5F5;
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-link-mobile__input::placeholder {
+  color: #4E4E4E;
+}
+
+.okta-link-mobile__input:focus {
+  border-color: #DB5C05;
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-link-mobile__input--error,
+.okta-link-mobile__input--error:focus {
+  border-color: #D92D20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+.okta-link-mobile__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+  width: 100%;
+}
+
+.okta-link-mobile__password-field {
+  position: relative;
+  width: 100%;
+}
+
+.okta-link-mobile__input--toggle {
+  padding-right: 48px;
+}
+
+.okta-link-mobile__password-toggle {
+  position: absolute;
+  right: 16px;
+  top: 15.5px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.okta-link-mobile__inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+  line-height: 18px;
+}
+
+.okta-link-mobile__inline-link:hover {
+  text-decoration: underline;
+}
+
+

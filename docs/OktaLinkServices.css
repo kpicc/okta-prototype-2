@@ -1,0 +1,268 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Link Services                                               */
+/* ------------------------------------------------------------------ */
+
+.okta-link {
+  font-family: var(--font-family-sans);
+  color: var(--color-text-primary);
+  background-color: var(--color-neutral-100);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Top bar ----------------------------------------------------- */
+
+.okta-link__topbar {
+  background-color: #000;
+  color: var(--color-neutral-0);
+}
+
+.okta-link__topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--font-size-base);
+}
+
+.okta-link__topbar-item {
+  cursor: pointer;
+}
+
+/* ---- Main nav ---------------------------------------------------- */
+
+.okta-link__nav {
+  background-color: var(--color-neutral-0);
+  border-bottom: 1px solid #C3C1C1;
+}
+
+.okta-link__nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-4) var(--space-6);
+  height: 75px;
+  box-sizing: border-box;
+}
+
+.okta-link__nav-logo {
+  display: block;
+  width: 105px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.okta-link__nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  flex: 1;
+}
+
+.okta-link__nav-link {
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-medium);
+  color: #303030;
+  cursor: pointer;
+}
+
+.okta-link__nav-link--right {
+  margin-left: auto;
+}
+
+/* ---- Step tracker ------------------------------------------------ */
+
+.okta-link__steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.okta-link__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.okta-link__step-label {
+  font-size: var(--font-size-base);
+  color: #666;
+  line-height: 20px;
+}
+
+.okta-link__step-label--completed {
+  font-weight: var(--font-weight-medium);
+  color: #008000;
+}
+
+.okta-link__step-label--active {
+  font-weight: var(--font-weight-medium);
+  color: #000;
+}
+
+.okta-link__step-line {
+  width: 95px;
+  height: 1px;
+  background-color: #D9D9D9;
+}
+
+/* ---- Body -------------------------------------------------------- */
+
+.okta-link__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 40px var(--space-4) var(--space-10);
+}
+
+/* ---- Success banner ---------------------------------------------- */
+
+.okta-link__success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  background-color: #F3FDF3;
+  border: 1px solid green;
+  border-radius: 6px;
+  width: 384px;
+  box-sizing: border-box;
+}
+
+.okta-link__success-text {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #004D1F;
+  line-height: 24px;
+}
+
+/* ---- Card -------------------------------------------------------- */
+
+.okta-link__card {
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: var(--space-6);
+  width: 384px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.okta-link__card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.okta-link__card-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 28px;
+  color: #191919;
+  margin: 0;
+}
+
+.okta-link__card-subtitle {
+  border-left: 2px solid var(--color-brand-primary);
+  padding-left: var(--space-4);
+}
+
+.okta-link__card-subtitle-text {
+  font-size: var(--font-size-base);
+  line-height: 24px;
+  color: #4E4E4E;
+  margin: 0;
+}
+
+.okta-link__cta {
+  width: 100%;
+  height: 60px;
+}
+
+.okta-link .ds-button {
+  font-size: 16px;
+}
+
+/* ---- Promo section ----------------------------------------------- */
+
+.okta-link__promo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 384px;
+  box-sizing: border-box;
+  border-top: 1px solid #E4E4E4;
+  padding: var(--space-6) var(--space-10);
+}
+
+.okta-link__promo-text {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #303030;
+  line-height: 24px;
+  margin: 0;
+}
+
+.okta-link__promo-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+  line-height: 24px;
+}
+
+.okta-link__promo-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Footer ------------------------------------------------------ */
+
+.okta-link__footer {
+  margin-top: auto;
+}
+
+.okta-link__footer-terms {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6);
+  border-top: 1px solid #CECECE;
+  cursor: pointer;
+}
+
+.okta-link__footer-terms-text {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #4E4E4E;
+}
+
+.okta-link__footer-bottom {
+  background-color: #303030;
+  padding: var(--space-6) var(--space-6);
+}
+
+.okta-link__footer-copyright {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-0);
+  text-align: right;
+}

@@ -1,0 +1,48 @@
+{
+  "name": "okta-user-test",
+  "version": "1.0.0",
+  "description": "Okta user testing prototype.",
+  "type": "module",
+  "main": "./dist/design-system.umd.cjs",
+  "module": "./dist/design-system.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/design-system.js",
+      "require": "./dist/design-system.umd.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles.css": "./dist/design-system.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite --open",
+    "build": "tsc -p tsconfig.build.json && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "design-system",
+    "react",
+    "typescript",
+    "tokens"
+  ],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "@types/react": "^18.3.21",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2"
+  }
+}

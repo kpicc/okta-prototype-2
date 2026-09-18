@@ -1,0 +1,294 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Update Account Login                                        */
+/* ------------------------------------------------------------------ */
+
+.okta-update {
+  font-family: var(--font-family-sans);
+  color: var(--color-text-primary);
+  background-color: var(--color-neutral-100);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Header ------------------------------------------------------ */
+
+.okta-update__header {
+  background-color: var(--color-neutral-0);
+  border-bottom: 1px solid #E4E4E4;
+}
+
+.okta-update__header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-6);
+  height: 80px;
+  box-sizing: border-box;
+}
+
+.okta-update__logo {
+  display: block;
+  width: 100px;
+  height: 36px;
+}
+
+.okta-update__back-btn {
+  font-size: 16px !important;
+}
+
+/* ---- Step tracker ------------------------------------------------ */
+
+.okta-update__steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.okta-update__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.okta-update__step-label {
+  font-size: var(--font-size-base);
+  color: #666;
+  line-height: 20px;
+}
+
+.okta-update__step-label--completed {
+  font-weight: var(--font-weight-medium);
+  color: #008000;
+}
+
+.okta-update__step-label--active {
+  font-weight: var(--font-weight-medium);
+  color: #000;
+}
+
+.okta-update__step-line {
+  width: 95px;
+  height: 1px;
+  background-color: #D9D9D9;
+}
+
+/* ---- Body / Card ------------------------------------------------- */
+
+.okta-update__body {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px var(--space-4) var(--space-6);
+}
+
+.okta-update__card {
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: var(--space-6);
+  width: 384px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-self: flex-start;
+}
+
+.okta-update__card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.okta-update__card-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 28px;
+  color: #303030;
+  margin: 0;
+}
+
+.okta-update__card-subtitle {
+  border-left: 2px solid var(--color-brand-primary);
+  padding-left: var(--space-4);
+}
+
+.okta-update__card-subtitle-text {
+  font-size: var(--font-size-base);
+  line-height: 24px;
+  color: #4E4E4E;
+  margin: 0;
+}
+
+/* ---- Fields ------------------------------------------------------ */
+
+.okta-update__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.okta-update__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.okta-update__form-error {
+  padding: 12px 16px;
+  color: #9B1C1C;
+  background-color: #FFF2F2;
+  border: 1px solid #D92D20;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.okta-update__field-error {
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-update__float-field {
+  position: relative;
+  width: 100%;
+}
+
+.okta-update__input {
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 20px var(--space-4) 6px;
+  background-color: var(--color-neutral-100);
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-update__input--password {
+  padding-right: 48px;
+}
+
+.okta-update__password-toggle {
+  position: absolute;
+  right: 16px;
+  top: 18px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.okta-update__input::placeholder {
+  color: transparent;
+}
+
+.okta-update__float-label {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: #4E4E4E;
+  pointer-events: none;
+  transition: top 150ms ease, font-size 150ms ease, color 150ms ease;
+}
+
+.okta-update__input:focus + .okta-update__float-label,
+.okta-update__input:not(:placeholder-shown) + .okta-update__float-label {
+  top: 14px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.okta-update__input:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-update__input--error,
+.okta-update__input--error:focus {
+  border-color: #D92D20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+/* ---- Password requirements toggle ------------------------------- */
+
+.okta-update__pw-reqs-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2) 0;
+  font-family: var(--font-family-sans);
+}
+
+.okta-update__pw-reqs-text {
+  font-size: var(--font-size-sm);
+  color: #4E4E4E;
+  line-height: 20px;
+}
+
+.okta-update__pw-reqs-icon {
+  transition: transform 200ms ease;
+}
+
+.okta-update__pw-reqs-icon--open {
+  transform: rotate(180deg);
+}
+
+.okta-update__pw-reqs-list {
+  margin: 0;
+  padding: 0 0 0 var(--space-5);
+  font-size: var(--font-size-sm);
+  color: #4E4E4E;
+  line-height: 24px;
+  list-style: disc;
+}
+
+/* ---- Actions ----------------------------------------------------- */
+
+.okta-update__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.okta-update__continue-btn {
+  width: 100%;
+  height: 60px;
+  font-size: 16px !important;
+}
+
+.okta-update__account-link {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+  line-height: 24px;
+}
+
+.okta-update__account-link:hover {
+  text-decoration: underline;
+}
+
+.okta-update .ds-button {
+  font-size: 16px;
+}

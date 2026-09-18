@@ -1,0 +1,50 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — MFA Complete / All Set (Mobile)                             */
+/* ------------------------------------------------------------------ */
+
+.okta-complete-mobile__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 390px;
+  box-sizing: border-box;
+}
+
+.okta-complete-mobile__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background-color: #F3FDF3;
+}
+
+.okta-complete-mobile__title {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  line-height: 20px;
+  color: #191919;
+  margin: 0;
+  text-align: center;
+}
+
+.okta-complete-mobile__text {
+  font-size: 14px;
+  line-height: 18px;
+  color: #4E4E4E;
+  margin: 0;
+  text-align: center;
+}
+
+.okta-complete-mobile__cta {
+  width: 100%;
+  height: 48px;
+  font-size: 14px !important;
+}

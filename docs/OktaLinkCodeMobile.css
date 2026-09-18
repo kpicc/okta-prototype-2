@@ -1,0 +1,79 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Link Code (Mobile)                                          */
+/* ------------------------------------------------------------------ */
+
+.okta-link-mobile__card--code {
+  gap: 24px;
+}
+
+.okta-code-mobile__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.okta-code-mobile__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.okta-code-mobile__field-error {
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-code-mobile__input {
+  width: 100%;
+  height: 55px;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  background-color: #F5F5F5;
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-code-mobile__input::placeholder {
+  color: #4E4E4E;
+}
+
+.okta-code-mobile__input:focus {
+  border-color: #DB5C05;
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-code-mobile__input--error,
+.okta-code-mobile__input--error:focus {
+  border-color: #D92D20;
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+
+.okta-code-mobile__resend-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  font-size: 14px;
+  line-height: 18px;
+  text-decoration: none;
+}
+
+.okta-code-mobile__resend-text {
+  color: #4E4E4E;
+}
+
+.okta-code-mobile__resend-link {
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+}
+
+.okta-code-mobile__resend-row:hover .okta-code-mobile__resend-link {
+  text-decoration: underline;
+}

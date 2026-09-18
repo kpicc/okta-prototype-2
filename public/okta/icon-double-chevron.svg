@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon/Outlined/DoubleChevron/Vertical">
+<path id="Combined Shape" d="M26.7275 22.707L20.3643 29.0713L14 22.707L15.4141 21.293L20.3643 26.2422L25.3135 21.293L26.7275 22.707ZM26.7275 17.3643L25.3135 18.7783L20.3643 13.8281L15.4141 18.7783L14 17.3643L20.3643 11L26.7275 17.3643Z" fill="black"/>
+<mask id="mask0_0_349" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="14" y="11" width="13" height="19">
+<path id="Combined Shape_2" d="M26.7275 22.707L20.3643 29.0713L14 22.707L15.4141 21.293L20.3643 26.2422L25.3135 21.293L26.7275 22.707ZM26.7275 17.3643L25.3135 18.7783L20.3643 13.8281L15.4141 18.7783L14 17.3643L20.3643 11L26.7275 17.3643Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_0_349)">
+<rect id="Fill" width="40" height="40" fill="#C35500"/>
+</g>
+</g>
+</svg>

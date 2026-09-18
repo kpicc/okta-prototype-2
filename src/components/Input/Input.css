@@ -1,0 +1,59 @@
+.ds-input {
+  width: 100%;
+  border: none;
+  border-bottom: var(--border-width-sm) solid var(--color-neutral-300);
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--color-neutral-900);
+  font-family: var(--font-family-sans);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.ds-input::placeholder {
+  color: var(--color-neutral-500);
+}
+
+.ds-input:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+}
+
+.ds-input:hover:not(:disabled) {
+  border-color: var(--color-neutral-500);
+}
+
+.ds-input:disabled {
+  border-color: var(--color-neutral-400);
+  color: var(--color-neutral-500);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ds-input--error {
+  border-color: var(--color-status-danger);
+}
+
+.ds-input--error:focus,
+.ds-input--error:hover {
+  border-color: var(--color-status-danger);
+}
+
+/* Sizes */
+
+.ds-input--small {
+  min-height: 32px;
+  padding: var(--space-1) 0;
+  font-size: var(--font-size-sm);
+}
+
+.ds-input--medium {
+  min-height: 40px;
+  padding: var(--space-2) 0;
+  font-size: var(--font-size-base);
+}
+
+.ds-input--large {
+  min-height: 48px;
+  padding: var(--space-3) 0;
+  font-size: var(--font-size-lg);
+}

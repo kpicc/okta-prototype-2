@@ -1,0 +1,27 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Link Success (Mobile)                                       */
+/* ------------------------------------------------------------------ */
+
+.okta-link-mobile__card--success {
+  gap: 24px;
+}
+
+.okta-success-mobile__info-box {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 16px;
+  background-color: #F0F8FD;
+  border: 1px solid #D3E8F7;
+  border-radius: 10px;
+}
+
+.okta-success-mobile__info-line {
+  font-size: 14px;
+  color: #4E4E4E;
+  line-height: 24px;
+  margin: 0;
+}
+
+.okta-success-mobile__info-line strong {
+  font-weight: var(--font-weight-medium);
+}
