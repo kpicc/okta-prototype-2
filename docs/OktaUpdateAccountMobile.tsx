@@ -23,10 +23,11 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
   const [confirmPassword, setConfirmPassword] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const emailError = submitted && (!email ? 'Enter your email address.' : !isValidEmail(email) ? 'Enter a valid email address.' : '');
-  const passwordError = submitted && (!password ? 'Create a password.' : !meetsPasswordRequirements(password) ? 'Your password must meet all password requirements.' : '');
-  const confirmError = submitted && (!confirmPassword ? 'Confirm your password.' : confirmPassword !== password ? 'Passwords must match.' : '');
+  const emailError = submitted && (!email ? 'Enter your email address.' : !isValidEmail(email) ? 'Email address must be in the form of an email address' : '');
+  const passwordError = submitted && (!password ? 'Create a password.' : !meetsPasswordRequirements(password) ? 'Password requirements were not met.' : '');
+  const confirmError = submitted && (!confirmPassword ? 'Confirm your password.' : confirmPassword !== password ? 'Passwords do not match' : '');
   const formInvalid = !isValidEmail(email) || !meetsPasswordRequirements(password) || confirmPassword !== password;
+  const firstError = emailError || passwordError || confirmError || '';
 
   function handleContinue() {
     setSubmitted(true);
@@ -75,23 +76,23 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
             </div>
           </div>
 
-          {submitted && formInvalid && (
-            <div className="okta-update-mobile__form-error" role="alert">
-              Please correct the errors below before continuing.
-            </div>
-          )}
-
           <div className="okta-update-mobile__fields">
             <div className="okta-update-mobile__field">
-              <input
-                type="email"
-                className={`okta-update-mobile__input${emailError ? ' okta-update-mobile__input--error' : ''}`}
-                placeholder="Enter your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-invalid={Boolean(emailError)}
-                aria-describedby={emailError ? 'update-mobile-email-error' : undefined} onKeyDown={onEnterSubmit} />
-              {emailError && <span id="update-mobile-email-error" className="okta-update-mobile__field-error">{emailError}</span>}
+              <div className="okta-update-mobile__password-field">
+                <input
+                  type="email"
+                  className={`okta-update-mobile__input okta-update-mobile__input--toggle${emailError ? ' okta-update-mobile__input--error' : ''}`}
+                  placeholder="Enter your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-invalid={Boolean(emailError)}
+                  aria-describedby={emailError ? 'update-mobile-form-error' : undefined} onKeyDown={onEnterSubmit} />
+                {email && (
+                  <button type="button" className="okta-update-mobile__password-toggle" aria-label="Clear email" onClick={() => setEmail('')}>
+                    <img src="/okta/icon-close.svg" alt="" width={24} height={24} />
+                  </button>
+                )}
+              </div>
             </div>
             <div className="okta-update-mobile__field">
               <div className="okta-update-mobile__password-field">
@@ -102,7 +103,7 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   aria-invalid={Boolean(passwordError)}
-                  aria-describedby={passwordError ? 'update-mobile-password-error' : undefined} onKeyDown={onEnterSubmit} />
+                  aria-describedby={passwordError ? 'update-mobile-form-error' : undefined} onKeyDown={onEnterSubmit} />
                 <button
                   type="button"
                   className="okta-update-mobile__password-toggle"
@@ -113,7 +114,6 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
                   <img src={showPassword ? '/okta/icon-eye-off.svg' : '/okta/icon-eye.svg'} alt="" width={24} height={24} />
                 </button>
               </div>
-              {passwordError && <span id="update-mobile-password-error" className="okta-update-mobile__field-error">{passwordError}</span>}
             </div>
             <div className="okta-update-mobile__field">
               <div className="okta-update-mobile__password-field">
@@ -124,7 +124,7 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   aria-invalid={Boolean(confirmError)}
-                  aria-describedby={confirmError ? 'update-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
+                  aria-describedby={confirmError ? 'update-mobile-form-error' : undefined} onKeyDown={onEnterSubmit} />
                 <button
                   type="button"
                   className="okta-update-mobile__password-toggle"
@@ -135,8 +135,14 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
                   <img src={showConfirmPassword ? '/okta/icon-eye-off.svg' : '/okta/icon-eye.svg'} alt="" width={24} height={24} />
                 </button>
               </div>
-              {confirmError && <span id="update-mobile-confirm-error" className="okta-update-mobile__field-error">{confirmError}</span>}
             </div>
+
+            {firstError && (
+              <div id="update-mobile-form-error" className="okta-update-mobile__form-error" role="alert">
+                <img src="/okta/icon-urgent.svg" alt="" width={16} height={16} className="okta-update-mobile__form-error-icon" />
+                <span>{firstError}</span>
+              </div>
+            )}
 
             <button
               className="okta-update-mobile__pw-reqs-toggle"
@@ -171,7 +177,11 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
               Continue
             </Button>
             <a href="#" className="okta-update-mobile__account-link" onClick={(e) => { e.preventDefault(); (onSignIn ?? onBack)(); }}>
-              <span>Already have an account? Sign in</span>
+              <span><span className="okta-update-mobile__link-prefix">Already have an account?&nbsp;</span>Sign in</span>
+              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
+            </a>
+            <a href="#" className="okta-update-mobile__account-link" onClick={(e) => e.preventDefault()}>
+              <span><span className="okta-update-mobile__link-prefix">Need help?&nbsp;</span>Message an agent</span>
               <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
             </a>
           </div>

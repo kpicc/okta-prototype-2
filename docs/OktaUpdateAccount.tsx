@@ -23,10 +23,11 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
   const [confirmPassword, setConfirmPassword] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const emailError = submitted && (!email ? 'Enter your email address.' : !isValidEmail(email) ? 'Enter a valid email address.' : '');
-  const passwordError = submitted && (!password ? 'Create a password.' : !meetsPasswordRequirements(password) ? 'Your password must meet all password requirements.' : '');
-  const confirmError = submitted && (!confirmPassword ? 'Confirm your password.' : confirmPassword !== password ? 'Passwords must match.' : '');
+  const emailError = submitted && (!email ? 'Enter your email address.' : !isValidEmail(email) ? 'Email address must be in the form of an email address' : '');
+  const passwordError = submitted && (!password ? 'Create a password.' : !meetsPasswordRequirements(password) ? 'Password requirements were not met.' : '');
+  const confirmError = submitted && (!confirmPassword ? 'Confirm your password.' : confirmPassword !== password ? 'Passwords do not match' : '');
   const formInvalid = !isValidEmail(email) || !meetsPasswordRequirements(password) || confirmPassword !== password;
+  const firstError = emailError || passwordError || confirmError || '';
 
   function handleContinue() {
     setSubmitted(true);
@@ -83,21 +84,21 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
             </div>
           </div>
 
-          {submitted && formInvalid && (
-            <div className="okta-update__form-error" role="alert">Please correct the errors below before continuing.</div>
-          )}
-
           <div className="okta-update__fields">
             <div className="okta-update__field">
               <div className="okta-update__float-field">
-                <input id="update-email" type="email" className={`okta-update__input${emailError ? ' okta-update__input--error' : ''}`} placeholder=" " value={email} onChange={(e) => setEmail(e.target.value)} aria-invalid={Boolean(emailError)} aria-describedby={emailError ? 'update-email-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="update-email" type="email" className={`okta-update__input okta-update__input--password${emailError ? ' okta-update__input--error' : ''}`} placeholder=" " value={email} onChange={(e) => setEmail(e.target.value)} aria-invalid={Boolean(emailError)} aria-describedby={emailError ? 'update-form-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="update-email" className="okta-update__float-label">Email</label>
+                {email && (
+                  <button type="button" className="okta-update__password-toggle" aria-label="Clear email" onClick={() => setEmail('')}>
+                    <img src="/okta/icon-close.svg" alt="" width={24} height={24} />
+                  </button>
+                )}
               </div>
-              {emailError && <span id="update-email-error" className="okta-update__field-error">{emailError}</span>}
             </div>
             <div className="okta-update__field">
               <div className="okta-update__float-field">
-                <input id="update-password" type={showPassword ? 'text' : 'password'} className={`okta-update__input okta-update__input--password${passwordError ? ' okta-update__input--error' : ''}`} placeholder=" " value={password} onChange={(e) => setPassword(e.target.value)} aria-invalid={Boolean(passwordError)} aria-describedby={passwordError ? 'update-password-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="update-password" type={showPassword ? 'text' : 'password'} className={`okta-update__input okta-update__input--password${passwordError ? ' okta-update__input--error' : ''}`} placeholder=" " value={password} onChange={(e) => setPassword(e.target.value)} aria-invalid={Boolean(passwordError)} aria-describedby={passwordError ? 'update-form-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="update-password" className="okta-update__float-label">Create password</label>
                 <button
                   type="button"
@@ -109,11 +110,10 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
                   <img src={showPassword ? '/okta/icon-eye-off.svg' : '/okta/icon-eye.svg'} alt="" width={24} height={24} />
                 </button>
               </div>
-              {passwordError && <span id="update-password-error" className="okta-update__field-error">{passwordError}</span>}
             </div>
             <div className="okta-update__field">
               <div className="okta-update__float-field">
-                <input id="update-confirm" type={showConfirmPassword ? 'text' : 'password'} className={`okta-update__input okta-update__input--password${confirmError ? ' okta-update__input--error' : ''}`} placeholder=" " value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} aria-invalid={Boolean(confirmError)} aria-describedby={confirmError ? 'update-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="update-confirm" type={showConfirmPassword ? 'text' : 'password'} className={`okta-update__input okta-update__input--password${confirmError ? ' okta-update__input--error' : ''}`} placeholder=" " value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} aria-invalid={Boolean(confirmError)} aria-describedby={confirmError ? 'update-form-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="update-confirm" className="okta-update__float-label">Confirm password</label>
                 <button
                   type="button"
@@ -125,8 +125,14 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
                   <img src={showConfirmPassword ? '/okta/icon-eye-off.svg' : '/okta/icon-eye.svg'} alt="" width={24} height={24} />
                 </button>
               </div>
-              {confirmError && <span id="update-confirm-error" className="okta-update__field-error">{confirmError}</span>}
             </div>
+
+            {firstError && (
+              <div id="update-form-error" className="okta-update__form-error" role="alert">
+                <img src="/okta/icon-urgent.svg" alt="" width={16} height={16} className="okta-update__form-error-icon" />
+                <span>{firstError}</span>
+              </div>
+            )}
 
             <button
               className="okta-update__pw-reqs-toggle"
@@ -159,7 +165,12 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
               Continue
             </Button>
             <a href="#" className="okta-update__account-link" onClick={(e) => { e.preventDefault(); (onSignIn ?? onBack)(); }}>
-              Already have an account?
+              <span><span className="okta-update__link-prefix">Already have an account?&nbsp;</span>Sign in</span>
+              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
+            </a>
+            <a href="#" className="okta-update__account-link" onClick={(e) => e.preventDefault()}>
+              <span><span className="okta-update__link-prefix">Need help?&nbsp;</span>Message an agent</span>
+              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
             </a>
           </div>
         </div>

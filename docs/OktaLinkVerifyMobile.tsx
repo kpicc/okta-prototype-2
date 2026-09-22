@@ -81,7 +81,7 @@ export function OktaLinkVerifyMobile({ onBack, onContinue }: OktaLinkVerifyMobil
 
           <div className="okta-link-mobile__fields">
             <div className="okta-link-mobile__field">
-              <input type="tel" maxLength={13} className={`okta-link-mobile__input${phoneError ? ' okta-link-mobile__input--error' : ''}`} placeholder="Phone number" value={phone} onChange={(event) => setPhone(formatPhone(event.target.value))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-mobile-phone-error' : undefined} onKeyDown={onEnterSubmit} />
+              <input type="tel" maxLength={14} className={`okta-link-mobile__input${phoneError ? ' okta-link-mobile__input--error' : ''}`} placeholder="Phone number" value={phone} onChange={(event) => setPhone(formatPhone(event.target.value))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-mobile-phone-error' : undefined} onKeyDown={onEnterSubmit} />
               {phoneError && <span id="link-mobile-phone-error" className="okta-link-mobile__field-error" role="alert">{phoneError}</span>}
             </div>
             <div className="okta-link-mobile__field">

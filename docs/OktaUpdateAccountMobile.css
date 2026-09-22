@@ -167,19 +167,18 @@
 }
 
 .okta-update-mobile__form-error {
-  padding: 12px 16px;
-  color: #9B1C1C;
-  background-color: #FFF2F2;
-  border: 1px solid #D92D20;
-  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: #C30000;
   font-size: 14px;
-  line-height: 18px;
+  line-height: 20px;
 }
 
-.okta-update-mobile__field-error {
-  color: #B42318;
-  font-size: 12px;
-  line-height: 16px;
+.okta-update-mobile__form-error-icon {
+  display: block;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .okta-update-mobile__input {
@@ -228,8 +227,8 @@
 
 .okta-update-mobile__input--error,
 .okta-update-mobile__input--error:focus {
-  border-color: #D92D20;
-  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+  border-color: #C30000;
+  box-shadow: none;
 }
 
 /* ---- Password requirements toggle ------------------------------- */
@@ -275,19 +274,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
 }
 
 .okta-update-mobile__continue-btn {
   width: 100%;
   height: 48px;
   font-size: 14px !important;
+  margin-bottom: 32px;
+}
+
+.okta-update-mobile__link-prefix {
+  color: #303030;
+  font-weight: var(--font-weight-normal);
 }
 
 .okta-update-mobile__account-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 2px;
   font-size: 14px;
   font-weight: var(--font-weight-medium);
   color: #2F7DC1;

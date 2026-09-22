@@ -87,7 +87,7 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
           <div className="okta-linkv__fields">
             <div className="okta-linkv__field">
               <div className="okta-linkv__float-field">
-                <input id="link-phone" type="tel" maxLength={13} className={`okta-linkv__input${phoneError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={phone} onChange={(event) => setPhone(formatPhone(event.target.value))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-phone-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="link-phone" type="tel" maxLength={14} className={`okta-linkv__input${phoneError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={phone} onChange={(event) => setPhone(formatPhone(event.target.value))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-phone-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="link-phone" className="okta-linkv__float-label">Phone number</label>
               </div>
               {phoneError && <span id="link-phone-error" className="okta-linkv__field-error" role="alert">{phoneError}</span>}
