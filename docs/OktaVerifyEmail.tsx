@@ -23,6 +23,7 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
   const codeError = showError && code !== '222222';
+  const codeErrorMessage = codeError ? (code.trim() === '' ? 'This field cannot be left blank' : 'Invalid code. Please try again.') : '';
 
   function handleContinue() {
     setShowError(true);
@@ -100,7 +101,7 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
               {codeError && (
                 <div id="verify-code-error" className="okta-verify__field-error" role="alert">
                   <img src="/okta/icon-urgent.svg" alt="" width={16} height={16} className="okta-verify__field-error-icon" />
-                  <span>Invalid code. Please try again.</span>
+                  <span>{codeErrorMessage}</span>
                 </div>
               )}
             </div>
