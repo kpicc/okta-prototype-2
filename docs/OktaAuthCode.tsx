@@ -24,6 +24,10 @@ export function OktaAuthCode({
     if (code === '222222') onContinue();
   }
 
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
+  }
+
   return (
     <div className="okta-auth-code">
       <header className="okta-auth-code__header">
@@ -66,8 +70,7 @@ export function OktaAuthCode({
                 codeError ? ' okta-auth-code__input--error' : ''
               }`}
               aria-invalid={codeError}
-              aria-describedby={codeError ? 'auth-code-error' : undefined}
-            />
+              aria-describedby={codeError ? 'auth-code-error' : undefined} onKeyDown={onEnterSubmit} />
             {codeError && (
               <span id="auth-code-error" className="okta-auth-code__error" role="alert">
                 Enter the valid 6-digit security code.

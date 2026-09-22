@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServicesMobile.css';
 import './OktaMfaSetupMobile.css';
@@ -42,6 +43,10 @@ export function OktaMfaSetupMobile({
       return;
     }
     trigger(() => onContinue?.());
+  }
+
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -134,11 +139,10 @@ export function OktaMfaSetupMobile({
                 className={`okta-mfa-mobile__confirm-input${showConfirmationError ? ' okta-mfa-mobile__confirm-input--error' : ''}`}
                 placeholder="Re-enter selected phone number"
                 value={confirmation}
-                onChange={(event) => { setConfirmation(event.target.value); setShowConfirmationError(false); }}
+                onChange={(event) => { setConfirmation(formatPhone(event.target.value)); setShowConfirmationError(false); }}
                 onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
                 aria-invalid={showConfirmationError}
-                aria-describedby={showConfirmationError ? 'mfa-mobile-confirm-error' : undefined}
-              />
+                aria-describedby={showConfirmationError ? 'mfa-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
               {showConfirmationError && <span id="mfa-mobile-confirm-error" className="okta-mfa-mobile__field-error" role="alert">Re-enter the selected phone number.</span>}
             </div>
           )}

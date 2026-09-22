@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServicesMobile.css';
 import './OktaLinkVerifyMobile.css';
@@ -32,6 +33,10 @@ export function OktaLinkVerifyMobile({ onBack, onContinue }: OktaLinkVerifyMobil
     setSubmitted(true);
     setTouched({ phone: true, pin: true });
     if (phoneDigits.length === 10 && /^\d{4}$/.test(pin)) trigger(() => onContinue?.());
+  }
+
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -76,12 +81,12 @@ export function OktaLinkVerifyMobile({ onBack, onContinue }: OktaLinkVerifyMobil
 
           <div className="okta-link-mobile__fields">
             <div className="okta-link-mobile__field">
-              <input type="tel" maxLength={10} className={`okta-link-mobile__input${phoneError ? ' okta-link-mobile__input--error' : ''}`} placeholder="Phone number" value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, '').slice(0, 10))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-mobile-phone-error' : undefined} />
+              <input type="tel" maxLength={13} className={`okta-link-mobile__input${phoneError ? ' okta-link-mobile__input--error' : ''}`} placeholder="Phone number" value={phone} onChange={(event) => setPhone(formatPhone(event.target.value))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-mobile-phone-error' : undefined} onKeyDown={onEnterSubmit} />
               {phoneError && <span id="link-mobile-phone-error" className="okta-link-mobile__field-error" role="alert">{phoneError}</span>}
             </div>
             <div className="okta-link-mobile__field">
               <div className="okta-link-mobile__password-field">
-                <input type={showPin ? 'text' : 'password'} inputMode="numeric" maxLength={4} className={`okta-link-mobile__input okta-link-mobile__input--toggle${pinError ? ' okta-link-mobile__input--error' : ''}`} placeholder="PIN" value={pin} onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-mobile-pin-error' : undefined} />
+                <input type={showPin ? 'text' : 'password'} inputMode="numeric" maxLength={4} className={`okta-link-mobile__input okta-link-mobile__input--toggle${pinError ? ' okta-link-mobile__input--error' : ''}`} placeholder="PIN" value={pin} onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-mobile-pin-error' : undefined} onKeyDown={onEnterSubmit} />
                 <button
                   type="button"
                   className="okta-link-mobile__password-toggle"

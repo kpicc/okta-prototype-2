@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone, looksLikePhone } from './formatPhone.js';
 import './OktaLanding.css';
 
 function isValidEmail(value: string): boolean {
@@ -36,8 +37,13 @@ export function OktaLanding({ onUpdateAccount, onSignIn }: OktaLandingProps) {
     }
   }
 
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleSubmit();
+  }
+
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value);
+    const raw = e.target.value;
+    setEmail(looksLikePhone(raw) ? formatPhone(raw) : raw);
     if (error) setError(false);
   }
 
@@ -143,7 +149,7 @@ export function OktaLanding({ onUpdateAccount, onSignIn }: OktaLandingProps) {
                     placeholder=" "
                     value={email}
                     onChange={handleInputChange}
-                  />
+                   onKeyDown={onEnterSubmit} />
                   <label htmlFor="okta-email" className="okta-landing__float-label">
                     Email
                   </label>

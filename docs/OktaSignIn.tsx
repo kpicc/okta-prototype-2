@@ -21,6 +21,10 @@ export function OktaSignIn({ email, onBack, onSignIn }: OktaSignInProps) {
     onSignIn();
   }
 
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleSignIn();
+  }
+
   return (
     <div className="okta-signin">
       <header className="okta-signin__header">
@@ -55,8 +59,7 @@ export function OktaSignIn({ email, onBack, onSignIn }: OktaSignInProps) {
                 onChange={(event) => { setPassword(event.target.value); setShowError(false); }}
                 onBlur={() => { if (!password) setShowError(true); }}
                 aria-invalid={showError}
-                aria-describedby={showError ? 'signin-password-error' : undefined}
-              />
+                aria-describedby={showError ? 'signin-password-error' : undefined} onKeyDown={onEnterSubmit} />
               <button
                 type="button"
                 className="okta-signin__password-toggle"

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServices.css';
 import './OktaLinkVerify.css';
@@ -24,6 +25,10 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
     setSubmitted(true);
     setTouched({ phone: true, pin: true });
     if (phoneDigits.length === 10 && /^\d{4}$/.test(pin)) trigger(() => onContinue?.());
+  }
+
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -82,14 +87,14 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
           <div className="okta-linkv__fields">
             <div className="okta-linkv__field">
               <div className="okta-linkv__float-field">
-                <input id="link-phone" type="tel" maxLength={10} className={`okta-linkv__input${phoneError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, '').slice(0, 10))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-phone-error' : undefined} />
+                <input id="link-phone" type="tel" maxLength={13} className={`okta-linkv__input${phoneError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={phone} onChange={(event) => setPhone(formatPhone(event.target.value))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-phone-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="link-phone" className="okta-linkv__float-label">Phone number</label>
               </div>
               {phoneError && <span id="link-phone-error" className="okta-linkv__field-error" role="alert">{phoneError}</span>}
             </div>
             <div className="okta-linkv__field">
               <div className="okta-linkv__float-field">
-                <input id="link-pin" type="password" inputMode="numeric" maxLength={4} className={`okta-linkv__input${pinError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={pin} onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-pin-error' : undefined} />
+                <input id="link-pin" type="password" inputMode="numeric" maxLength={4} className={`okta-linkv__input${pinError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={pin} onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-pin-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="link-pin" className="okta-linkv__float-label">PIN</label>
               </div>
               {pinError && <span id="link-pin-error" className="okta-linkv__field-error" role="alert">{pinError}</span>}

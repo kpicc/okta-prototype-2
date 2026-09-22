@@ -33,6 +33,10 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
     if (!formInvalid) trigger(() => onContinue?.(email));
   }
 
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
+  }
+
   return (
     <div className="okta-update-mobile">
       {/* Header */}
@@ -86,8 +90,7 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 aria-invalid={Boolean(emailError)}
-                aria-describedby={emailError ? 'update-mobile-email-error' : undefined}
-              />
+                aria-describedby={emailError ? 'update-mobile-email-error' : undefined} onKeyDown={onEnterSubmit} />
               {emailError && <span id="update-mobile-email-error" className="okta-update-mobile__field-error">{emailError}</span>}
             </div>
             <div className="okta-update-mobile__field">
@@ -99,8 +102,7 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   aria-invalid={Boolean(passwordError)}
-                  aria-describedby={passwordError ? 'update-mobile-password-error' : undefined}
-                />
+                  aria-describedby={passwordError ? 'update-mobile-password-error' : undefined} onKeyDown={onEnterSubmit} />
                 <button
                   type="button"
                   className="okta-update-mobile__password-toggle"
@@ -122,8 +124,7 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   aria-invalid={Boolean(confirmError)}
-                  aria-describedby={confirmError ? 'update-mobile-confirm-error' : undefined}
-                />
+                  aria-describedby={confirmError ? 'update-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
                 <button
                   type="button"
                   className="okta-update-mobile__password-toggle"

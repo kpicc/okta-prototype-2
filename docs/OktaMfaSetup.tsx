@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServices.css';
 import './OktaLinkOtp.css';
@@ -43,6 +44,10 @@ export function OktaMfaSetup({
       return;
     }
     trigger(() => onContinue?.());
+  }
+
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -145,11 +150,10 @@ export function OktaMfaSetup({
                   className={`okta-otp__confirm-input${showConfirmationError ? ' okta-otp__confirm-input--error' : ''}`}
                   placeholder=" "
                   value={confirmation}
-                  onChange={(event) => { setConfirmation(event.target.value.replace(/\D/g, '').slice(0, 10)); setShowConfirmationError(false); }}
+                  onChange={(event) => { setConfirmation(formatPhone(event.target.value)); setShowConfirmationError(false); }}
                   onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
                   aria-invalid={showConfirmationError}
-                  aria-describedby={showConfirmationError ? 'mfa-confirm-error' : undefined}
-                />
+                  aria-describedby={showConfirmationError ? 'mfa-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="mfa-confirm" className="okta-otp__confirm-label">Re-enter selected phone number</label>
               </div>
               {showConfirmationError && <span id="mfa-confirm-error" className="okta-otp__field-error" role="alert">Re-enter the selected phone number.</span>}

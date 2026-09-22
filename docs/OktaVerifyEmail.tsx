@@ -28,6 +28,10 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
     if (code === '222222') trigger(() => onContinue?.());
   }
 
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
+  }
+
   return (
     <div className="okta-verify">
       {/* Header */}
@@ -79,7 +83,7 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
           <div className="okta-verify__fields">
             <div className="okta-verify__field">
               <div className="okta-verify__float-field">
-                <input id="verify-code" type="text" inputMode="numeric" maxLength={6} className={`okta-verify__input${codeError ? ' okta-verify__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'verify-code-error' : undefined} />
+                <input id="verify-code" type="text" inputMode="numeric" maxLength={6} className={`okta-verify__input${codeError ? ' okta-verify__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'verify-code-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="verify-code" className="okta-verify__float-label">Enter code</label>
               </div>
               {codeError && <span id="verify-code-error" className="okta-verify__field-error" role="alert">Enter the valid 6-digit verification code.</span>}

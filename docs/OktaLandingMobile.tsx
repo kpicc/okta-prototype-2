@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone, looksLikePhone } from './formatPhone.js';
 import './OktaLandingMobile.css';
 
 interface OktaLandingMobileProps {
@@ -30,6 +31,10 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
       return;
     }
     onSignIn(email);
+  }
+
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleSignIn();
   }
 
   return (
@@ -179,10 +184,9 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
                 className={`okta-mobile__drawer-input${emailError ? ' okta-mobile__drawer-input--error' : ''}`}
                 placeholder=" "
                 value={email}
-                onChange={(event) => { setEmail(event.target.value); setEmailError(false); }}
+                onChange={(event) => { const raw = event.target.value; setEmail(looksLikePhone(raw) ? formatPhone(raw) : raw); setEmailError(false); }}
                 aria-invalid={emailError}
-                aria-describedby={emailError ? 'mobile-signin-email-error' : undefined}
-              />
+                aria-describedby={emailError ? 'mobile-signin-email-error' : undefined} onKeyDown={onEnterSubmit} />
               <label htmlFor="okta-mobile-email" className="okta-mobile__drawer-float-label">
                 Enter your email
               </label>

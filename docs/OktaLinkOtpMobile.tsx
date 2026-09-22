@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServicesMobile.css';
 import './OktaLinkOtpMobile.css';
@@ -40,6 +41,10 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
       return;
     }
     trigger(() => onContinue?.());
+  }
+
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -132,11 +137,10 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
                 className={`okta-otp-mobile__confirm-input${showConfirmationError ? ' okta-otp-mobile__confirm-input--error' : ''}`}
                 placeholder={selected.value.includes('@') ? 'Re-enter selected email address' : 'Re-enter selected phone number'}
                 value={confirmation}
-                onChange={(event) => { setConfirmation(selected.value.includes('@') ? event.target.value : event.target.value.replace(/\D/g, '').slice(0, 10)); setShowConfirmationError(false); }}
+                onChange={(event) => { setConfirmation(selected.value.includes('@') ? event.target.value : formatPhone(event.target.value)); setShowConfirmationError(false); }}
                 onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
                 aria-invalid={showConfirmationError}
-                aria-describedby={showConfirmationError ? 'otp-mobile-confirm-error' : undefined}
-              />
+                aria-describedby={showConfirmationError ? 'otp-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
               {showConfirmationError && <span id="otp-mobile-confirm-error" className="okta-otp-mobile__field-error" role="alert">Re-enter the selected delivery method.</span>}
             </div>
           )}

@@ -20,6 +20,10 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onC
     if (code === '222222') trigger(() => onContinue?.());
   }
 
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
+  }
+
   return (
     <div className="okta-verify-mobile">
       {/* Header */}
@@ -70,8 +74,7 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onC
                 onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }}
                 onBlur={() => { if (code !== '222222') setShowError(true); }}
                 aria-invalid={codeError}
-                aria-describedby={codeError ? 'verify-mobile-code-error' : undefined}
-              />
+                aria-describedby={codeError ? 'verify-mobile-code-error' : undefined} onKeyDown={onEnterSubmit} />
               {codeError && <span id="verify-mobile-code-error" className="okta-verify-mobile__field-error" role="alert">Enter the valid 6-digit verification code.</span>}
             </div>
             <a href="#" className="okta-verify-mobile__resend-row" onClick={(e) => e.preventDefault()}>

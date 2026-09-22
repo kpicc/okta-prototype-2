@@ -27,6 +27,10 @@ export function OktaLinkCode({
     if (code === '222222') trigger(() => onContinue?.());
   }
 
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
+  }
+
   return (
     <div className="okta-link">
       {/* Top bar */}
@@ -85,7 +89,7 @@ export function OktaLinkCode({
           <div className="okta-lcode__fields">
             <div className="okta-lcode__field">
               <div className="okta-lcode__float-field">
-                <input id="link-code" type="text" inputMode="numeric" maxLength={6} className={`okta-lcode__input${codeError ? ' okta-lcode__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'link-code-error' : undefined} />
+                <input id="link-code" type="text" inputMode="numeric" maxLength={6} className={`okta-lcode__input${codeError ? ' okta-lcode__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'link-code-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="link-code" className="okta-lcode__float-label">Enter code</label>
               </div>
               {codeError && <span id="link-code-error" className="okta-lcode__field-error" role="alert">Enter the valid 6-digit security code.</span>}

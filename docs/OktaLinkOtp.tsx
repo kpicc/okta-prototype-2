@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServices.css';
 import './OktaLinkOtp.css';
@@ -44,6 +45,10 @@ export function OktaLinkOtp({
       return;
     }
     trigger(() => onContinue?.());
+  }
+
+  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -149,11 +154,10 @@ export function OktaLinkOtp({
                   className={`okta-otp__confirm-input${showConfirmationError ? ' okta-otp__confirm-input--error' : ''}`}
                   placeholder=" "
                   value={confirmation}
-                  onChange={(event) => { setConfirmation(selected === phone ? event.target.value.replace(/\D/g, '').slice(0, 10) : event.target.value); setShowConfirmationError(false); }}
+                  onChange={(event) => { setConfirmation(selected === phone ? formatPhone(event.target.value) : event.target.value); setShowConfirmationError(false); }}
                   onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
                   aria-invalid={showConfirmationError}
-                  aria-describedby={showConfirmationError ? 'otp-confirm-error' : undefined}
-                />
+                  aria-describedby={showConfirmationError ? 'otp-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="otp-confirm" className="okta-otp__confirm-label">
                   {selected === phone ? 'Re-enter the selected phone number' : 'Re-enter the selected email address'}
                 </label>
