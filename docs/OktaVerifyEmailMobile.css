@@ -159,7 +159,7 @@
 .okta-verify-mobile__fields {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .okta-verify-mobile__field {
@@ -168,10 +168,47 @@
   gap: 4px;
 }
 
+.okta-verify-mobile__banner-error {
+  margin: 0;
+  color: #C30000;
+  font-size: 14px;
+  line-height: 20px;
+}
+
 .okta-verify-mobile__field-error {
-  color: #B42318;
-  font-size: 12px;
-  line-height: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: #C30000;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.okta-verify-mobile__field-error-icon {
+  display: block;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.okta-verify-mobile__input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.okta-verify-mobile__input--clearable {
+  padding-right: 48px;
+}
+
+.okta-verify-mobile__clear {
+  position: absolute;
+  right: 16px;
+  top: 15.5px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 .okta-verify-mobile__input {
@@ -200,8 +237,8 @@
 
 .okta-verify-mobile__input--error,
 .okta-verify-mobile__input--error:focus {
-  border-color: #D92D20;
-  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+  border-color: #C30000;
+  box-shadow: none;
 }
 
 .okta-verify-mobile__resend-row {
@@ -237,11 +274,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
 }
 
 .okta-verify-mobile__continue-btn {
   width: 100%;
   height: 48px;
   font-size: 14px !important;
+  margin-bottom: 32px;
+}
+
+.okta-verify-mobile__account-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.okta-verify-mobile__link-prefix {
+  color: #303030;
+  font-weight: var(--font-weight-normal);
+}
+
+.okta-verify-mobile__account-link:hover {
+  text-decoration: underline;
 }

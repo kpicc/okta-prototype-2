@@ -167,6 +167,7 @@ export function App() {
           email={userEmail}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('update-account')}
+          onSignIn={() => setScreen('sign-in')}
           onContinue={() => setScreen('link-services')}
         />
       );
@@ -282,6 +283,7 @@ export function App() {
         <OktaVerifyEmailMobile
           email={userEmail}
           onBack={() => setScreen('landing')}
+          onSignIn={() => setScreen('sign-in')}
           onContinue={() => setScreen('link-services')}
         />
       );

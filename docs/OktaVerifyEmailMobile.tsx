@@ -6,10 +6,11 @@ import './OktaVerifyEmailMobile.css';
 interface OktaVerifyEmailMobileProps {
   email?: string;
   onBack: () => void;
+  onSignIn?: () => void;
   onContinue?: () => void;
 }
 
-export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onContinue }: OktaVerifyEmailMobileProps) {
+export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onSignIn, onContinue }: OktaVerifyEmailMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
@@ -63,19 +64,36 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onC
           </div>
 
           <div className="okta-verify-mobile__fields">
+            {codeError && (
+              <p className="okta-verify-mobile__banner-error" role="alert">
+                We found some errors. Please review the form and make the necessary corrections.
+              </p>
+            )}
             <div className="okta-verify-mobile__field">
-              <input
-                type="text"
-                inputMode="numeric"
-                maxLength={6}
-                className={`okta-verify-mobile__input${codeError ? ' okta-verify-mobile__input--error' : ''}`}
-                placeholder="Enter the code"
-                value={code}
-                onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }}
-                onBlur={() => { if (code !== '222222') setShowError(true); }}
-                aria-invalid={codeError}
-                aria-describedby={codeError ? 'verify-mobile-code-error' : undefined} onKeyDown={onEnterSubmit} />
-              {codeError && <span id="verify-mobile-code-error" className="okta-verify-mobile__field-error" role="alert">Enter the valid 6-digit verification code.</span>}
+              <div className="okta-verify-mobile__input-wrap">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  className={`okta-verify-mobile__input okta-verify-mobile__input--clearable${codeError ? ' okta-verify-mobile__input--error' : ''}`}
+                  placeholder="Enter the code"
+                  value={code}
+                  onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }}
+                  onBlur={() => { if (code !== '222222') setShowError(true); }}
+                  aria-invalid={codeError}
+                  aria-describedby={codeError ? 'verify-mobile-code-error' : undefined} onKeyDown={onEnterSubmit} />
+                {code && (
+                  <button type="button" className="okta-verify-mobile__clear" aria-label="Clear code" onClick={() => { setCode(''); setShowError(false); }}>
+                    <img src="/okta/icon-close.svg" alt="" width={24} height={24} />
+                  </button>
+                )}
+              </div>
+              {codeError && (
+                <div id="verify-mobile-code-error" className="okta-verify-mobile__field-error" role="alert">
+                  <img src="/okta/icon-urgent.svg" alt="" width={16} height={16} className="okta-verify-mobile__field-error-icon" />
+                  <span>Invalid code. Please try again.</span>
+                </div>
+              )}
             </div>
             <a href="#" className="okta-verify-mobile__resend-row" onClick={(e) => e.preventDefault()}>
               <span className="okta-verify-mobile__resend-text">Didn't receive the code?</span>
@@ -88,6 +106,14 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onC
             <Button size="large" className="okta-verify-mobile__continue-btn" loading={loading} onClick={handleContinue}>
               Continue
             </Button>
+            <a href="#" className="okta-verify-mobile__account-link" onClick={(e) => { e.preventDefault(); (onSignIn ?? onBack)(); }}>
+              <span><span className="okta-verify-mobile__link-prefix">Already have an account?&nbsp;</span>Sign in</span>
+              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
+            </a>
+            <a href="#" className="okta-verify-mobile__account-link" onClick={(e) => e.preventDefault()}>
+              <span><span className="okta-verify-mobile__link-prefix">Need help?&nbsp;</span>Message an agent</span>
+              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
+            </a>
           </div>
         </div>
       </main>

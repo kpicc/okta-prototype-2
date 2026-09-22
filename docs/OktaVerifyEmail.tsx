@@ -7,6 +7,7 @@ interface OktaVerifyEmailProps {
   email?: string;
   onBack: () => void;
   onCancel: () => void;
+  onSignIn?: () => void;
   onContinue?: () => void;
 }
 
@@ -17,7 +18,7 @@ function maskEmail(email: string): string {
   return `${visible}***${local.slice(-1)}@${domain}`;
 }
 
-export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel, onContinue }: OktaVerifyEmailProps) {
+export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel, onSignIn, onContinue }: OktaVerifyEmailProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
@@ -81,12 +82,27 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
           </div>
 
           <div className="okta-verify__fields">
+            {codeError && (
+              <p className="okta-verify__banner-error" role="alert">
+                We found some errors. Please review the form and make the necessary corrections.
+              </p>
+            )}
             <div className="okta-verify__field">
               <div className="okta-verify__float-field">
-                <input id="verify-code" type="text" inputMode="numeric" maxLength={6} className={`okta-verify__input${codeError ? ' okta-verify__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'verify-code-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="verify-code" type="text" inputMode="numeric" maxLength={6} className={`okta-verify__input okta-verify__input--clearable${codeError ? ' okta-verify__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'verify-code-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="verify-code" className="okta-verify__float-label">Enter code</label>
+                {code && (
+                  <button type="button" className="okta-verify__clear" aria-label="Clear code" onClick={() => { setCode(''); setShowError(false); }}>
+                    <img src="/okta/icon-close.svg" alt="" width={24} height={24} />
+                  </button>
+                )}
               </div>
-              {codeError && <span id="verify-code-error" className="okta-verify__field-error" role="alert">Enter the valid 6-digit verification code.</span>}
+              {codeError && (
+                <div id="verify-code-error" className="okta-verify__field-error" role="alert">
+                  <img src="/okta/icon-urgent.svg" alt="" width={16} height={16} className="okta-verify__field-error-icon" />
+                  <span>Invalid code. Please try again.</span>
+                </div>
+              )}
             </div>
             <p className="okta-verify__resend-text">
               Didn't receive the code?{' '}
@@ -98,8 +114,13 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
             <Button size="large" className="okta-verify__continue-btn" loading={loading} onClick={handleContinue}>
               Continue
             </Button>
-            <a href="#" className="okta-verify__cancel-link" onClick={(e) => { e.preventDefault(); onCancel(); }}>
-              Cancel
+            <a href="#" className="okta-verify__account-link" onClick={(e) => { e.preventDefault(); (onSignIn ?? onCancel)(); }}>
+              <span><span className="okta-verify__link-prefix">Already have an account?&nbsp;</span>Sign in</span>
+              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
+            </a>
+            <a href="#" className="okta-verify__account-link" onClick={(e) => e.preventDefault()}>
+              <span><span className="okta-verify__link-prefix">Need help?&nbsp;</span>Message an agent</span>
+              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
             </a>
           </div>
         </div>
