@@ -146,7 +146,7 @@ export function OktaMfaSetup({
                 <input
                   id="mfa-confirm"
                   type="tel"
-                  maxLength={10}
+                  maxLength={14}
                   className={`okta-otp__confirm-input${showConfirmationError ? ' okta-otp__confirm-input--error' : ''}`}
                   placeholder=" "
                   value={confirmation}

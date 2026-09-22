@@ -133,7 +133,7 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
             <div className="okta-otp-mobile__confirm-group">
               <input
                 type={selected.value.includes('@') ? 'email' : 'tel'}
-                maxLength={selected.value.includes('@') ? undefined : 10}
+                maxLength={selected.value.includes('@') ? undefined : 14}
                 className={`okta-otp-mobile__confirm-input${showConfirmationError ? ' okta-otp-mobile__confirm-input--error' : ''}`}
                 placeholder={selected.value.includes('@') ? 'Re-enter selected email address' : 'Re-enter selected phone number'}
                 value={confirmation}

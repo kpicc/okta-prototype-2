@@ -135,7 +135,7 @@ export function OktaMfaSetupMobile({
             <div className="okta-mfa-mobile__confirm-group">
               <input
                 type="tel"
-                maxLength={20}
+                maxLength={14}
                 className={`okta-mfa-mobile__confirm-input${showConfirmationError ? ' okta-mfa-mobile__confirm-input--error' : ''}`}
                 placeholder="Re-enter selected phone number"
                 value={confirmation}

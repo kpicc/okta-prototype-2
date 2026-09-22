@@ -150,7 +150,7 @@ export function OktaLinkOtp({
                 <input
                   id="otp-confirm"
                   type={selected === phone ? 'tel' : 'email'}
-                  maxLength={selected === phone ? 10 : undefined}
+                  maxLength={selected === phone ? 14 : undefined}
                   className={`okta-otp__confirm-input${showConfirmationError ? ' okta-otp__confirm-input--error' : ''}`}
                   placeholder=" "
                   value={confirmation}

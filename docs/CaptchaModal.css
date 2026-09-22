@@ -1,0 +1,127 @@
+.okta-captcha__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.okta-captcha__box {
+  background: #FFFFFF;
+  border-radius: 8px;
+  width: 320px;
+  max-width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  font-family: var(--font-family-sans);
+}
+
+.okta-captcha__header {
+  background: #4285F4;
+  color: #FFFFFF;
+  padding: 20px 20px 24px;
+}
+
+.okta-captcha__prompt {
+  margin: 0;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.okta-captcha__prompt--strong {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-top: 2px;
+}
+
+.okta-captcha__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: #FFFFFF;
+  padding: 0;
+}
+
+.okta-captcha__tile {
+  aspect-ratio: 1 / 1;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  background-image: url('/okta/captcha-crosswalk.jpg');
+  background-size: 400% 400%;
+  background-repeat: no-repeat;
+  outline: none;
+  transition: transform 120ms ease;
+}
+
+.okta-captcha__tile:focus-visible {
+  outline: 2px solid #1A73E8;
+  outline-offset: -2px;
+}
+
+.okta-captcha__tile--selected {
+  transform: scale(0.92);
+}
+
+.okta-captcha__tile-check {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.okta-captcha__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid #E5E5E5;
+  background: #FFFFFF;
+}
+
+.okta-captcha__footer-icons {
+  display: flex;
+  gap: 4px;
+  color: #5F6368;
+}
+
+.okta-captcha__icon-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.okta-captcha__icon-btn:hover {
+  background: #F1F3F4;
+}
+
+.okta-captcha__submit {
+  background: #1A73E8;
+  color: #FFFFFF;
+  border: 0;
+  border-radius: 4px;
+  padding: 8px 20px;
+  font-family: var(--font-family-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.okta-captcha__submit:hover {
+  background: #1557B0;
+}
