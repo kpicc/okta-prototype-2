@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '../src';
-import { CaptchaModal } from './CaptchaModal.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaUpdateAccount.css';
 
@@ -16,7 +15,6 @@ const meetsPasswordRequirements = (value: string) =>
 
 export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAccountProps) {
   const { loading, trigger } = useDelayedAction();
-  const [captchaOpen, setCaptchaOpen] = useState(false);
   const [pwReqsOpen, setPwReqsOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -33,12 +31,7 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
 
   function handleContinue() {
     setSubmitted(true);
-    if (!formInvalid) setCaptchaOpen(true);
-  }
-
-  function handleCaptchaVerified() {
-    setCaptchaOpen(false);
-    trigger(() => onContinue?.(email));
+    if (!formInvalid) trigger(() => onContinue?.(email));
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -182,10 +175,6 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
           </div>
         </div>
       </main>
-
-      {captchaOpen && (
-        <CaptchaModal onClose={() => setCaptchaOpen(false)} onVerified={handleCaptchaVerified} />
-      )}
     </div>
   );
 }
