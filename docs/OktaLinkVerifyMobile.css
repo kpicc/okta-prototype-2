@@ -99,4 +99,11 @@
   text-decoration: underline;
 }
 
+.okta-link-mobile__login-error {
+  margin: 0;
+  color: #C30000;
+  font-size: 14px;
+  line-height: 20px;
+}
+
 

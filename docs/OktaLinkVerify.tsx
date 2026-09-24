@@ -17,6 +17,7 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
   const [pin, setPin] = useState('');
   const [touched, setTouched] = useState({ phone: false, pin: false });
   const [submitted, setSubmitted] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   const phoneDigits = phone.replace(/\D/g, '');
   const phoneError = (touched.phone || submitted) && (!phone ? 'Enter your phone number.' : phoneDigits.length !== 10 ? 'Enter a valid 10-digit phone number.' : '');
   const pinError = (touched.pin || submitted) && (!pin ? 'Enter your PIN.' : !/^\d{4}$/.test(pin) ? 'Enter your 4-digit PIN.' : '');
@@ -24,7 +25,8 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
   function handleContinue() {
     setSubmitted(true);
     setTouched({ phone: true, pin: true });
-    if (phoneDigits.length === 10 && /^\d{4}$/.test(pin)) trigger(() => onContinue?.());
+    setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== '1234');
+    if (phoneDigits.length === 10 && pin === '1234') trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -94,7 +96,7 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
             </div>
             <div className="okta-linkv__field">
               <div className="okta-linkv__float-field">
-                <input id="link-pin" type="password" inputMode="numeric" maxLength={4} className={`okta-linkv__input${pinError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={pin} onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-pin-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="link-pin" type="password" inputMode="numeric" maxLength={4} className={`okta-linkv__input${pinError ? ' okta-linkv__input--error' : ''}`} placeholder=" " value={pin} onChange={(event) => { setPin(event.target.value.replace(/\D/g, '')); setLoginError(false); }} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-pin-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="link-pin" className="okta-linkv__float-label">PIN</label>
               </div>
               {pinError && <span id="link-pin-error" className="okta-linkv__field-error" role="alert">{pinError}</span>}
@@ -112,6 +114,7 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
           </div>
 
           <div className="okta-linkv__actions">
+            {loginError && <p className="okta-linkv__login-error" role="alert">Login failed. Please try again.</p>}
             <Button size="large" className="okta-linkv__continue-btn" loading={loading} onClick={handleContinue}>
               Continue
             </Button>

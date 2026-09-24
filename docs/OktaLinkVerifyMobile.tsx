@@ -25,6 +25,7 @@ export function OktaLinkVerifyMobile({ onBack, onContinue }: OktaLinkVerifyMobil
   const [showPin, setShowPin] = useState(false);
   const [touched, setTouched] = useState({ phone: false, pin: false });
   const [submitted, setSubmitted] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   const phoneDigits = phone.replace(/\D/g, '');
   const phoneError = (touched.phone || submitted) && (!phone ? 'Enter your phone number.' : phoneDigits.length !== 10 ? 'Enter a valid 10-digit phone number.' : '');
   const pinError = (touched.pin || submitted) && (!pin ? 'Enter your PIN.' : !/^\d{4}$/.test(pin) ? 'Enter your 4-digit PIN.' : '');
@@ -32,7 +33,8 @@ export function OktaLinkVerifyMobile({ onBack, onContinue }: OktaLinkVerifyMobil
   function handleContinue() {
     setSubmitted(true);
     setTouched({ phone: true, pin: true });
-    if (phoneDigits.length === 10 && /^\d{4}$/.test(pin)) trigger(() => onContinue?.());
+    setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== '1234');
+    if (phoneDigits.length === 10 && pin === '1234') trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -86,7 +88,7 @@ export function OktaLinkVerifyMobile({ onBack, onContinue }: OktaLinkVerifyMobil
             </div>
             <div className="okta-link-mobile__field">
               <div className="okta-link-mobile__password-field">
-                <input type={showPin ? 'text' : 'password'} inputMode="numeric" maxLength={4} className={`okta-link-mobile__input okta-link-mobile__input--toggle${pinError ? ' okta-link-mobile__input--error' : ''}`} placeholder="PIN" value={pin} onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-mobile-pin-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input type={showPin ? 'text' : 'password'} inputMode="numeric" maxLength={4} className={`okta-link-mobile__input okta-link-mobile__input--toggle${pinError ? ' okta-link-mobile__input--error' : ''}`} placeholder="PIN" value={pin} onChange={(event) => { setPin(event.target.value.replace(/\D/g, '')); setLoginError(false); }} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-mobile-pin-error' : undefined} onKeyDown={onEnterSubmit} />
                 <button
                   type="button"
                   className="okta-link-mobile__password-toggle"
@@ -112,6 +114,7 @@ export function OktaLinkVerifyMobile({ onBack, onContinue }: OktaLinkVerifyMobil
             </a>
           </div>
 
+          {loginError && <p className="okta-link-mobile__login-error" role="alert">Login failed. Please try again.</p>}
           <Button size="large" className="okta-link-mobile__continue-btn" loading={loading} onClick={handleContinue}>
             Continue
           </Button>
