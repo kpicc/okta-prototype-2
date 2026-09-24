@@ -82,7 +82,7 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
       <div className="okta-verify__steps">
         <div className="okta-verify__step okta-verify__step--active">
           <img src="/okta/step-active.svg" alt="" width={24} height={24} />
-          <span className="okta-verify__step-label okta-verify__step-label--active">Update account login</span>
+          <span className="okta-verify__step-label okta-verify__step-label--active">Create account</span>
         </div>
         <div className="okta-verify__step-line" />
         <div className="okta-verify__step">

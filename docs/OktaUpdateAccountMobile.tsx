@@ -23,9 +23,9 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
   const [confirmPassword, setConfirmPassword] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const emailError = submitted && (!email ? 'Enter your email address.' : !isValidEmail(email) ? 'Email address must be in the form of an email address' : '');
-  const passwordError = submitted && (!password ? 'Create a password.' : !meetsPasswordRequirements(password) ? 'Password requirements were not met.' : '');
-  const confirmError = submitted && (!confirmPassword ? 'Confirm your password.' : confirmPassword !== password ? 'Passwords do not match' : '');
+  const emailError = submitted && (!email ? 'This field cannot be left blank' : !isValidEmail(email) ? 'Email address must be in the form of an email address' : '');
+  const passwordError = submitted && (!password ? 'This field cannot be left blank' : !meetsPasswordRequirements(password) ? 'Password requirements were not met.' : '');
+  const confirmError = submitted && (!confirmPassword ? 'This field cannot be left blank' : confirmPassword !== password ? 'Passwords do not match' : '');
   const formInvalid = !isValidEmail(email) || !meetsPasswordRequirements(password) || confirmPassword !== password;
   const firstError = emailError || passwordError || confirmError || '';
 
@@ -52,7 +52,7 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
       <div className="okta-update-mobile__steps">
         <div className="okta-update-mobile__step okta-update-mobile__step--active">
           <img src="/okta/step-current.svg" alt="" width={24} height={24} />
-          <span className="okta-update-mobile__step-label okta-update-mobile__step-label--active">Update login</span>
+          <span className="okta-update-mobile__step-label okta-update-mobile__step-label--active">Create account</span>
         </div>
         <div className="okta-update-mobile__step-line okta-update-mobile__step-line--first" />
         <div className="okta-update-mobile__step">
@@ -70,7 +70,7 @@ export function OktaUpdateAccountMobile({ onBack, onContinue, onSignIn }: OktaUp
       <main className="okta-update-mobile__body">
         <div className="okta-update-mobile__card">
           <div className="okta-update-mobile__card-header">
-            <h2 className="okta-update-mobile__card-title">Update my account login</h2>
+            <h2 className="okta-update-mobile__card-title">Create your account</h2>
             <div className="okta-update-mobile__card-subtitle">
               <p className="okta-update-mobile__card-subtitle-text">Please enter your email & password below.</p>
             </div>

@@ -79,7 +79,7 @@ export function OktaMfaSetup({
       <div className="okta-link__steps">
         <div className="okta-link__step">
           <img src="/okta/step-completed.svg" alt="" width={24} height={24} />
-          <span className="okta-link__step-label okta-link__step-label--completed">Update account login</span>
+          <span className="okta-link__step-label okta-link__step-label--completed">Create account</span>
         </div>
         <div className="okta-link__step-line" />
         <div className="okta-link__step">

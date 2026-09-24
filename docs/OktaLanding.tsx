@@ -117,7 +117,7 @@ export function OktaLanding({ onUpdateAccount, onSignIn }: OktaLandingProps) {
             </div>
             <div className="okta-landing__left-content">
               <div className="okta-landing__left-header">
-                <span className="okta-landing__eyebrow">Update your account login</span>
+                <span className="okta-landing__eyebrow">Create your account</span>
                 <h1 className="okta-landing__left-title">
                   We've updated your login experience.
                 </h1>

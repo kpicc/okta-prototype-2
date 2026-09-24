@@ -66,7 +66,7 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onS
       <div className="okta-verify-mobile__steps">
         <div className="okta-verify-mobile__step okta-verify-mobile__step--active">
           <img src="/okta/step-current.svg" alt="" width={24} height={24} />
-          <span className="okta-verify-mobile__step-label okta-verify-mobile__step-label--active">Update login</span>
+          <span className="okta-verify-mobile__step-label okta-verify-mobile__step-label--active">Create account</span>
         </div>
         <div className="okta-verify-mobile__step-line okta-verify-mobile__step-line--first" />
         <div className="okta-verify-mobile__step">

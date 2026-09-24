@@ -243,6 +243,7 @@
 
 .okta-verify-mobile__resend-row {
   display: inline-flex;
+  margin-top: 8px;
   align-items: center;
   gap: 4px;
   padding: 4px 0;

@@ -35,7 +35,7 @@ export function OktaLinkServicesMobile({ onBack, onContinue }: OktaLinkServicesM
       <div className="okta-link-mobile__steps">
         <div className="okta-link-mobile__step">
           <img src="/okta/step-completed.svg" alt="" width={24} height={24} />
-          <span className="okta-link-mobile__step-label okta-link-mobile__step-label--completed">Update login</span>
+          <span className="okta-link-mobile__step-label okta-link-mobile__step-label--completed">Create account</span>
         </div>
         <div className="okta-link-mobile__step-line okta-link-mobile__step-line--first" />
         <div className="okta-link-mobile__step okta-link-mobile__step--active">

@@ -120,7 +120,7 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
 
           {/* Content */}
           <div className="okta-mobile__content">
-            <span className="okta-mobile__eyebrow">Update your account login</span>
+            <span className="okta-mobile__eyebrow">Create your account</span>
             <h1 className="okta-mobile__title">
               We've updated your login experience.
             </h1>
