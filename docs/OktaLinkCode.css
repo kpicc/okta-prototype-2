@@ -20,6 +20,11 @@
   line-height: 16px;
 }
 
+.okta-lcode__cta-error {
+  align-self: stretch;
+  text-align: left;
+}
+
 .okta-lcode__float-field {
   position: relative;
   width: 100%;

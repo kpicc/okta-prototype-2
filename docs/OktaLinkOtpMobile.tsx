@@ -145,11 +145,11 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
                 onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
                 aria-invalid={showConfirmationError}
                 aria-describedby={showConfirmationError ? 'otp-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
-              {showConfirmationError && <span id="otp-mobile-confirm-error" className="okta-otp-mobile__field-error" role="alert">{selected.value.includes('@') ? 'Entered email address does not match. Please try again.' : 'Entered phone number did not match. Please try again.'}</span>}
             </div>
           )}
           </div>
 
+          {showConfirmationError && selected && <span id="otp-mobile-confirm-error" className="okta-otp-mobile__field-error" role="alert">{selected.value.includes('@') ? 'Entered email address does not match. Please try again.' : 'Entered phone number did not match. Please try again.'}</span>}
           <Button size="large" className="okta-link-mobile__continue-btn" loading={loading} onClick={handleContinue}>
             Continue
           </Button>

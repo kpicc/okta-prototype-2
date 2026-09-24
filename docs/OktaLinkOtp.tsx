@@ -173,11 +173,11 @@ export function OktaLinkOtp({
                   {selected === phone ? 'Re-enter the selected phone number' : 'Re-enter the selected email address'}
                 </label>
               </div>
-              {showConfirmationError && <span id="otp-confirm-error" className="okta-otp__field-error" role="alert">{selected === phone ? 'Entered phone number did not match. Please try again.' : 'Entered email address does not match. Please try again.'}</span>}
             </div>
           )}
 
           <div className="okta-otp__actions">
+            {showConfirmationError && selected && <span id="otp-confirm-error" className="okta-otp__field-error" role="alert">{selected === phone ? 'Entered phone number did not match. Please try again.' : 'Entered email address does not match. Please try again.'}</span>}
             <Button size="large" className="okta-otp__continue-btn" loading={loading} onClick={handleContinue}>
               Continue
             </Button>

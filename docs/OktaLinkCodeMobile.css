@@ -25,6 +25,11 @@
   line-height: 16px;
 }
 
+.okta-code-mobile__cta-error {
+  align-self: stretch;
+  text-align: left;
+}
+
 .okta-code-mobile__input {
   width: 100%;
   height: 55px;

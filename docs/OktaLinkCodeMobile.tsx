@@ -76,7 +76,6 @@ export function OktaLinkCodeMobile({ destination = '(***)***-**90', onBack, onCo
           <div className="okta-code-mobile__fields">
             <div className="okta-code-mobile__field">
               <input type="text" inputMode="numeric" maxLength={6} className={`okta-code-mobile__input${codeError ? ' okta-code-mobile__input--error' : ''}`} placeholder="Enter the code" value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'link-code-mobile-error' : undefined} onKeyDown={onEnterSubmit} />
-              {codeError && <span id="link-code-mobile-error" className="okta-code-mobile__field-error" role="alert">Enter the valid 6-digit security code.</span>}
             </div>
             <a href="#" className="okta-code-mobile__resend-row" onClick={(e) => e.preventDefault()}>
               <span className="okta-code-mobile__resend-text">Didn't receive the code?</span>
@@ -85,6 +84,7 @@ export function OktaLinkCodeMobile({ destination = '(***)***-**90', onBack, onCo
             </a>
           </div>
 
+          {codeError && <span id="link-code-mobile-error" className="okta-code-mobile__field-error okta-code-mobile__cta-error" role="alert">Enter the valid 6-digit security code.</span>}
           <Button size="large" className="okta-link-mobile__continue-btn" loading={loading} onClick={handleContinue}>
             Continue
           </Button>
