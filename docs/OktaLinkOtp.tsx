@@ -13,6 +13,12 @@ interface OktaLinkOtpProps {
   onContinue?: () => void;
 }
 
+const maskEmail = (value: string) => {
+  const [local, domain] = value.split('@');
+  if (!local || !domain) return value;
+  return `${local[0]}***${local.length > 1 ? local.at(-1) : ''}@${domain}`;
+};
+
 export function OktaLinkOtp({
   phone = '(***) ***-**90',
   email = 'e***l@address.com',
@@ -26,6 +32,7 @@ export function OktaLinkOtp({
   const [confirmation, setConfirmation] = useState('');
   const [showSelectionError, setShowSelectionError] = useState(false);
   const [showConfirmationError, setShowConfirmationError] = useState(false);
+  const maskedEmail = maskEmail(email);
 
   function handleSelect(value: string) {
     setSelected(value);
@@ -40,7 +47,11 @@ export function OktaLinkOtp({
       setShowSelectionError(true);
       return;
     }
-    if (!confirmation.trim()) {
+    if (selected === phone && confirmation.replace(/\D/g, '') !== '1234567890') {
+      setShowConfirmationError(true);
+      return;
+    }
+    if (selected !== phone && confirmation.trim() !== 'email@address.com') {
       setShowConfirmationError(true);
       return;
     }
@@ -136,8 +147,8 @@ export function OktaLinkOtp({
                 <button className="okta-otp__dropdown-option" onClick={() => handleSelect(phone)}>
                   {phone}
                 </button>
-                <button className="okta-otp__dropdown-option" onClick={() => handleSelect(email)}>
-                  {email}
+                <button className="okta-otp__dropdown-option" onClick={() => handleSelect(maskedEmail)}>
+                  {maskedEmail}
                 </button>
               </div>
             )}
@@ -162,7 +173,7 @@ export function OktaLinkOtp({
                   {selected === phone ? 'Re-enter the selected phone number' : 'Re-enter the selected email address'}
                 </label>
               </div>
-              {showConfirmationError && <span id="otp-confirm-error" className="okta-otp__field-error" role="alert">Re-enter the selected delivery method.</span>}
+              {showConfirmationError && <span id="otp-confirm-error" className="okta-otp__field-error" role="alert">{selected === phone ? 'Entered phone number did not match. Please try again.' : 'Entered email address does not match. Please try again.'}</span>}
             </div>
           )}
 

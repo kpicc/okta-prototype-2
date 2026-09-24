@@ -36,7 +36,11 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
       setShowSelectionError(true);
       return;
     }
-    if (!confirmation.trim()) {
+    if (!selected.value.includes('@') && confirmation.replace(/\D/g, '') !== '1234567890') {
+      setShowConfirmationError(true);
+      return;
+    }
+    if (selected.value.includes('@') && confirmation.trim() !== 'email@address.com') {
       setShowConfirmationError(true);
       return;
     }
@@ -141,7 +145,7 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
                 onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
                 aria-invalid={showConfirmationError}
                 aria-describedby={showConfirmationError ? 'otp-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
-              {showConfirmationError && <span id="otp-mobile-confirm-error" className="okta-otp-mobile__field-error" role="alert">Re-enter the selected delivery method.</span>}
+              {showConfirmationError && <span id="otp-mobile-confirm-error" className="okta-otp-mobile__field-error" role="alert">{selected.value.includes('@') ? 'Entered email address does not match. Please try again.' : 'Entered phone number did not match. Please try again.'}</span>}
             </div>
           )}
           </div>
