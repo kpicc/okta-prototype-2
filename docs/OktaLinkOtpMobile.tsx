@@ -48,7 +48,7 @@ export function OktaLinkOtpMobile({ email = 'email@address.com', onBack, onConti
       setShowConfirmationError(true);
       return;
     }
-    if (selected.value.includes('@') && confirmation.trim() !== email) {
+    if (selected.value.includes('@') && confirmation.trim().toLowerCase() !== email.trim().toLowerCase()) {
       setShowConfirmationError(true);
       return;
     }

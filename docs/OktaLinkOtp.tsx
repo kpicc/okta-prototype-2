@@ -51,7 +51,7 @@ export function OktaLinkOtp({
       setShowConfirmationError(true);
       return;
     }
-    if (selected !== phone && confirmation.trim() !== email) {
+    if (selected !== phone && confirmation.trim().toLowerCase() !== email.trim().toLowerCase()) {
       setShowConfirmationError(true);
       return;
     }
