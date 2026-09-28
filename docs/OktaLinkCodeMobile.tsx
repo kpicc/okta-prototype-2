@@ -6,6 +6,7 @@ import './OktaLinkCodeMobile.css';
 
 interface OktaLinkCodeMobileProps {
   destination?: string;
+  expectedCode?: string;
   onBack: () => void;
   onContinue?: () => void;
 }
@@ -17,16 +18,16 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaLinkCodeMobile({ destination = '(***)***-**90', onBack, onContinue }: OktaLinkCodeMobileProps) {
+export function OktaLinkCodeMobile({ destination = '(***)***-**90', expectedCode = '222222', onBack, onContinue }: OktaLinkCodeMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
-  const codeError = showError && code !== '222222';
+  const codeError = showError && code !== expectedCode;
 
   function handleContinue() {
     setShowError(true);
-    if (code === '222222') trigger(() => onContinue?.());
+    if (code === expectedCode) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -75,7 +76,7 @@ export function OktaLinkCodeMobile({ destination = '(***)***-**90', onBack, onCo
 
           <div className="okta-code-mobile__fields">
             <div className="okta-code-mobile__field">
-              <input type="text" inputMode="numeric" maxLength={6} className={`okta-code-mobile__input${codeError ? ' okta-code-mobile__input--error' : ''}`} placeholder="Enter the code" value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'link-code-mobile-error' : undefined} onKeyDown={onEnterSubmit} />
+              <input type="text" inputMode="numeric" maxLength={6} className={`okta-code-mobile__input${codeError ? ' okta-code-mobile__input--error' : ''}`} placeholder="Enter the code" value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== expectedCode) setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'link-code-mobile-error' : undefined} onKeyDown={onEnterSubmit} />
             </div>
             <a href="#" className="okta-code-mobile__resend-row" onClick={(e) => e.preventDefault()}>
               <span className="okta-code-mobile__resend-text">Didn't receive the code?</span>

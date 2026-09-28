@@ -6,6 +6,7 @@ import './OktaLinkCode.css';
 
 interface OktaLinkCodeProps {
   destination?: string;
+  expectedCode?: string;
   onBack: () => void;
   onCancel: () => void;
   onContinue?: () => void;
@@ -13,6 +14,7 @@ interface OktaLinkCodeProps {
 
 export function OktaLinkCode({
   destination = '*******90',
+  expectedCode = '222222',
   onBack,
   onCancel,
   onContinue,
@@ -20,11 +22,11 @@ export function OktaLinkCode({
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
-  const codeError = showError && code !== '222222';
+  const codeError = showError && code !== expectedCode;
 
   function handleContinue() {
     setShowError(true);
-    if (code === '222222') trigger(() => onContinue?.());
+    if (code === expectedCode) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -89,7 +91,7 @@ export function OktaLinkCode({
           <div className="okta-lcode__fields">
             <div className="okta-lcode__field">
               <div className="okta-lcode__float-field">
-                <input id="link-code" type="text" inputMode="numeric" maxLength={6} className={`okta-lcode__input${codeError ? ' okta-lcode__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'link-code-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="link-code" type="text" inputMode="numeric" maxLength={6} className={`okta-lcode__input${codeError ? ' okta-lcode__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== expectedCode) setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'link-code-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="link-code" className="okta-lcode__float-label">Enter code</label>
               </div>
             </div>

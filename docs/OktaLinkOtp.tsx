@@ -10,7 +10,7 @@ interface OktaLinkOtpProps {
   email?: string;
   onBack: () => void;
   onCancel: () => void;
-  onContinue?: () => void;
+  onContinue?: (method: 'email' | 'phone', destination: string) => void;
 }
 
 const maskEmail = (value: string) => {
@@ -21,7 +21,7 @@ const maskEmail = (value: string) => {
 
 export function OktaLinkOtp({
   phone = '(***) ***-**90',
-  email = 'email@address.com',
+  email,
   onBack,
   onCancel,
   onContinue,
@@ -32,7 +32,7 @@ export function OktaLinkOtp({
   const [confirmation, setConfirmation] = useState('');
   const [showSelectionError, setShowSelectionError] = useState(false);
   const [showConfirmationError, setShowConfirmationError] = useState(false);
-  const maskedEmail = maskEmail(email);
+  const maskedEmail = email ? maskEmail(email) : null;
 
   function handleSelect(value: string) {
     setSelected(value);
@@ -51,11 +51,11 @@ export function OktaLinkOtp({
       setShowConfirmationError(true);
       return;
     }
-    if (selected !== phone && confirmation.trim().toLowerCase() !== email.trim().toLowerCase()) {
+    if (selected !== phone && (!email || confirmation.trim().toLowerCase() !== email.trim().toLowerCase())) {
       setShowConfirmationError(true);
       return;
     }
-    trigger(() => onContinue?.());
+    trigger(() => onContinue?.(selected === phone ? 'phone' : 'email', selected));
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -147,9 +147,11 @@ export function OktaLinkOtp({
                 <button className="okta-otp__dropdown-option" onClick={() => handleSelect(phone)}>
                   {phone}
                 </button>
-                <button className="okta-otp__dropdown-option" onClick={() => handleSelect(maskedEmail)}>
-                  {maskedEmail}
-                </button>
+                {maskedEmail && (
+                  <button className="okta-otp__dropdown-option" onClick={() => handleSelect(maskedEmail)}>
+                    {maskedEmail}
+                  </button>
+                )}
               </div>
             )}
             {showSelectionError && <span id="otp-selection-error" className="okta-otp__field-error" role="alert">Select a delivery method.</span>}

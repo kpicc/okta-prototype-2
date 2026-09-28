@@ -8,7 +8,7 @@ import './OktaLinkOtpMobile.css';
 interface OktaLinkOtpMobileProps {
   email?: string;
   onBack: () => void;
-  onContinue?: () => void;
+  onContinue?: (method: 'email' | 'phone', destination: string) => void;
 }
 
 const maskEmail = (value: string) => {
@@ -24,7 +24,7 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaLinkOtpMobile({ email = 'email@address.com', onBack, onContinue }: OktaLinkOtpMobileProps) {
+export function OktaLinkOtpMobile({ email, onBack, onContinue }: OktaLinkOtpMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,10 +33,10 @@ export function OktaLinkOtpMobile({ email = 'email@address.com', onBack, onConti
   const [showSelectionError, setShowSelectionError] = useState(false);
   const [showConfirmationError, setShowConfirmationError] = useState(false);
 
-  const maskedEmail = maskEmail(email);
+  const maskedEmail = email ? maskEmail(email) : null;
   const options = [
     { label: '(***) ***-**90', value: '(***) ***-**90' },
-    { label: maskedEmail, value: maskedEmail },
+    ...(maskedEmail ? [{ label: maskedEmail, value: maskedEmail }] : []),
   ];
 
   function handleContinue() {
@@ -48,11 +48,11 @@ export function OktaLinkOtpMobile({ email = 'email@address.com', onBack, onConti
       setShowConfirmationError(true);
       return;
     }
-    if (selected.value.includes('@') && confirmation.trim().toLowerCase() !== email.trim().toLowerCase()) {
+    if (selected.value.includes('@') && (!email || confirmation.trim().toLowerCase() !== email.trim().toLowerCase())) {
       setShowConfirmationError(true);
       return;
     }
-    trigger(() => onContinue?.());
+    trigger(() => onContinue?.(selected.value.includes('@') ? 'email' : 'phone', selected.value));
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
