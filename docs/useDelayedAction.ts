@@ -8,13 +8,13 @@ import { useState } from 'react';
 export function useDelayedAction() {
   const [loading, setLoading] = useState(false);
 
-  function trigger(action?: () => void) {
+  function trigger(action?: () => void | Promise<void>) {
     if (loading || !action) return;
     setLoading(true);
     const delay = 200 + Math.random() * 1300;
     window.setTimeout(() => {
       setLoading(false);
-      action();
+      void action();
     }, delay);
   }
 

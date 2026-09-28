@@ -16,7 +16,7 @@ interface OktaLinkOtpProps {
 const maskEmail = (value: string) => {
   const [local, domain] = value.split('@');
   if (!local || !domain) return value;
-  return `${local[0]}***${local.length > 1 ? local.at(-1) : ''}@${domain}`;
+  return `${local[0]}***${local.length > 1 ? local.slice(-1) : ''}@${domain}`;
 };
 
 export function OktaLinkOtp({

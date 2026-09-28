@@ -8,23 +8,24 @@ import './OktaVerifyEmailMobile.css';
 
 interface OktaVerifyEmailMobileProps {
   email?: string;
+  expectedCode?: string;
   onBack: () => void;
   onSignIn?: () => void;
   onContinue?: () => void;
 }
 
-export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onSignIn, onContinue }: OktaVerifyEmailMobileProps) {
+export function OktaVerifyEmailMobile({ email = 'e***l@address.com', expectedCode = '222222', onBack, onSignIn, onContinue }: OktaVerifyEmailMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [captchaOpen, setCaptchaOpen] = useState(false);
-  const codeError = showError && code !== '222222';
+  const codeError = showError && code !== expectedCode;
   const codeErrorMessage = codeError ? (code.trim() === '' ? 'This field cannot be left blank' : 'Invalid code. Please try again.') : '';
 
   function processCode() {
     setShowError(true);
-    if (code === '222222') {
+    if (code === expectedCode) {
       trigger(() => onContinue?.());
     } else {
       setAttempts((n) => n + 1);
@@ -91,11 +92,6 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onS
           </div>
 
           <div className="okta-verify-mobile__fields">
-            {codeError && (
-              <p className="okta-verify-mobile__banner-error" role="alert">
-                We found some errors. Please review the form and make the necessary corrections.
-              </p>
-            )}
             <div className="okta-verify-mobile__field">
               <div className="okta-verify-mobile__input-wrap">
                 <input
@@ -106,7 +102,7 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', onBack, onS
                   placeholder="Enter the code"
                   value={code}
                   onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }}
-                  onBlur={() => { if (code !== '222222') setShowError(true); }}
+                  onBlur={() => { if (code !== expectedCode) setShowError(true); }}
                   aria-invalid={codeError}
                   aria-describedby={codeError ? 'verify-mobile-code-error' : undefined} onKeyDown={onEnterSubmit} />
                 {code && (

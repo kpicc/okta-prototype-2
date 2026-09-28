@@ -6,3 +6,5 @@ dist/
 !public/**/*.png
 !logo/**/*.png
 .vercel
+.env.local
+.env*.local

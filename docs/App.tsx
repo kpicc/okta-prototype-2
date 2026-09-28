@@ -26,6 +26,7 @@ import { OktaMyAccountMobile } from './OktaMyAccountMobile.js';
 import { OktaSignIn } from './OktaSignIn.js';
 import { OktaAuthVerify } from './OktaAuthVerify.js';
 import { OktaAuthCode } from './OktaAuthCode.js';
+import { requestVerificationCode } from './verificationApi.js';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -64,7 +65,19 @@ export function App() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
   const [userEmail, setUserEmail] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
   const [authContact, setAuthContact] = useState('');
+
+  async function handleCreateAccount(email: string) {
+    setUserEmail(email);
+    try {
+      const code = await requestVerificationCode(email);
+      setVerificationCode(code);
+    } catch {
+      setVerificationCode('222222');
+    }
+    setScreen('verify-email');
+  }
 
   function renderDesktop() {
     if (screen === 'sign-in') {
@@ -165,6 +178,7 @@ export function App() {
       return (
         <OktaVerifyEmail
           email={userEmail}
+          expectedCode={verificationCode}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('update-account')}
           onSignIn={() => setScreen('sign-in')}
@@ -176,7 +190,7 @@ export function App() {
       return (
         <OktaUpdateAccount
           onBack={() => setScreen('landing')}
-          onContinue={(email) => { setUserEmail(email); setScreen('verify-email'); }}
+          onContinue={(email) => { void handleCreateAccount(email); }}
           onSignIn={() => setScreen('sign-in')}
         />
       );
@@ -282,6 +296,7 @@ export function App() {
       return (
         <OktaVerifyEmailMobile
           email={userEmail}
+          expectedCode={verificationCode}
           onBack={() => setScreen('landing')}
           onSignIn={() => setScreen('sign-in')}
           onContinue={() => setScreen('link-services')}
@@ -292,7 +307,7 @@ export function App() {
       return (
         <OktaUpdateAccountMobile
           onBack={() => setScreen('landing')}
-          onContinue={(email) => { setUserEmail(email); setScreen('verify-email'); }}
+          onContinue={(email) => { void handleCreateAccount(email); }}
           onSignIn={() => setScreen('sign-in')}
         />
       );

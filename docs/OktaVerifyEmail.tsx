@@ -8,6 +8,7 @@ import './OktaVerifyEmail.css';
 
 interface OktaVerifyEmailProps {
   email?: string;
+  expectedCode?: string;
   onBack: () => void;
   onCancel: () => void;
   onSignIn?: () => void;
@@ -21,18 +22,18 @@ function maskEmail(email: string): string {
   return `${visible}***${local.slice(-1)}@${domain}`;
 }
 
-export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel, onSignIn, onContinue }: OktaVerifyEmailProps) {
+export function OktaVerifyEmail({ email = 'email@address.com', expectedCode = '222222', onBack, onCancel, onSignIn, onContinue }: OktaVerifyEmailProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [captchaOpen, setCaptchaOpen] = useState(false);
-  const codeError = showError && code !== '222222';
+  const codeError = showError && code !== expectedCode;
   const codeErrorMessage = codeError ? (code.trim() === '' ? 'This field cannot be left blank' : 'Invalid code. Please try again.') : '';
 
   function processCode() {
     setShowError(true);
-    if (code === '222222') {
+    if (code === expectedCode) {
       trigger(() => onContinue?.());
     } else {
       setAttempts((n) => n + 1);
@@ -109,14 +110,9 @@ export function OktaVerifyEmail({ email = 'email@address.com', onBack, onCancel,
           </div>
 
           <div className="okta-verify__fields">
-            {codeError && (
-              <p className="okta-verify__banner-error" role="alert">
-                We found some errors. Please review the form and make the necessary corrections.
-              </p>
-            )}
             <div className="okta-verify__field">
               <div className="okta-verify__float-field">
-                <input id="verify-code" type="text" inputMode="numeric" maxLength={6} className={`okta-verify__input okta-verify__input--clearable${codeError ? ' okta-verify__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'verify-code-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="verify-code" type="text" inputMode="numeric" maxLength={6} className={`okta-verify__input okta-verify__input--clearable${codeError ? ' okta-verify__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value); if (showError) setShowError(false); }} onBlur={() => { if (code !== expectedCode) setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'verify-code-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="verify-code" className="okta-verify__float-label">Enter code</label>
                 {code && (
                   <button type="button" className="okta-verify__clear" aria-label="Clear code" onClick={() => { setCode(''); setShowError(false); }}>
