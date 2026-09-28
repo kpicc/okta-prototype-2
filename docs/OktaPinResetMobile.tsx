@@ -7,7 +7,7 @@ import './OktaForgotPinMobile.css';
 interface OktaPinResetMobileProps {
   phone?: string;
   onBack: () => void;
-  onContinue?: () => void;
+  onContinue?: (pin: string) => void;
 }
 
 const footerLinks = [
@@ -48,7 +48,7 @@ export function OktaPinResetMobile({ phone = '', onBack, onContinue }: OktaPinRe
 
   function handleContinue() {
     setSubmitted(true);
-    if (!getPinError() && !getConfirmError()) trigger(() => onContinue?.());
+    if (!getPinError() && !getConfirmError()) trigger(() => onContinue?.(pin));
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {

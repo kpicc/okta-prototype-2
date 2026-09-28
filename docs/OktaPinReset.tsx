@@ -8,7 +8,7 @@ import './OktaPinReset.css';
 interface OktaPinResetProps {
   phone?: string;
   onBack: () => void;
-  onContinue?: () => void;
+  onContinue?: (pin: string) => void;
 }
 
 const WEAK_PINS = new Set(['1111', '1234', '0000']);
@@ -41,7 +41,7 @@ export function OktaPinReset({ phone = '', onBack, onContinue }: OktaPinResetPro
 
   function handleContinue() {
     setSubmitted(true);
-    if (!getPinError() && !getConfirmError()) trigger(() => onContinue?.());
+    if (!getPinError() && !getConfirmError()) trigger(() => onContinue?.(pin));
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {

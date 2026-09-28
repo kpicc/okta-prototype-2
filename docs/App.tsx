@@ -74,6 +74,7 @@ export function App() {
   }, []);
   const [userEmail, setUserEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [accountPin, setAccountPin] = useState('');
   const [authContact, setAuthContact] = useState('');
 
   async function handleCreateAccount(email: string) {
@@ -188,7 +189,7 @@ export function App() {
       return (
         <OktaPinReset
           onBack={() => setScreen('landing')}
-          onContinue={() => setScreen('pin-reset-success')}
+          onContinue={(pin) => { setAccountPin(pin); setScreen('pin-reset-success'); }}
         />
       );
     }
@@ -203,6 +204,7 @@ export function App() {
     if (screen === 'link-verify') {
       return (
         <OktaLinkVerify
+          expectedPin={accountPin || undefined}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-services')}
           onContinue={() => setScreen('link-otp')}
@@ -336,7 +338,7 @@ export function App() {
       return (
         <OktaPinResetMobile
           onBack={() => setScreen('landing')}
-          onContinue={() => setScreen('pin-reset-success')}
+          onContinue={(pin) => { setAccountPin(pin); setScreen('pin-reset-success'); }}
         />
       );
     }
@@ -351,6 +353,7 @@ export function App() {
     if (screen === 'link-verify') {
       return (
         <OktaLinkVerifyMobile
+          expectedPin={accountPin || undefined}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('link-otp')}
           onForgotPin={() => setScreen('forgot-pin')}

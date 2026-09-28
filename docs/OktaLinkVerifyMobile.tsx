@@ -6,6 +6,7 @@ import './OktaLinkServicesMobile.css';
 import './OktaLinkVerifyMobile.css';
 
 interface OktaLinkVerifyMobileProps {
+  expectedPin?: string;
   onBack: () => void;
   onContinue?: () => void;
   onForgotPin?: () => void;
@@ -18,7 +19,7 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaLinkVerifyMobile({ onBack, onContinue, onForgotPin }: OktaLinkVerifyMobileProps) {
+export function OktaLinkVerifyMobile({ expectedPin = '1234', onBack, onContinue, onForgotPin }: OktaLinkVerifyMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [phone, setPhone] = useState('');
@@ -34,8 +35,8 @@ export function OktaLinkVerifyMobile({ onBack, onContinue, onForgotPin }: OktaLi
   function handleContinue() {
     setSubmitted(true);
     setTouched({ phone: true, pin: true });
-    setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== '1234');
-    if (phoneDigits.length === 10 && pin === '1234') trigger(() => onContinue?.());
+    setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== expectedPin);
+    if (phoneDigits.length === 10 && pin === expectedPin) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {

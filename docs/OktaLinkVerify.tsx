@@ -6,13 +6,14 @@ import './OktaLinkServices.css';
 import './OktaLinkVerify.css';
 
 interface OktaLinkVerifyProps {
+  expectedPin?: string;
   onBack: () => void;
   onCancel: () => void;
   onContinue?: () => void;
   onForgotPin?: () => void;
 }
 
-export function OktaLinkVerify({ onBack, onCancel, onContinue, onForgotPin }: OktaLinkVerifyProps) {
+export function OktaLinkVerify({ expectedPin = '1234', onBack, onCancel, onContinue, onForgotPin }: OktaLinkVerifyProps) {
   const { loading, trigger } = useDelayedAction();
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
@@ -26,8 +27,8 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue, onForgotPin }: Ok
   function handleContinue() {
     setSubmitted(true);
     setTouched({ phone: true, pin: true });
-    setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== '1234');
-    if (phoneDigits.length === 10 && pin === '1234') trigger(() => onContinue?.());
+    setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== expectedPin);
+    if (phoneDigits.length === 10 && pin === expectedPin) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
