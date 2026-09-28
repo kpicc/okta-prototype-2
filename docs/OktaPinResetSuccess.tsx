@@ -36,24 +36,6 @@ export function OktaPinResetSuccess({ onBack, onContinue }: OktaPinResetSuccessP
         </div>
       </nav>
 
-      {/* Step tracker */}
-      <div className="okta-link__steps">
-        <div className="okta-link__step">
-          <img src="/okta/step-completed.svg" alt="" width={24} height={24} />
-          <span className="okta-link__step-label okta-link__step-label--completed">Create account</span>
-        </div>
-        <div className="okta-link__step-line" />
-        <div className="okta-link__step">
-          <img src="/okta/step-current.svg" alt="" width={24} height={24} />
-          <span className="okta-link__step-label okta-link__step-label--active">Link services</span>
-        </div>
-        <div className="okta-link__step-line" />
-        <div className="okta-link__step">
-          <img src="/okta/step-inactive.svg" alt="" width={24} height={24} />
-          <span className="okta-link__step-label">Set up MFA</span>
-        </div>
-      </div>
-
       {/* Content */}
       <main className="okta-link__body">
         <div className="okta-fpin__check-card">
