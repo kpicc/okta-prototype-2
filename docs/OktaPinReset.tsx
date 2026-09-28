@@ -23,22 +23,25 @@ export function OktaPinReset({ phone = '', onBack, onContinue }: OktaPinResetPro
   const phoneDigits = phone.replace(/\D/g, '');
   const lastFour = phoneDigits.slice(-4);
 
-  const pinError = submitted && (!pin
-    ? 'Enter your PIN.'
-    : !/^\d{4}$/.test(pin)
-      ? 'Enter a 4-digit PIN.'
-      : WEAK_PINS.has(pin) || pin === lastFour
-        ? 'Choose a more secure PIN.'
-        : '');
-  const confirmError = submitted && (!confirm
-    ? 'Confirm your PIN.'
-    : confirm !== pin
-      ? 'PINs do not match.'
-      : '');
+  function getPinError() {
+    if (!pin) return 'Enter your PIN.';
+    if (!/^\d{4}$/.test(pin)) return 'Enter a 4-digit PIN.';
+    if (WEAK_PINS.has(pin) || pin === lastFour) return 'Choose a more secure PIN.';
+    return '';
+  }
+
+  function getConfirmError() {
+    if (!confirm) return 'Confirm your PIN.';
+    if (confirm !== pin) return 'PINs do not match.';
+    return '';
+  }
+
+  const pinError = submitted ? getPinError() : '';
+  const confirmError = submitted ? getConfirmError() : '';
 
   function handleContinue() {
     setSubmitted(true);
-    if (!pinError && !confirmError && pin && confirm) trigger(() => onContinue?.());
+    if (!getPinError() && !getConfirmError()) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
