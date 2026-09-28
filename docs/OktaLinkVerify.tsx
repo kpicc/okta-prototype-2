@@ -9,9 +9,10 @@ interface OktaLinkVerifyProps {
   onBack: () => void;
   onCancel: () => void;
   onContinue?: () => void;
+  onForgotPin?: () => void;
 }
 
-export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyProps) {
+export function OktaLinkVerify({ onBack, onCancel, onContinue, onForgotPin }: OktaLinkVerifyProps) {
   const { loading, trigger } = useDelayedAction();
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
@@ -102,7 +103,7 @@ export function OktaLinkVerify({ onBack, onCancel, onContinue }: OktaLinkVerifyP
               {pinError && <span id="link-pin-error" className="okta-linkv__field-error" role="alert">{pinError}</span>}
             </div>
             <div className="okta-linkv__link-row">
-              <a href="#" className="okta-linkv__link" onClick={(e) => e.preventDefault()}>
+              <a href="#" className="okta-linkv__link" onClick={(e) => { e.preventDefault(); onForgotPin?.(); }}>
                 <span>Forgot PIN?</span>
                 <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
               </a>

@@ -12,3 +12,11 @@ export async function requestVerificationCode(email: string): Promise<string> {
 
   return data.code;
 }
+
+export async function sendPinResetEmail(email: string): Promise<void> {
+  await fetch('/api/send-pin-reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+}

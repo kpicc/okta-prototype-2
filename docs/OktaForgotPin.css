@@ -1,0 +1,155 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Forgot PIN (phone entry)                                    */
+/* ------------------------------------------------------------------ */
+
+.okta-fpin__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.okta-fpin__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.okta-fpin__field-error {
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-fpin__float-field {
+  position: relative;
+  width: 100%;
+}
+
+.okta-fpin__input {
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 20px var(--space-4) 6px;
+  padding-right: 48px;
+  background-color: var(--color-neutral-100);
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-fpin__input::placeholder {
+  color: transparent;
+}
+
+.okta-fpin__float-label {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: #4E4E4E;
+  pointer-events: none;
+  transition: top 150ms ease, font-size 150ms ease, color 150ms ease;
+}
+
+.okta-fpin__input:focus + .okta-fpin__float-label,
+.okta-fpin__input:not(:placeholder-shown) + .okta-fpin__float-label {
+  top: 14px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.okta-fpin__input:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-fpin__input--error,
+.okta-fpin__input--error:focus {
+  border-color: #C30000;
+  box-shadow: none;
+}
+
+.okta-fpin__clear {
+  position: absolute;
+  right: 16px;
+  top: 18px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.okta-fpin__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.okta-fpin__continue-btn {
+  width: 100%;
+  height: 60px;
+}
+
+.okta-fpin__cancel-link {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+  line-height: 24px;
+}
+
+.okta-fpin__cancel-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Check email confirmation card ------------------------------- */
+
+.okta-fpin__check-card {
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: var(--space-6) var(--space-4);
+  width: 384px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.okta-fpin__check-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background-color: #F3FDF3;
+}
+
+.okta-fpin__check-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 28px;
+  color: #191919;
+  margin: 0;
+  text-align: center;
+}
+
+.okta-fpin__check-text {
+  font-size: var(--font-size-base);
+  line-height: 24px;
+  color: #4E4E4E;
+  margin: 0;
+  text-align: center;
+}

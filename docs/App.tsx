@@ -26,11 +26,19 @@ import { OktaMyAccountMobile } from './OktaMyAccountMobile.js';
 import { OktaSignIn } from './OktaSignIn.js';
 import { OktaAuthVerify } from './OktaAuthVerify.js';
 import { OktaAuthCode } from './OktaAuthCode.js';
-import { requestVerificationCode } from './verificationApi.js';
+import { OktaForgotPin } from './OktaForgotPin.js';
+import { OktaForgotPinCheck } from './OktaForgotPinCheck.js';
+import { OktaForgotPinMobile } from './OktaForgotPinMobile.js';
+import { OktaForgotPinCheckMobile } from './OktaForgotPinCheckMobile.js';
+import { OktaPinReset } from './OktaPinReset.js';
+import { OktaPinResetSuccess } from './OktaPinResetSuccess.js';
+import { OktaPinResetMobile } from './OktaPinResetMobile.js';
+import { OktaPinResetSuccessMobile } from './OktaPinResetSuccessMobile.js';
+import { requestVerificationCode, sendPinResetEmail } from './verificationApi.js';
 
 const MOBILE_BREAKPOINT = 768;
 
-type Screen = 'landing' | 'sign-in' | 'auth-verify' | 'auth-code' | 'update-account' | 'verify-email' | 'link-services' | 'link-verify' | 'link-otp' | 'link-code' | 'link-success' | 'mfa-setup' | 'mfa-verify' | 'mfa-complete' | 'my-account';
+type Screen = 'landing' | 'sign-in' | 'auth-verify' | 'auth-code' | 'update-account' | 'verify-email' | 'link-services' | 'link-verify' | 'link-otp' | 'link-code' | 'link-success' | 'mfa-setup' | 'mfa-verify' | 'mfa-complete' | 'my-account' | 'forgot-pin' | 'forgot-pin-check' | 'pin-reset' | 'pin-reset-success';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
@@ -77,6 +85,13 @@ export function App() {
       setVerificationCode('222222');
     }
     setScreen('verify-email');
+  }
+
+  function handleForgotPin() {
+    if (userEmail) {
+      void sendPinResetEmail(userEmail);
+    }
+    setScreen('forgot-pin-check');
   }
 
   function renderDesktop() {
@@ -157,12 +172,41 @@ export function App() {
         />
       );
     }
+    if (screen === 'forgot-pin') {
+      return (
+        <OktaForgotPin
+          onBack={() => setScreen('landing')}
+          onCancel={() => setScreen('link-verify')}
+          onContinue={() => handleForgotPin()}
+        />
+      );
+    }
+    if (screen === 'forgot-pin-check') {
+      return <OktaForgotPinCheck onBack={() => setScreen('landing')} />;
+    }
+    if (screen === 'pin-reset') {
+      return (
+        <OktaPinReset
+          onBack={() => setScreen('landing')}
+          onContinue={() => setScreen('pin-reset-success')}
+        />
+      );
+    }
+    if (screen === 'pin-reset-success') {
+      return (
+        <OktaPinResetSuccess
+          onBack={() => setScreen('landing')}
+          onContinue={() => setScreen('link-verify')}
+        />
+      );
+    }
     if (screen === 'link-verify') {
       return (
         <OktaLinkVerify
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-services')}
           onContinue={() => setScreen('link-otp')}
+          onForgotPin={() => setScreen('forgot-pin')}
         />
       );
     }
@@ -276,11 +320,40 @@ export function App() {
         />
       );
     }
+    if (screen === 'forgot-pin') {
+      return (
+        <OktaForgotPinMobile
+          onBack={() => setScreen('landing')}
+          onCancel={() => setScreen('link-verify')}
+          onContinue={() => handleForgotPin()}
+        />
+      );
+    }
+    if (screen === 'forgot-pin-check') {
+      return <OktaForgotPinCheckMobile onBack={() => setScreen('landing')} />;
+    }
+    if (screen === 'pin-reset') {
+      return (
+        <OktaPinResetMobile
+          onBack={() => setScreen('landing')}
+          onContinue={() => setScreen('pin-reset-success')}
+        />
+      );
+    }
+    if (screen === 'pin-reset-success') {
+      return (
+        <OktaPinResetSuccessMobile
+          onBack={() => setScreen('landing')}
+          onContinue={() => setScreen('link-verify')}
+        />
+      );
+    }
     if (screen === 'link-verify') {
       return (
         <OktaLinkVerifyMobile
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('link-otp')}
+          onForgotPin={() => setScreen('forgot-pin')}
         />
       );
     }

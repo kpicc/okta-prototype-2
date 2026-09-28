@@ -1,0 +1,121 @@
+/* ------------------------------------------------------------------ */
+/*  Okta — Forgot PIN Mobile                                           */
+/* ------------------------------------------------------------------ */
+
+.okta-fpin-mobile__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.okta-fpin-mobile__field-error {
+  color: #B42318;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.okta-fpin-mobile__input {
+  width: 100%;
+  height: 55px;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  background-color: #F5F5F5;
+  border: 1px solid #E4E4E4;
+  border-radius: 10px;
+  font-family: var(--font-family-sans);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.okta-fpin-mobile__input::placeholder {
+  color: #4E4E4E;
+}
+
+.okta-fpin-mobile__input:focus {
+  border-color: #DB5C05;
+  box-shadow: 0 0 0 4px rgba(219, 92, 5, 0.15);
+}
+
+.okta-fpin-mobile__input--error,
+.okta-fpin-mobile__input--error:focus {
+  border-color: #C30000;
+  box-shadow: none;
+}
+
+.okta-fpin-mobile__continue-btn {
+  width: 100%;
+  height: 48px;
+  margin-top: 8px;
+}
+
+.okta-fpin-mobile__cancel-link {
+  align-self: center;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: #2F7DC1;
+  text-decoration: none;
+  line-height: 18px;
+}
+
+.okta-fpin-mobile__cancel-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Check email confirmation card ------------------------------- */
+
+.okta-fpin-mobile__check-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--color-neutral-0);
+  border: 1px solid #E4E4E4;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 390px;
+  box-sizing: border-box;
+}
+
+.okta-fpin-mobile__check-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background-color: #F3FDF3;
+}
+
+.okta-fpin-mobile__check-title {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  line-height: 22px;
+  color: #191919;
+  margin: 0;
+  text-align: center;
+}
+
+.okta-fpin-mobile__check-text {
+  font-size: 14px;
+  line-height: 20px;
+  color: #4E4E4E;
+  margin: 0;
+  text-align: center;
+}
+
+/* ---- PIN reset notice -------------------------------------------- */
+
+.okta-fpin-mobile__notice {
+  border-left: 2px solid #DB5C05;
+  padding-left: 12px;
+}
+
+.okta-fpin-mobile__notice-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: #4E4E4E;
+}

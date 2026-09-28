@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { Button } from '../src';
-import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServicesMobile.css';
-import './OktaLinkVerifyMobile.css';
+import './OktaForgotPinMobile.css';
 
-interface OktaLinkVerifyMobileProps {
+interface OktaPinResetMobileProps {
+  phone?: string;
   onBack: () => void;
   onContinue?: () => void;
-  onForgotPin?: () => void;
 }
 
 const footerLinks = [
@@ -18,24 +17,35 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaLinkVerifyMobile({ onBack, onContinue, onForgotPin }: OktaLinkVerifyMobileProps) {
+const WEAK_PINS = new Set(['1111', '1234', '0000']);
+
+export function OktaPinResetMobile({ phone = '', onBack, onContinue }: OktaPinResetMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
-  const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [showPin, setShowPin] = useState(false);
-  const [touched, setTouched] = useState({ phone: false, pin: false });
+  const [showConfirm, setShowConfirm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [loginError, setLoginError] = useState(false);
   const phoneDigits = phone.replace(/\D/g, '');
-  const phoneError = (touched.phone || submitted) && (!phone ? 'Enter your phone number.' : phoneDigits.length !== 10 ? 'Enter a valid 10-digit phone number.' : '');
-  const pinError = (touched.pin || submitted) && (!pin ? 'Enter your PIN.' : !/^\d{4}$/.test(pin) ? 'Enter your 4-digit PIN.' : '');
+  const lastFour = phoneDigits.slice(-4);
+
+  const pinError = submitted && (!pin
+    ? 'Enter your PIN.'
+    : !/^\d{4}$/.test(pin)
+      ? 'Enter a 4-digit PIN.'
+      : WEAK_PINS.has(pin) || pin === lastFour
+        ? 'Choose a more secure PIN.'
+        : '');
+  const confirmError = submitted && (!confirm
+    ? 'Confirm your PIN.'
+    : confirm !== pin
+      ? 'PINs do not match.'
+      : '');
 
   function handleContinue() {
     setSubmitted(true);
-    setTouched({ phone: true, pin: true });
-    setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== '1234');
-    if (phoneDigits.length === 10 && pin === '1234') trigger(() => onContinue?.());
+    if (!pinError && !confirmError && pin && confirm) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -75,48 +85,56 @@ export function OktaLinkVerifyMobile({ onBack, onContinue, onForgotPin }: OktaLi
       {/* Card */}
       <main className="okta-link-mobile__body">
         <div className="okta-link-mobile__card okta-link-mobile__card--verify">
-          <h2 className="okta-link-mobile__card-title">Link your services</h2>
-          <div className="okta-link-mobile__card-subtitle">
-            <p className="okta-link-mobile__card-subtitle-text">
-              Verify your phone number and PIN one last time to link your existing services.
+          <h2 className="okta-link-mobile__card-title">PIN Reset</h2>
+          <div className="okta-fpin-mobile__notice">
+            <p className="okta-fpin-mobile__notice-text">
+              Please updated to a more secure PIN. Avoid weak combinations such as 1111, 1234, or the last 4-digits of your phone number.
             </p>
           </div>
 
-          <div className="okta-link-mobile__fields">
-            <div className="okta-link-mobile__field">
-              <input type="tel" maxLength={14} className={`okta-link-mobile__input${phoneError ? ' okta-link-mobile__input--error' : ''}`} placeholder="Phone number" value={phone} onChange={(event) => setPhone(formatPhone(event.target.value))} onBlur={() => setTouched((current) => ({ ...current, phone: true }))} aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'link-mobile-phone-error' : undefined} onKeyDown={onEnterSubmit} />
-              {phoneError && <span id="link-mobile-phone-error" className="okta-link-mobile__field-error" role="alert">{phoneError}</span>}
+          <div className="okta-fpin-mobile__field">
+            <div className="okta-link-mobile__password-field">
+              <input
+                type={showPin ? 'text' : 'password'}
+                inputMode="numeric"
+                maxLength={4}
+                className={`okta-fpin-mobile__input${pinError ? ' okta-fpin-mobile__input--error' : ''}`}
+                placeholder="New PIN"
+                value={pin}
+                onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))}
+                aria-invalid={Boolean(pinError)}
+                aria-describedby={pinError ? 'pin-reset-mobile-new-error' : undefined}
+                onKeyDown={onEnterSubmit}
+              />
+              <button type="button" className="okta-link-mobile__password-toggle" aria-label={showPin ? 'Hide PIN' : 'Show PIN'} onClick={() => setShowPin((current) => !current)}>
+                <img src={showPin ? '/okta/icon-eye-off.svg' : '/okta/icon-eye.svg'} alt="" width={24} height={24} />
+              </button>
             </div>
-            <div className="okta-link-mobile__field">
-              <div className="okta-link-mobile__password-field">
-                <input type={showPin ? 'text' : 'password'} inputMode="numeric" maxLength={4} className={`okta-link-mobile__input okta-link-mobile__input--toggle${pinError ? ' okta-link-mobile__input--error' : ''}`} placeholder="PIN" value={pin} onChange={(event) => { setPin(event.target.value.replace(/\D/g, '')); setLoginError(false); }} onBlur={() => setTouched((current) => ({ ...current, pin: true }))} aria-invalid={Boolean(pinError)} aria-describedby={pinError ? 'link-mobile-pin-error' : undefined} onKeyDown={onEnterSubmit} />
-                <button
-                  type="button"
-                  className="okta-link-mobile__password-toggle"
-                  aria-label={showPin ? 'Hide PIN' : 'Show PIN'}
-                  aria-pressed={showPin}
-                  onClick={() => setShowPin((current) => !current)}
-                >
-                  <img src={showPin ? '/okta/icon-eye-off.svg' : '/okta/icon-eye.svg'} alt="" width={24} height={24} />
-                </button>
-              </div>
-              {pinError && <span id="link-mobile-pin-error" className="okta-link-mobile__field-error" role="alert">{pinError}</span>}
-            </div>
+            {pinError && <span id="pin-reset-mobile-new-error" className="okta-fpin-mobile__field-error" role="alert">{pinError}</span>}
           </div>
 
-          <div className="okta-link-mobile__links">
-            <a href="#" className="okta-link-mobile__inline-link" onClick={(e) => { e.preventDefault(); onForgotPin?.(); }}>
-              <span>Forgot PIN?</span>
-              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
-            </a>
-            <a href="#" className="okta-link-mobile__inline-link" onClick={(e) => e.preventDefault()}>
-              <span>Sign in with username instead</span>
-              <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
-            </a>
+          <div className="okta-fpin-mobile__field">
+            <div className="okta-link-mobile__password-field">
+              <input
+                type={showConfirm ? 'text' : 'password'}
+                inputMode="numeric"
+                maxLength={4}
+                className={`okta-fpin-mobile__input${confirmError ? ' okta-fpin-mobile__input--error' : ''}`}
+                placeholder="Confirm PIN"
+                value={confirm}
+                onChange={(event) => setConfirm(event.target.value.replace(/\D/g, ''))}
+                aria-invalid={Boolean(confirmError)}
+                aria-describedby={confirmError ? 'pin-reset-mobile-confirm-error' : undefined}
+                onKeyDown={onEnterSubmit}
+              />
+              <button type="button" className="okta-link-mobile__password-toggle" aria-label={showConfirm ? 'Hide PIN' : 'Show PIN'} onClick={() => setShowConfirm((current) => !current)}>
+                <img src={showConfirm ? '/okta/icon-eye-off.svg' : '/okta/icon-eye.svg'} alt="" width={24} height={24} />
+              </button>
+            </div>
+            {confirmError && <span id="pin-reset-mobile-confirm-error" className="okta-fpin-mobile__field-error" role="alert">{confirmError}</span>}
           </div>
 
-          {loginError && <p className="okta-link-mobile__login-error" role="alert">Login failed. Please try again.</p>}
-          <Button size="large" className="okta-link-mobile__continue-btn" loading={loading} onClick={handleContinue}>
+          <Button size="large" className="okta-fpin-mobile__continue-btn" loading={loading} onClick={handleContinue}>
             Continue
           </Button>
         </div>
