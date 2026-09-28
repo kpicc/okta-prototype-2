@@ -84,8 +84,24 @@ export function App() {
   const [verificationCode, setVerificationCode] = useState('');
   const [accountPin, setAccountPin] = useState('');
   const [authContact, setAuthContact] = useState('');
-  const [linkCode, setLinkCode] = useState('');
-  const [linkCodeDestination, setLinkCodeDestination] = useState('');
+  const [linkCode, setLinkCodeState] = useState(() => sessionStorage.getItem('oktaLinkCode') || '');
+  const setLinkCode = (value: string) => {
+    setLinkCodeState(value);
+    if (value) {
+      sessionStorage.setItem('oktaLinkCode', value);
+    } else {
+      sessionStorage.removeItem('oktaLinkCode');
+    }
+  };
+  const [linkCodeDestination, setLinkCodeDestinationState] = useState(() => sessionStorage.getItem('oktaLinkCodeDestination') || '');
+  const setLinkCodeDestination = (value: string) => {
+    setLinkCodeDestinationState(value);
+    if (value) {
+      sessionStorage.setItem('oktaLinkCodeDestination', value);
+    } else {
+      sessionStorage.removeItem('oktaLinkCodeDestination');
+    }
+  };
 
   async function handleCreateAccount(email: string) {
     setUserEmail(email);
