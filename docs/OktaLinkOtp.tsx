@@ -21,7 +21,7 @@ const maskEmail = (value: string) => {
 
 export function OktaLinkOtp({
   phone = '(***) ***-**90',
-  email = 'e***l@address.com',
+  email = 'email@address.com',
   onBack,
   onCancel,
   onContinue,
@@ -51,7 +51,7 @@ export function OktaLinkOtp({
       setShowConfirmationError(true);
       return;
     }
-    if (selected !== phone && confirmation.trim() !== 'email@address.com') {
+    if (selected !== phone && confirmation.trim() !== email) {
       setShowConfirmationError(true);
       return;
     }

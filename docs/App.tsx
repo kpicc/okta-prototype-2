@@ -317,6 +317,7 @@ export function App() {
     if (screen === 'link-otp') {
       return (
         <OktaLinkOtpMobile
+          email={userEmail || undefined}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('link-code')}
         />

@@ -6,9 +6,16 @@ import './OktaLinkServicesMobile.css';
 import './OktaLinkOtpMobile.css';
 
 interface OktaLinkOtpMobileProps {
+  email?: string;
   onBack: () => void;
   onContinue?: () => void;
 }
+
+const maskEmail = (value: string) => {
+  const [local, domain] = value.split('@');
+  if (!local || !domain) return value;
+  return `${local[0]}***${local.length > 1 ? local.slice(-1) : ''}@${domain}`;
+};
 
 const footerLinks = [
   { label: 'CONTACT', items: ['Contact us', 'Find a store'] },
@@ -17,7 +24,7 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps) {
+export function OktaLinkOtpMobile({ email = 'email@address.com', onBack, onContinue }: OktaLinkOtpMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -26,9 +33,10 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
   const [showSelectionError, setShowSelectionError] = useState(false);
   const [showConfirmationError, setShowConfirmationError] = useState(false);
 
+  const maskedEmail = maskEmail(email);
   const options = [
     { label: '(***) ***-**90', value: '(***) ***-**90' },
-    { label: 'e***l@address.com', value: 'e***l@address.com' },
+    { label: maskedEmail, value: maskedEmail },
   ];
 
   function handleContinue() {
@@ -40,7 +48,7 @@ export function OktaLinkOtpMobile({ onBack, onContinue }: OktaLinkOtpMobileProps
       setShowConfirmationError(true);
       return;
     }
-    if (selected.value.includes('@') && confirmation.trim() !== 'email@address.com') {
+    if (selected.value.includes('@') && confirmation.trim() !== email) {
       setShowConfirmationError(true);
       return;
     }
