@@ -8,7 +8,8 @@ import './OktaLinkOtpMobile.css';
 interface OktaLinkOtpMobileProps {
   email?: string;
   onBack: () => void;
-  onContinue?: (method: 'email' | 'phone', destination: string) => void;
+  onContinue?: () => void;
+  onSelectMethod?: (method: 'email' | 'phone', destination: string) => void;
 }
 
 const maskEmail = (value: string) => {
@@ -24,7 +25,7 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaLinkOtpMobile({ email, onBack, onContinue }: OktaLinkOtpMobileProps) {
+export function OktaLinkOtpMobile({ email, onBack, onContinue, onSelectMethod }: OktaLinkOtpMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -52,7 +53,7 @@ export function OktaLinkOtpMobile({ email, onBack, onContinue }: OktaLinkOtpMobi
       setShowConfirmationError(true);
       return;
     }
-    trigger(() => onContinue?.(selected.value.includes('@') ? 'email' : 'phone', selected.value));
+    trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -131,7 +132,7 @@ export function OktaLinkOtpMobile({ email, onBack, onContinue }: OktaLinkOtpMobi
                   <button
                     key={option.label}
                     className="okta-otp-mobile__dropdown-option"
-                    onClick={() => { setSelected(option); setConfirmation(''); setDropdownOpen(false); setShowSelectionError(false); setShowConfirmationError(false); }}
+                    onClick={() => { setSelected(option); setConfirmation(''); setDropdownOpen(false); setShowSelectionError(false); setShowConfirmationError(false); onSelectMethod?.(option.value.includes('@') ? 'email' : 'phone', option.value); }}
                   >
                     {option.label}
                   </button>

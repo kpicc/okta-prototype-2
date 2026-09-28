@@ -98,7 +98,7 @@ export function App() {
     setScreen('verify-email');
   }
 
-  async function handleLinkOtpContinue(method: 'email' | 'phone', destination: string) {
+  async function handleLinkOtpMethod(method: 'email' | 'phone', destination: string) {
     setLinkCodeDestination(destination);
     if (method === 'email' && userEmail) {
       try {
@@ -110,7 +110,6 @@ export function App() {
     } else {
       setLinkCode('222222');
     }
-    setScreen('link-code');
   }
 
   function handleForgotPin() {
@@ -196,7 +195,8 @@ export function App() {
           email={userEmail || undefined}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-verify')}
-          onContinue={(method, destination) => { void handleLinkOtpContinue(method, destination); }}
+          onContinue={() => setScreen('link-code')}
+          onSelectMethod={(method, destination) => { void handleLinkOtpMethod(method, destination); }}
         />
       );
     }
@@ -348,7 +348,8 @@ export function App() {
         <OktaLinkOtpMobile
           email={userEmail || undefined}
           onBack={() => setScreen('landing')}
-          onContinue={(method, destination) => { void handleLinkOtpContinue(method, destination); }}
+          onContinue={() => setScreen('link-code')}
+          onSelectMethod={(method, destination) => { void handleLinkOtpMethod(method, destination); }}
         />
       );
     }

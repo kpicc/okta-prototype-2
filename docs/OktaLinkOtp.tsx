@@ -10,7 +10,8 @@ interface OktaLinkOtpProps {
   email?: string;
   onBack: () => void;
   onCancel: () => void;
-  onContinue?: (method: 'email' | 'phone', destination: string) => void;
+  onContinue?: () => void;
+  onSelectMethod?: (method: 'email' | 'phone', destination: string) => void;
 }
 
 const maskEmail = (value: string) => {
@@ -25,6 +26,7 @@ export function OktaLinkOtp({
   onBack,
   onCancel,
   onContinue,
+  onSelectMethod,
 }: OktaLinkOtpProps) {
   const { loading, trigger } = useDelayedAction();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -40,6 +42,7 @@ export function OktaLinkOtp({
     setDropdownOpen(false);
     setShowSelectionError(false);
     setShowConfirmationError(false);
+    onSelectMethod?.(value === phone ? 'phone' : 'email', value);
   }
 
   function handleContinue() {
@@ -55,7 +58,7 @@ export function OktaLinkOtp({
       setShowConfirmationError(true);
       return;
     }
-    trigger(() => onContinue?.(selected === phone ? 'phone' : 'email', selected));
+    trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
