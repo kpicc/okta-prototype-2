@@ -94,6 +94,7 @@ export function App() {
     }
   };
   const [linkCodeDestination, setLinkCodeDestinationState] = useState(() => sessionStorage.getItem('oktaLinkCodeDestination') || '');
+  const [mfaCode, setMfaCode] = useState('');
   const setLinkCodeDestination = (value: string) => {
     setLinkCodeDestinationState(value);
     if (value) {
@@ -126,6 +127,20 @@ export function App() {
     } else {
       setLinkCode('222222');
     }
+  }
+
+  async function handleMfaSetupContinue() {
+    if (userEmail) {
+      try {
+        const code = await requestVerificationCode(userEmail);
+        setMfaCode(code);
+      } catch {
+        setMfaCode('222222');
+      }
+    } else {
+      setMfaCode('222222');
+    }
+    setScreen('mfa-verify');
   }
 
   function handleForgotPin() {
@@ -169,6 +184,7 @@ export function App() {
     if (screen === 'mfa-verify') {
       return (
         <OktaMfaVerify
+          expectedCode={mfaCode || undefined}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('mfa-setup')}
           onContinue={() => setScreen('mfa-complete')}
@@ -180,7 +196,7 @@ export function App() {
         <OktaMfaSetup
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-success')}
-          onContinue={() => setScreen('mfa-verify')}
+          onContinue={() => { void handleMfaSetupContinue(); }}
         />
       );
     }
@@ -326,13 +342,14 @@ export function App() {
         <OktaMfaSetupMobile
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-success')}
-          onContinue={() => setScreen('mfa-verify')}
+          onContinue={() => { void handleMfaSetupContinue(); }}
         />
       );
     }
     if (screen === 'mfa-verify') {
       return (
         <OktaMfaVerifyMobile
+          expectedCode={mfaCode || undefined}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('mfa-complete')}
         />

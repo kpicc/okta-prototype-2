@@ -12,6 +12,12 @@ interface OktaMfaSetupMobileProps {
   onContinue?: () => void;
 }
 
+const PHONE_MAP: Record<string, string> = {
+  '(***) ***-**90': '1234567890',
+  '(***) ***-**01': '1234567801',
+  '(***) ***-**12': '1234567812',
+};
+
 const footerLinks = [
   { label: 'CONTACT', items: ['Contact us', 'Find a store'] },
   { label: 'SUPPORT', items: ['All support', 'Account & billing', 'Network & coverage', 'Phones & devices', 'Plans & services', 'Home internet', 'Device repair', 'Device care'] },
@@ -38,7 +44,8 @@ export function OktaMfaSetupMobile({
       setShowSelectionError(true);
       return;
     }
-    if (!confirmation.trim()) {
+    const expectedDigits = PHONE_MAP[selected];
+    if (!confirmation.trim() || (expectedDigits && confirmation.replace(/\D/g, '') !== expectedDigits)) {
       setShowConfirmationError(true);
       return;
     }
@@ -143,7 +150,7 @@ export function OktaMfaSetupMobile({
                 onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
                 aria-invalid={showConfirmationError}
                 aria-describedby={showConfirmationError ? 'mfa-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
-              {showConfirmationError && <span id="mfa-mobile-confirm-error" className="okta-mfa-mobile__field-error" role="alert">Re-enter the selected phone number.</span>}
+              {showConfirmationError && <span id="mfa-mobile-confirm-error" className="okta-mfa-mobile__field-error" role="alert">Phone numbers do not match.</span>}
             </div>
           )}
           </div>

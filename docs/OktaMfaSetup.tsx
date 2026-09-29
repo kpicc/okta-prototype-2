@@ -13,6 +13,12 @@ interface OktaMfaSetupProps {
   onContinue?: () => void;
 }
 
+const PHONE_MAP: Record<string, string> = {
+  '(***) ***-**90': '1234567890',
+  '(***) ***-**01': '1234567801',
+  '(***) ***-**12': '1234567812',
+};
+
 export function OktaMfaSetup({
   phones = ['(***) ***-**90', '(***) ***-**01', '(***) ***-**12'],
   onBack,
@@ -39,7 +45,8 @@ export function OktaMfaSetup({
       setShowSelectionError(true);
       return;
     }
-    if (!confirmation.trim()) {
+    const expectedDigits = PHONE_MAP[selected];
+    if (!confirmation.trim() || (expectedDigits && confirmation.replace(/\D/g, '') !== expectedDigits)) {
       setShowConfirmationError(true);
       return;
     }
@@ -156,7 +163,7 @@ export function OktaMfaSetup({
                   aria-describedby={showConfirmationError ? 'mfa-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="mfa-confirm" className="okta-otp__confirm-label">Re-enter selected phone number</label>
               </div>
-              {showConfirmationError && <span id="mfa-confirm-error" className="okta-otp__field-error" role="alert">Re-enter the selected phone number.</span>}
+              {showConfirmationError && <span id="mfa-confirm-error" className="okta-otp__field-error" role="alert">Phone numbers do not match.</span>}
             </div>
           )}
 

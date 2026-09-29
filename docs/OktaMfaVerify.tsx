@@ -5,20 +5,21 @@ import './OktaLinkServices.css';
 import './OktaLinkCode.css';
 
 interface OktaMfaVerifyProps {
+  expectedCode?: string;
   onBack: () => void;
   onCancel: () => void;
   onContinue?: () => void;
 }
 
-export function OktaMfaVerify({ onBack, onCancel, onContinue }: OktaMfaVerifyProps) {
+export function OktaMfaVerify({ expectedCode = '222222', onBack, onCancel, onContinue }: OktaMfaVerifyProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
-  const codeError = showError && code !== '222222';
+  const codeError = showError && code !== expectedCode;
 
   function handleContinue() {
     setShowError(true);
-    if (code === '222222') trigger(() => onContinue?.());
+    if (code === expectedCode) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -81,7 +82,7 @@ export function OktaMfaVerify({ onBack, onCancel, onContinue }: OktaMfaVerifyPro
           <div className="okta-lcode__fields">
             <div className="okta-lcode__field">
               <div className="okta-lcode__float-field">
-                <input id="mfa-code" type="text" inputMode="numeric" maxLength={6} className={`okta-lcode__input${codeError ? ' okta-lcode__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'mfa-code-error' : undefined} onKeyDown={onEnterSubmit} />
+                <input id="mfa-code" type="text" inputMode="numeric" maxLength={6} className={`okta-lcode__input${codeError ? ' okta-lcode__input--error' : ''}`} placeholder=" " value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== expectedCode) setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'mfa-code-error' : undefined} onKeyDown={onEnterSubmit} />
                 <label htmlFor="mfa-code" className="okta-lcode__float-label">Enter security code</label>
               </div>
               {codeError && <span id="mfa-code-error" className="okta-lcode__field-error" role="alert">Enter the valid 6-digit security code.</span>}

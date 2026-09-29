@@ -5,6 +5,7 @@ import './OktaLinkServicesMobile.css';
 import './OktaMfaVerifyMobile.css';
 
 interface OktaMfaVerifyMobileProps {
+  expectedCode?: string;
   onBack: () => void;
   onContinue?: () => void;
 }
@@ -16,16 +17,16 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaMfaVerifyMobile({ onBack, onContinue }: OktaMfaVerifyMobileProps) {
+export function OktaMfaVerifyMobile({ expectedCode = '222222', onBack, onContinue }: OktaMfaVerifyMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
-  const codeError = showError && code !== '222222';
+  const codeError = showError && code !== expectedCode;
 
   function handleContinue() {
     setShowError(true);
-    if (code === '222222') trigger(() => onContinue?.());
+    if (code === expectedCode) trigger(() => onContinue?.());
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -74,7 +75,7 @@ export function OktaMfaVerifyMobile({ onBack, onContinue }: OktaMfaVerifyMobileP
 
           <div className="okta-mfa-verify-mobile__fields">
             <div className="okta-mfa-verify-mobile__field">
-              <input type="text" inputMode="numeric" maxLength={6} className={`okta-mfa-verify-mobile__input${codeError ? ' okta-mfa-verify-mobile__input--error' : ''}`} placeholder="Enter the code" value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== '222222') setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'mfa-mobile-code-error' : undefined} onKeyDown={onEnterSubmit} />
+              <input type="text" inputMode="numeric" maxLength={6} className={`okta-mfa-verify-mobile__input${codeError ? ' okta-mfa-verify-mobile__input--error' : ''}`} placeholder="Enter the code" value={code} onChange={(event) => { setCode(event.target.value.replace(/\D/g, '')); if (showError) setShowError(false); }} onBlur={() => { if (code !== expectedCode) setShowError(true); }} aria-invalid={codeError} aria-describedby={codeError ? 'mfa-mobile-code-error' : undefined} onKeyDown={onEnterSubmit} />
               {codeError && <span id="mfa-mobile-code-error" className="okta-mfa-verify-mobile__field-error" role="alert">Enter the valid 6-digit security code.</span>}
             </div>
             <a href="#" className="okta-mfa-verify-mobile__resend-row" onClick={(e) => e.preventDefault()}>
