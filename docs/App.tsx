@@ -187,7 +187,7 @@ export function App() {
     if (screen === 'link-success') {
       return (
         <OktaLinkSuccess
-          email="email@address.com"
+          email={userEmail || 'email@address.com'}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-code')}
           onContinue={() => setScreen('mfa-setup')}
@@ -315,7 +315,7 @@ export function App() {
     if (screen === 'link-success') {
       return (
         <OktaLinkSuccessMobile
-          email="email@address.com"
+          email={userEmail || 'email@address.com'}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('mfa-setup')}
         />
