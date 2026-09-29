@@ -14,7 +14,7 @@ interface OktaMfaSetupProps {
 }
 
 export function OktaMfaSetup({
-  phones = ['+ X (XXX) XXX-XX90', '+ X (XXX) XXX-XX01', '+ X (XXX) XXX-XX12'],
+  phones = ['(***) ***-**90', '(***) ***-**01', '(***) ***-**12'],
   onBack,
   onCancel,
   onContinue,

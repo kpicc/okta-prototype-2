@@ -41,6 +41,8 @@ export function OktaLinkOtpMobile({ email, onBack, onContinue, onSelectMethod }:
   ];
 
   function handleContinue() {
+    setShowSelectionError(false);
+    setShowConfirmationError(false);
     if (!selected) {
       setShowSelectionError(true);
       return;

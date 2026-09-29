@@ -46,8 +46,8 @@ export function OktaLinkOtp({
   }
 
   function handleContinue() {
-    // eslint-disable-next-line no-console
-    console.log('link-otp debug', { selected, phone, email, confirmation: JSON.stringify(confirmation), emailTrim: JSON.stringify(email?.trim().toLowerCase()), confirmationTrim: JSON.stringify(confirmation.trim().toLowerCase()) });
+    setShowSelectionError(false);
+    setShowConfirmationError(false);
     if (!selected) {
       setShowSelectionError(true);
       return;
