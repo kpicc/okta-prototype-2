@@ -4,18 +4,26 @@ import './OktaSignIn.css';
 
 interface OktaSignInProps {
   email: string;
+  expectedEmail?: string;
+  expectedPassword?: string;
   onBack: () => void;
   onSignIn: () => void;
 }
 
-export function OktaSignIn({ email, onBack, onSignIn }: OktaSignInProps) {
+export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onSignIn }: OktaSignInProps) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   function handleSignIn() {
+    setFormError(null);
     if (!password) {
       setShowError(true);
+      return;
+    }
+    if ((expectedEmail && email !== expectedEmail) || (expectedPassword && password !== expectedPassword)) {
+      setFormError('The email or password you entered is incorrect.');
       return;
     }
     onSignIn();
@@ -56,7 +64,7 @@ export function OktaSignIn({ email, onBack, onSignIn }: OktaSignInProps) {
                 className={`okta-signin__password${showError ? ' okta-signin__password--error' : ''}`}
                 placeholder="Password"
                 value={password}
-                onChange={(event) => { setPassword(event.target.value); setShowError(false); }}
+                onChange={(event) => { setPassword(event.target.value); setShowError(false); setFormError(null); }}
                 onBlur={() => { if (!password) setShowError(true); }}
                 aria-invalid={showError}
                 aria-describedby={showError ? 'signin-password-error' : undefined} onKeyDown={onEnterSubmit} />
@@ -80,6 +88,7 @@ export function OktaSignIn({ email, onBack, onSignIn }: OktaSignInProps) {
             <a href="#" className="okta-signin__link okta-signin__link--start" onClick={(event) => event.preventDefault()}>
               Forgot password?<img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
             </a>
+            {formError && <span className="okta-signin__form-error" role="alert">{formError}</span>}
           </div>
 
           <div className="okta-signin__actions">

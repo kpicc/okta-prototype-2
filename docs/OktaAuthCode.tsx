@@ -4,6 +4,7 @@ import './OktaAuthCode.css';
 
 interface OktaAuthCodeProps {
   contact: string;
+  expectedCode?: string;
   onBack: () => void;
   onLogoClick: () => void;
   onContinue: () => void;
@@ -11,17 +12,18 @@ interface OktaAuthCodeProps {
 
 export function OktaAuthCode({
   contact,
+  expectedCode = '222222',
   onBack,
   onLogoClick,
   onContinue,
 }: OktaAuthCodeProps) {
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
-  const codeError = showError && code !== '222222';
+  const codeError = showError && code !== expectedCode;
 
   function handleContinue() {
     setShowError(true);
-    if (code === '222222') onContinue();
+    if (code === expectedCode) onContinue();
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -63,7 +65,7 @@ export function OktaAuthCode({
                 if (showError) setShowError(false);
               }}
               onBlur={() => {
-                if (code !== '222222') setShowError(true);
+                if (code !== expectedCode) setShowError(true);
               }}
               placeholder="Enter code"
               className={`okta-auth-code__input${

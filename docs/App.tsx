@@ -81,9 +81,19 @@ export function App() {
       sessionStorage.removeItem('oktaUserEmail');
     }
   };
+  const [userPassword, setUserPasswordState] = useState(() => sessionStorage.getItem('oktaUserPassword') || '');
+  const setUserPassword = (value: string) => {
+    setUserPasswordState(value);
+    if (value) {
+      sessionStorage.setItem('oktaUserPassword', value);
+    } else {
+      sessionStorage.removeItem('oktaUserPassword');
+    }
+  };
   const [verificationCode, setVerificationCode] = useState('');
   const [accountPin, setAccountPin] = useState('');
   const [authContact, setAuthContact] = useState('');
+  const [authCode, setAuthCode] = useState('');
   const [linkCode, setLinkCodeState] = useState(() => sessionStorage.getItem('oktaLinkCode') || '');
   const setLinkCode = (value: string) => {
     setLinkCodeState(value);
@@ -104,8 +114,9 @@ export function App() {
     }
   };
 
-  async function handleCreateAccount(email: string) {
+  async function handleCreateAccount(email: string, password: string) {
     setUserEmail(email);
+    setUserPassword(password);
     try {
       const code = await requestVerificationCode(email);
       setVerificationCode(code);
@@ -152,7 +163,7 @@ export function App() {
 
   function renderDesktop() {
     if (screen === 'sign-in') {
-      return <OktaSignIn email={userEmail} onBack={() => setScreen('landing')} onSignIn={() => setScreen('auth-verify')} />;
+      return <OktaSignIn email={userEmail} expectedEmail={userEmail || undefined} expectedPassword={userPassword || undefined} onBack={() => setScreen('landing')} onSignIn={() => setScreen('auth-verify')} />;
     }
     if (screen === 'auth-verify') {
       return (
@@ -161,7 +172,20 @@ export function App() {
           phone="(***) ***-**90"
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
-          onContinue={(contact) => { setAuthContact(contact); setScreen('auth-code'); }}
+          onContinue={async (contact) => {
+            setAuthContact(contact);
+            if (userEmail) {
+              try {
+                const code = await requestVerificationCode(userEmail);
+                setAuthCode(code);
+              } catch {
+                setAuthCode('222222');
+              }
+            } else {
+              setAuthCode('222222');
+            }
+            setScreen('auth-code');
+          }}
         />
       );
     }
@@ -169,6 +193,7 @@ export function App() {
       return (
         <OktaAuthCode
           contact={authContact}
+          expectedCode={authCode || undefined}
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
           onContinue={() => setScreen('my-account')}
@@ -295,7 +320,7 @@ export function App() {
       return (
         <OktaUpdateAccount
           onBack={() => setScreen('landing')}
-          onContinue={(email) => { void handleCreateAccount(email); }}
+          onContinue={(email, password) => { void handleCreateAccount(email, password); }}
           onSignIn={() => setScreen('sign-in')}
         />
       );
@@ -305,7 +330,7 @@ export function App() {
 
   function renderMobile() {
     if (screen === 'sign-in') {
-      return <OktaSignIn email={userEmail} onBack={() => setScreen('landing')} onSignIn={() => setScreen('auth-verify')} />;
+      return <OktaSignIn email={userEmail} expectedEmail={userEmail || undefined} expectedPassword={userPassword || undefined} onBack={() => setScreen('landing')} onSignIn={() => setScreen('auth-verify')} />;
     }
     if (screen === 'auth-verify') {
       return (
@@ -314,7 +339,20 @@ export function App() {
           phone="(***) ***-**90"
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
-          onContinue={(contact) => { setAuthContact(contact); setScreen('auth-code'); }}
+          onContinue={async (contact) => {
+            setAuthContact(contact);
+            if (userEmail) {
+              try {
+                const code = await requestVerificationCode(userEmail);
+                setAuthCode(code);
+              } catch {
+                setAuthCode('222222');
+              }
+            } else {
+              setAuthCode('222222');
+            }
+            setScreen('auth-code');
+          }}
         />
       );
     }
@@ -322,6 +360,7 @@ export function App() {
       return (
         <OktaAuthCode
           contact={authContact}
+          expectedCode={authCode || undefined}
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
           onContinue={() => setScreen('my-account')}
@@ -447,7 +486,7 @@ export function App() {
       return (
         <OktaUpdateAccountMobile
           onBack={() => setScreen('landing')}
-          onContinue={(email) => { void handleCreateAccount(email); }}
+          onContinue={(email, password) => { void handleCreateAccount(email, password); }}
           onSignIn={() => setScreen('sign-in')}
         />
       );

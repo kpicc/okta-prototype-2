@@ -169,10 +169,17 @@
   box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
 }
 
-.okta-signin__error {
+.okta-signin__error,
+.okta-signin__form-error {
   color: #b42318;
   font-size: 12px;
   line-height: 16px;
+}
+
+.okta-signin__form-error {
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
 }
 
 .okta-signin__link {

@@ -5,7 +5,7 @@ import './OktaUpdateAccount.css';
 
 interface OktaUpdateAccountProps {
   onBack: () => void;
-  onContinue?: (email: string) => void;
+  onContinue?: (email: string, password: string) => void;
   onSignIn?: () => void;
 }
 
@@ -31,7 +31,7 @@ export function OktaUpdateAccount({ onBack, onContinue, onSignIn }: OktaUpdateAc
 
   function handleContinue() {
     setSubmitted(true);
-    if (!formInvalid) trigger(() => onContinue?.(email));
+    if (!formInvalid) trigger(() => onContinue?.(email, password));
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
