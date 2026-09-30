@@ -19,7 +19,7 @@ export function OktaForgotPasswordSuccessMobile({ onBack }: OktaForgotPasswordSu
       <main className="okta-forgot-password-success-mobile__body">
         <div className="okta-forgot-password-success-mobile__card">
           <div className="okta-forgot-password-success-mobile__icon-wrap">
-            <img src="/okta/icon-check.svg" alt="" width={48} height={48} />
+            <img src="/okta/icon-check-circle.svg" alt="" width={84} height={84} />
           </div>
           <h2 className="okta-forgot-password-success-mobile__title">Got it! Check your email</h2>
           <p className="okta-forgot-password-success-mobile__text">We sent you an email, follow the instructions to reset your password.</p>

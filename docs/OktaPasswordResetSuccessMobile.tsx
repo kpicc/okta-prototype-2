@@ -21,7 +21,7 @@ export function OktaPasswordResetSuccessMobile({ onBack, onContinue }: OktaPassw
       <main className="okta-password-reset-success-mobile__body">
         <div className="okta-password-reset-success-mobile__card">
           <div className="okta-password-reset-success-mobile__icon-wrap">
-            <img src="/okta/icon-check.svg" alt="" width={48} height={48} />
+            <img src="/okta/icon-check-circle.svg" alt="" width={84} height={84} />
           </div>
           <h2 className="okta-password-reset-success-mobile__title">You’re all set!</h2>
           <p className="okta-password-reset-success-mobile__text">Your password has been reset.</p>

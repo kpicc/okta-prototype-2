@@ -19,7 +19,7 @@ export function OktaPasswordResetSuccess({ onBack, onContinue }: OktaPasswordRes
       <main className="okta-password-reset-success__body">
         <div className="okta-password-reset-success__card">
           <div className="okta-password-reset-success__icon-wrap">
-            <img src="/okta/icon-check.svg" alt="" width={48} height={48} />
+            <img src="/okta/icon-check-circle.svg" alt="" width={84} height={84} />
           </div>
           <h1 className="okta-password-reset-success__title">You’re all set!</h1>
           <p className="okta-password-reset-success__text">Your password has been reset.</p>
