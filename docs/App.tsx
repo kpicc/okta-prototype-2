@@ -30,6 +30,8 @@ import { OktaForgotPasswordSuccess } from './OktaForgotPasswordSuccess.js';
 import { OktaForgotPasswordSuccessMobile } from './OktaForgotPasswordSuccessMobile.js';
 import { OktaPasswordReset } from './OktaPasswordReset.js';
 import { OktaPasswordResetMobile } from './OktaPasswordResetMobile.js';
+import { OktaPasswordResetSuccess } from './OktaPasswordResetSuccess.js';
+import { OktaPasswordResetSuccessMobile } from './OktaPasswordResetSuccessMobile.js';
 import { OktaAuthVerify } from './OktaAuthVerify.js';
 import { OktaAuthCode } from './OktaAuthCode.js';
 import { OktaForgotPin } from './OktaForgotPin.js';
@@ -44,7 +46,7 @@ import { requestVerificationCode, sendPinResetEmail, sendPasswordResetEmail } fr
 
 const MOBILE_BREAKPOINT = 768;
 
-type Screen = 'landing' | 'sign-in' | 'forgot-password' | 'forgot-password-success' | 'password-reset' | 'auth-verify' | 'auth-code' | 'update-account' | 'verify-email' | 'link-services' | 'link-verify' | 'link-otp' | 'link-code' | 'link-success' | 'mfa-setup' | 'mfa-verify' | 'mfa-complete' | 'my-account' | 'forgot-pin' | 'forgot-pin-check' | 'pin-reset' | 'pin-reset-success';
+type Screen = 'landing' | 'sign-in' | 'forgot-password' | 'forgot-password-success' | 'password-reset' | 'password-reset-success' | 'auth-verify' | 'auth-code' | 'update-account' | 'verify-email' | 'link-services' | 'link-verify' | 'link-otp' | 'link-code' | 'link-success' | 'mfa-setup' | 'mfa-verify' | 'mfa-complete' | 'my-account' | 'forgot-pin' | 'forgot-pin-check' | 'pin-reset' | 'pin-reset-success';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
@@ -205,7 +207,10 @@ export function App() {
       return <OktaForgotPasswordSuccess onBack={() => setScreen('forgot-password')} />;
     }
     if (screen === 'password-reset') {
-      return <OktaPasswordReset email={userEmail} onBack={() => setScreen('sign-in')} onContinue={(password) => { setUserPassword(password); setScreen('sign-in'); }} onEmailChange={setUserEmail} />;
+      return <OktaPasswordReset email={userEmail} onBack={() => setScreen('sign-in')} onContinue={(password) => { setUserPassword(password); setScreen('password-reset-success'); }} onEmailChange={setUserEmail} />;
+    }
+    if (screen === 'password-reset-success') {
+      return <OktaPasswordResetSuccess onBack={() => setScreen('password-reset')} onContinue={() => setScreen('sign-in')} />;
     }
     if (screen === 'auth-verify') {
       return (
@@ -386,7 +391,10 @@ export function App() {
       return <OktaForgotPasswordSuccessMobile onBack={() => setScreen('forgot-password')} />;
     }
     if (screen === 'password-reset') {
-      return <OktaPasswordResetMobile email={userEmail} onBack={() => setScreen('sign-in')} onContinue={(password) => { setUserPassword(password); setScreen('sign-in'); }} onEmailChange={setUserEmail} />;
+      return <OktaPasswordResetMobile email={userEmail} onBack={() => setScreen('sign-in')} onContinue={(password) => { setUserPassword(password); setScreen('password-reset-success'); }} onEmailChange={setUserEmail} />;
+    }
+    if (screen === 'password-reset-success') {
+      return <OktaPasswordResetSuccessMobile onBack={() => setScreen('password-reset')} onContinue={() => setScreen('sign-in')} />;
     }
     if (screen === 'auth-verify') {
       return (
