@@ -8,10 +8,11 @@ interface OktaSignInProps {
   expectedPassword?: string;
   onBack: () => void;
   onSignIn: () => void;
+  onForgotPassword?: () => void;
   onEmailChange?: (email: string) => void;
 }
 
-export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onSignIn, onEmailChange }: OktaSignInProps) {
+export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onSignIn, onForgotPassword, onEmailChange }: OktaSignInProps) {
   const [emailInput, setEmailInput] = useState(email);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -56,31 +57,36 @@ export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onS
           </div>
 
           <div className="okta-signin__fields">
-            <div className="okta-signin__input okta-signin__input--populated">
-              <label htmlFor="signin-email" className="okta-signin__input-label">Email</label>
+            <div className="okta-signin__field">
               <input
                 id="signin-email"
                 type="email"
-                className="okta-signin__input-value"
+                className="okta-signin__input"
+                placeholder=" "
                 value={emailInput}
                 onChange={(event) => { setEmailInput(event.target.value); onEmailChange?.(event.target.value); setFormError(null); }}
                 onKeyDown={onEnterSubmit}
               />
-              <button className="okta-signin__input-action" type="button" aria-label="Change email" onClick={onBack}>
-                <img src="/okta/icon-password-visibility.svg" alt="" width={24} height={24} />
-              </button>
+              <label htmlFor="signin-email" className="okta-signin__input-label">Email</label>
+              {emailInput && (
+                <button className="okta-signin__input-action" type="button" aria-label="Clear email" onClick={() => { setEmailInput(''); onEmailChange?.(''); setFormError(null); }}>
+                  <img src="/okta/icon-password-visibility.svg" alt="" width={24} height={24} />
+                </button>
+              )}
             </div>
 
-            <div className="okta-signin__password-field">
+            <div className="okta-signin__field">
               <input
+                id="signin-password"
                 type={showPassword ? 'text' : 'password'}
                 className={`okta-signin__password${showError ? ' okta-signin__password--error' : ''}`}
-                placeholder="Password"
+                placeholder=" "
                 value={password}
                 onChange={(event) => { setPassword(event.target.value); setShowError(false); setFormError(null); }}
                 onBlur={() => { if (!password) setShowError(true); }}
                 aria-invalid={showError}
                 aria-describedby={showError ? 'signin-password-error' : undefined} onKeyDown={onEnterSubmit} />
+              <label htmlFor="signin-password" className="okta-signin__input-label">Password</label>
               <button
                 type="button"
                 className="okta-signin__password-toggle"
@@ -98,7 +104,7 @@ export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onS
               {showError && <span id="signin-password-error" className="okta-signin__error" role="alert">Enter your password.</span>}
             </div>
 
-            <a href="#" className="okta-signin__link okta-signin__link--start" onClick={(event) => event.preventDefault()}>
+            <a href="#" className="okta-signin__link okta-signin__link--start" onClick={(event) => { event.preventDefault(); onForgotPassword?.(); }}>
               Forgot password?<img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
             </a>
             {formError && <span className="okta-signin__form-error" role="alert">{formError}</span>}
