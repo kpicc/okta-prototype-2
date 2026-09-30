@@ -44,15 +44,17 @@ export function OktaForgotPasswordMobile({ email: initialEmail = '', onBack, onC
 
           <div className="okta-forgot-password-mobile__field">
             <input
+              id="forgot-password-email-mobile"
               type="email"
               className={`okta-forgot-password-mobile__input${showError ? ' okta-forgot-password-mobile__input--error' : ''}`}
-              placeholder="Email"
+              placeholder=" "
               value={email}
               onChange={(event) => { setEmail(event.target.value); setShowError(false); }}
               onBlur={() => { if (!isValidEmail(email)) setShowError(true); }}
               aria-invalid={showError}
               aria-describedby={showError ? 'forgot-email-mobile-error' : undefined}
             />
+            <label htmlFor="forgot-password-email-mobile" className="okta-forgot-password-mobile__input-label">Email</label>
             {showError && <span id="forgot-email-mobile-error" className="okta-forgot-password-mobile__error" role="alert">Email address must be in the form of an email address.</span>}
           </div>
 

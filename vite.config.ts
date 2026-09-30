@@ -3,6 +3,7 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { sendVerificationCodeHandler } from './api/lib/sendVerificationCodeHandler.mjs';
 import { sendPinResetHandler } from './api/lib/sendPinResetHandler.mjs';
+import { sendPasswordResetHandler } from './api/lib/sendPasswordResetHandler.mjs';
 
 type PostHandler = (body: unknown) => Promise<{ status: number; body: unknown }>;
 
@@ -42,6 +43,7 @@ function verificationApiPlugin() {
     configureServer(server: { middlewares: { use: (path: string, handler: (req: MiddlewareReq, res: MiddlewareRes) => Promise<void>) => void } }) {
       mountJsonPost(server, '/api/send-verification-code', sendVerificationCodeHandler);
       mountJsonPost(server, '/api/send-pin-reset', sendPinResetHandler);
+      mountJsonPost(server, '/api/send-password-reset', sendPasswordResetHandler);
     },
   };
 }

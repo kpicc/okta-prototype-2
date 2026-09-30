@@ -20,3 +20,11 @@ export async function sendPinResetEmail(email: string): Promise<void> {
     body: JSON.stringify({ email }),
   });
 }
+
+export async function sendPasswordResetEmail(email: string): Promise<void> {
+  await fetch('/api/send-password-reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+}
