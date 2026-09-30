@@ -87,20 +87,22 @@ export function App() {
         target.alt === 'Freedom Mobile' &&
         target.className.includes('logo')
       ) {
+        event.stopPropagation();
         setScreen('landing');
         return;
       }
       let node: HTMLElement | null = target instanceof HTMLElement ? target : null;
       while (node && node !== document.body) {
         if (node instanceof HTMLButtonElement && node.textContent?.trim() === 'Back') {
+          event.stopPropagation();
           setScreen('landing');
           return;
         }
         node = node.parentElement;
       }
     }
-    document.addEventListener('click', handleGlobalClick);
-    return () => document.removeEventListener('click', handleGlobalClick);
+    document.addEventListener('click', handleGlobalClick, true);
+    return () => document.removeEventListener('click', handleGlobalClick, true);
   }, []);
 
   const [userEmail, setUserEmailState] = useState(() => sessionStorage.getItem('oktaUserEmail') || '');
