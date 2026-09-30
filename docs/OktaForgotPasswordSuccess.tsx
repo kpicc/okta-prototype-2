@@ -3,10 +3,9 @@ import './OktaForgotPasswordSuccess.css';
 
 interface OktaForgotPasswordSuccessProps {
   onBack: () => void;
-  onContinue: () => void;
 }
 
-export function OktaForgotPasswordSuccess({ onBack, onContinue }: OktaForgotPasswordSuccessProps) {
+export function OktaForgotPasswordSuccess({ onBack }: OktaForgotPasswordSuccessProps) {
   return (
     <div className="okta-forgot-password-success">
       <header className="okta-forgot-password-success__header">
@@ -23,7 +22,6 @@ export function OktaForgotPasswordSuccess({ onBack, onContinue }: OktaForgotPass
           </div>
           <h1 className="okta-forgot-password-success__title">Got it! Check your email</h1>
           <p className="okta-forgot-password-success__text">We sent you an email, follow the instructions to reset your password.</p>
-          <Button size="large" className="okta-forgot-password-success__cta" onClick={onContinue}>Continue</Button>
         </div>
       </main>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../src';
 import './OktaPasswordReset.css';
 
@@ -6,15 +6,25 @@ const meetsPasswordRequirements = (value: string) =>
   value.length >= 8 && /[A-Z]/.test(value) && /[a-z]/.test(value) && /\d/.test(value) && /[^A-Za-z0-9]/.test(value);
 
 interface OktaPasswordResetProps {
+  email?: string;
   onBack: () => void;
   onContinue?: (password: string) => void;
+  onEmailChange?: (email: string) => void;
 }
 
-export function OktaPasswordReset({ onBack, onContinue }: OktaPasswordResetProps) {
+export function OktaPasswordReset({ email: initialEmail = '', onBack, onContinue, onEmailChange }: OktaPasswordResetProps) {
+  useEffect(() => {
+    if (!initialEmail) {
+      const stored = localStorage.getItem('oktaPasswordResetEmail');
+      if (stored) onEmailChange?.(stored);
+    }
+  }, [initialEmail, onEmailChange]);
+
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [pwReqsOpen, setPwReqsOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const passwordError = submitted && !meetsPasswordRequirements(password) ? 'Password requirements were not met.' : '';
@@ -23,6 +33,7 @@ export function OktaPasswordReset({ onBack, onContinue }: OktaPasswordResetProps
   function handleContinue() {
     setSubmitted(true);
     if (meetsPasswordRequirements(password) && confirm && confirm === password) {
+      localStorage.removeItem('oktaPasswordResetEmail');
       onContinue?.(password);
     }
   }
@@ -89,6 +100,31 @@ export function OktaPasswordReset({ onBack, onContinue }: OktaPasswordResetProps
               </button>
               {confirmError && <span id="reset-confirm-error" className="okta-password-reset__error" role="alert">{confirmError}</span>}
             </div>
+
+            <button
+              type="button"
+              className="okta-password-reset__pw-reqs-toggle"
+              onClick={() => setPwReqsOpen(!pwReqsOpen)}
+              aria-expanded={pwReqsOpen}
+            >
+              <span className="okta-password-reset__pw-reqs-text">Password requirements</span>
+              <img
+                src="/okta/icon-chevron-down.svg"
+                alt=""
+                width={24}
+                height={24}
+                className={`okta-password-reset__pw-reqs-icon${pwReqsOpen ? ' okta-password-reset__pw-reqs-icon--open' : ''}`}
+              />
+            </button>
+            {pwReqsOpen && (
+              <ul className="okta-password-reset__pw-reqs-list">
+                <li>At least 8 characters</li>
+                <li>At least one uppercase letter</li>
+                <li>At least one lowercase letter</li>
+                <li>At least one number</li>
+                <li>At least one special character</li>
+              </ul>
+            )}
           </div>
 
           <div className="okta-password-reset__actions">

@@ -1,12 +1,10 @@
-import { Button } from '../src';
 import './OktaForgotPasswordSuccessMobile.css';
 
 interface OktaForgotPasswordSuccessMobileProps {
   onBack: () => void;
-  onContinue: () => void;
 }
 
-export function OktaForgotPasswordSuccessMobile({ onBack, onContinue }: OktaForgotPasswordSuccessMobileProps) {
+export function OktaForgotPasswordSuccessMobile({ onBack }: OktaForgotPasswordSuccessMobileProps) {
   return (
     <div className="okta-forgot-password-success-mobile">
       <header className="okta-forgot-password-success-mobile__header">
@@ -25,7 +23,6 @@ export function OktaForgotPasswordSuccessMobile({ onBack, onContinue }: OktaForg
           </div>
           <h2 className="okta-forgot-password-success-mobile__title">Got it! Check your email</h2>
           <p className="okta-forgot-password-success-mobile__text">We sent you an email, follow the instructions to reset your password.</p>
-          <Button size="large" className="okta-forgot-password-success-mobile__cta" onClick={onContinue}>Continue</Button>
         </div>
       </main>
     </div>
