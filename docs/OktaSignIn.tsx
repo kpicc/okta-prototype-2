@@ -8,9 +8,11 @@ interface OktaSignInProps {
   expectedPassword?: string;
   onBack: () => void;
   onSignIn: () => void;
+  onEmailChange?: (email: string) => void;
 }
 
-export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onSignIn }: OktaSignInProps) {
+export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onSignIn, onEmailChange }: OktaSignInProps) {
+  const [emailInput, setEmailInput] = useState(email);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -18,11 +20,15 @@ export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onS
 
   function handleSignIn() {
     setFormError(null);
+    if (!emailInput.trim()) {
+      setFormError('The email or password you entered is incorrect.');
+      return;
+    }
     if (!password) {
       setShowError(true);
       return;
     }
-    if ((expectedEmail && email !== expectedEmail) || (expectedPassword && password !== expectedPassword)) {
+    if ((expectedEmail && emailInput !== expectedEmail) || (expectedPassword && password !== expectedPassword)) {
       setFormError('The email or password you entered is incorrect.');
       return;
     }
@@ -51,8 +57,15 @@ export function OktaSignIn({ email, expectedEmail, expectedPassword, onBack, onS
 
           <div className="okta-signin__fields">
             <div className="okta-signin__input okta-signin__input--populated">
-              <span className="okta-signin__input-label">Email</span>
-              <span className="okta-signin__input-value">{email}</span>
+              <label htmlFor="signin-email" className="okta-signin__input-label">Email</label>
+              <input
+                id="signin-email"
+                type="email"
+                className="okta-signin__input-value"
+                value={emailInput}
+                onChange={(event) => { setEmailInput(event.target.value); onEmailChange?.(event.target.value); setFormError(null); }}
+                onKeyDown={onEnterSubmit}
+              />
               <button className="okta-signin__input-action" type="button" aria-label="Change email" onClick={onBack}>
                 <img src="/okta/icon-password-visibility.svg" alt="" width={24} height={24} />
               </button>

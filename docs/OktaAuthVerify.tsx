@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '../src';
 import './OktaAuthVerify.css';
 
@@ -8,6 +8,7 @@ interface OktaAuthVerifyProps {
   onBack: () => void;
   onLogoClick: () => void;
   onContinue: (contact: string) => void;
+  onSelect?: (method: 'phone' | 'email', contact: string) => void;
 }
 
 function maskEmail(value: string): string {
@@ -23,18 +24,34 @@ export function OktaAuthVerify({
   onBack,
   onLogoClick,
   onContinue,
+  onSelect,
 }: OktaAuthVerifyProps) {
   const [selected, setSelected] = useState<'phone' | 'email' | null>('phone');
   const [showError, setShowError] = useState(false);
+  const sentRef = useRef(false);
+
+  const getContact = (value: 'phone' | 'email') =>
+    value === 'phone' ? phone.replace(/[^*\d]/g, '') : maskEmail(email);
+
+  function handleSelect(value: 'phone' | 'email') {
+    setSelected(value);
+    setShowError(false);
+    onSelect?.(value, getContact(value));
+  }
+
+  useEffect(() => {
+    if (!sentRef.current && selected) {
+      sentRef.current = true;
+      onSelect?.(selected, getContact(selected));
+    }
+  }, []);
 
   function handleContinue() {
     if (!selected) {
       setShowError(true);
       return;
     }
-    const contact =
-      selected === 'phone' ? phone.replace(/[^*\d]/g, '') : maskEmail(email);
-    onContinue(contact);
+    onContinue(getContact(selected));
   }
 
   return (
@@ -64,7 +81,7 @@ export function OktaAuthVerify({
               role="radio"
               aria-checked={selected === 'phone'}
               className={`okta-auth__option${selected === 'phone' ? ' okta-auth__option--selected' : ''}`}
-              onClick={() => { setSelected('phone'); setShowError(false); }}
+              onClick={() => handleSelect('phone')}
             >
               <span className="okta-auth__option-label">Phone number</span>
               <span className="okta-auth__option-value">{phone}</span>
@@ -82,7 +99,7 @@ export function OktaAuthVerify({
               role="radio"
               aria-checked={selected === 'email'}
               className={`okta-auth__option${selected === 'email' ? ' okta-auth__option--selected' : ''}`}
-              onClick={() => { setSelected('email'); setShowError(false); }}
+              onClick={() => handleSelect('email')}
             >
               <span className="okta-auth__option-label">Email</span>
               <span className="okta-auth__option-value">{maskEmail(email)}</span>

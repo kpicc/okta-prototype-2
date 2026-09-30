@@ -56,7 +56,7 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  padding: 40px 24px;
+  padding: var(--space-6);
   background: #fff;
   border: 1px solid #e4e4e4;
   border-radius: 20px;
@@ -210,5 +210,6 @@
   .okta-auth__card {
     width: 100%;
     max-width: 384px;
+    padding: var(--space-6);
   }
 }

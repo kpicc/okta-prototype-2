@@ -6,7 +6,7 @@
   background-color: var(--color-neutral-0);
   border: 1px solid #E4E4E4;
   border-radius: 20px;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-6);
   width: 358px;
   box-sizing: border-box;
   display: flex;

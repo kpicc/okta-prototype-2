@@ -48,7 +48,7 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  padding: 40px 24px;
+  padding: var(--space-6);
   background: #fff;
   border: 1px solid #e4e4e4;
   border-radius: 20px;
@@ -115,6 +115,17 @@
 .okta-signin__input-value {
   font-size: 16px;
   line-height: 20px;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  width: 100%;
+  color: #191919;
+  font-family: var(--font-family-sans);
+}
+
+.okta-signin__input-value::placeholder {
+  color: #4e4e4e;
 }
 
 .okta-signin__input-action {
@@ -241,7 +252,7 @@
 
   .okta-signin__card {
     width: 100%;
-    padding: 24px;
+    padding: var(--space-6);
   }
 
   .okta-signin__title {

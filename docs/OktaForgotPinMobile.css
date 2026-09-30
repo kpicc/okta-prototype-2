@@ -73,7 +73,7 @@
   background-color: var(--color-neutral-0);
   border: 1px solid #E4E4E4;
   border-radius: 20px;
-  padding: 24px;
+  padding: var(--space-6);
   width: 100%;
   max-width: 390px;
   box-sizing: border-box;
