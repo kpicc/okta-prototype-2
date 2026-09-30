@@ -321,7 +321,7 @@ export function App() {
         <OktaUpdateAccount
           onBack={() => setScreen('landing')}
           onContinue={(email, password) => { void handleCreateAccount(email, password); }}
-          onSignIn={() => setScreen('sign-in')}
+          onSignIn={() => { setUserEmail(''); setScreen('sign-in'); }}
         />
       );
     }
@@ -487,7 +487,7 @@ export function App() {
         <OktaUpdateAccountMobile
           onBack={() => setScreen('landing')}
           onContinue={(email, password) => { void handleCreateAccount(email, password); }}
-          onSignIn={() => setScreen('sign-in')}
+          onSignIn={() => { setUserEmail(''); setScreen('sign-in'); }}
         />
       );
     }
