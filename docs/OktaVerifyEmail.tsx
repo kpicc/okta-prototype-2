@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../src';
 import { useDelayedAction } from './useDelayedAction.js';
+import { useCodeEntryActions } from './useCodeEntryActions.js';
 import './OktaVerifyEmail.css';
 
 interface OktaVerifyEmailProps {
@@ -10,6 +11,8 @@ interface OktaVerifyEmailProps {
   onCancel: () => void;
   onSignIn?: () => void;
   onContinue?: () => void;
+  onResend?: () => void | Promise<void>;
+  onSecurityCheck?: () => void | Promise<void>;
 }
 
 function maskEmail(email: string): string {
@@ -19,17 +22,22 @@ function maskEmail(email: string): string {
   return `${visible}***${local.slice(-1)}@${domain}`;
 }
 
-export function OktaVerifyEmail({ email = 'email@address.com', expectedCode = '222222', onBack, onCancel, onSignIn, onContinue }: OktaVerifyEmailProps) {
+export function OktaVerifyEmail({ email = 'email@address.com', expectedCode = '222222', onBack, onCancel, onSignIn, onContinue, onResend, onSecurityCheck }: OktaVerifyEmailProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
   const codeError = showError && code !== expectedCode;
   const codeErrorMessage = codeError ? (code.trim() === '' ? 'This field cannot be left blank' : 'Invalid code. Please try again.') : '';
+  const { canValidateCode, handleInvalidCode, handleResend, resetCodeSecurity, securityChecking } = useCodeEntryActions(onSecurityCheck, onResend);
 
-  function handleContinue() {
+  async function handleContinue() {
     setShowError(true);
+    if (!(await canValidateCode())) return;
     if (code === expectedCode) {
+      resetCodeSecurity();
       trigger(() => onContinue?.());
+    } else {
+      handleInvalidCode();
     }
   }
 
@@ -105,12 +113,12 @@ export function OktaVerifyEmail({ email = 'email@address.com', expectedCode = '2
             </div>
             <p className="okta-verify__resend-text">
               Didn't receive the code?{' '}
-              <a href="#" className="okta-verify__resend-link" onClick={(e) => e.preventDefault()}>Resend</a>
+              <a href="#" className="okta-verify__resend-link" onClick={(e) => { e.preventDefault(); void handleResend(); }}>Resend</a>
             </p>
           </div>
 
           <div className="okta-verify__actions">
-            <Button size="large" className="okta-verify__continue-btn" loading={loading} onClick={handleContinue}>
+            <Button size="large" className="okta-verify__continue-btn" loading={loading || securityChecking} onClick={handleContinue}>
               Continue
             </Button>
             <a href="#" className="okta-verify__account-link" onClick={(e) => { e.preventDefault(); (onSignIn ?? onCancel)(); }}>

@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-const SITE_KEY = (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_RECAPTCHA_SITE_KEY || '';
+const SITE_KEY = (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_RECAPTCHA_CHECKBOX_SITE_KEY || '';
 let recaptchaScriptPromise: Promise<RecaptchaApi> | null = null;
 
 function loadRecaptcha(): Promise<RecaptchaApi> {
@@ -59,7 +59,7 @@ export function CaptchaModal({ onClose, onVerified }: CaptchaModalProps) {
 
   useEffect(() => {
     if (!SITE_KEY) {
-      setError('reCAPTCHA is not configured. Add VITE_RECAPTCHA_SITE_KEY and RECAPTCHA_SECRET_KEY.');
+      setError('reCAPTCHA is not configured. Add VITE_RECAPTCHA_CHECKBOX_SITE_KEY and RECAPTCHA_CHECKBOX_SECRET_KEY.');
       return;
     }
 
@@ -103,9 +103,9 @@ export function CaptchaModal({ onClose, onVerified }: CaptchaModalProps) {
       <div className="okta-captcha__box" onClick={(event) => event.stopPropagation()}>
         <div className="okta-captcha__content">
           <h2 className="okta-captcha__title">Security check</h2>
-          <p className="okta-captcha__subtitle">Complete the reCAPTCHA below to send your verification code.</p>
+          <p className="okta-captcha__subtitle">Complete the reCAPTCHA below to continue.</p>
           {SITE_KEY ? <div ref={containerRef} className="okta-captcha__widget" /> : null}
-          {submitting && <p className="okta-captcha__status">Sending verification code…</p>}
+          {submitting && <p className="okta-captcha__status">Verifying…</p>}
           {error && <p className="okta-captcha__error" role="alert">{error}</p>}
           <button type="button" className="okta-captcha__cancel" onClick={onClose} disabled={submitting}>
             Cancel

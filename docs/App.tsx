@@ -42,11 +42,18 @@ import { OktaPinReset } from './OktaPinReset.js';
 import { OktaPinResetSuccess } from './OktaPinResetSuccess.js';
 import { OktaPinResetMobile } from './OktaPinResetMobile.js';
 import { OktaPinResetSuccessMobile } from './OktaPinResetSuccessMobile.js';
-import { requestVerificationCode, sendPinResetEmail, sendPasswordResetEmail } from './verificationApi.js';
+import { CaptchaModal } from './CaptchaModal.js';
+import { requestVerificationCode, verifyRecaptchaToken, sendPinResetEmail, sendPasswordResetEmail } from './verificationApi.js';
+import { executeRecaptcha } from './recaptchaApi.js';
 
 const MOBILE_BREAKPOINT = 768;
 
 type Screen = 'landing' | 'sign-in' | 'forgot-password' | 'forgot-password-success' | 'password-reset' | 'password-reset-success' | 'auth-verify' | 'auth-code' | 'update-account' | 'verify-email' | 'link-services' | 'link-verify' | 'link-otp' | 'link-code' | 'link-success' | 'mfa-setup' | 'mfa-verify' | 'mfa-complete' | 'my-account' | 'forgot-pin' | 'forgot-pin-check' | 'pin-reset' | 'pin-reset-success';
+
+type PendingVisibleRecaptcha = {
+  complete: (token: string) => Promise<void>;
+  reject: (error: Error) => void;
+};
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
@@ -148,6 +155,36 @@ export function App() {
       sessionStorage.removeItem('oktaLinkCodeDestination');
     }
   };
+  const [pendingVisibleRecaptcha, setPendingVisibleRecaptcha] = useState<PendingVisibleRecaptcha | null>(null);
+
+  function requestVisibleRecaptcha(action: (token: string) => Promise<void>): Promise<void> {
+    return new Promise((resolve, reject) => {
+      setPendingVisibleRecaptcha({
+        complete: async (token) => {
+          await action(token);
+          resolve();
+        },
+        reject,
+      });
+    });
+  }
+
+  async function handleVisibleRecaptchaVerified(token: string): Promise<boolean> {
+    if (!pendingVisibleRecaptcha) return false;
+    try {
+      await pendingVisibleRecaptcha.complete(token);
+      setPendingVisibleRecaptcha(null);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function handleVisibleRecaptchaClose() {
+    pendingVisibleRecaptcha?.reject(new Error('recaptcha_cancelled'));
+    setPendingVisibleRecaptcha(null);
+  }
+
   async function handleCreateAccount(email: string, password: string) {
     setUserEmail(email);
     setUserPassword(password);
@@ -197,6 +234,38 @@ export function App() {
     }
   }
 
+  async function handleCodeSecurityCheck() {
+    await requestVisibleRecaptcha((recaptchaToken) => verifyRecaptchaToken(recaptchaToken, 'checkbox'));
+  }
+
+  async function resendCreateAccountCode() {
+    await requestVisibleRecaptcha(async (recaptchaToken) => {
+      if (!userEmail) throw new Error('missing_email');
+      setVerificationCode(await requestVerificationCode(userEmail, recaptchaToken, 'checkbox'));
+    });
+  }
+
+  async function resendLinkCode() {
+    await requestVisibleRecaptcha(async (recaptchaToken) => {
+      if (!userEmail) throw new Error('missing_email');
+      setLinkCode(await requestVerificationCode(userEmail, recaptchaToken, 'checkbox'));
+    });
+  }
+
+  async function resendMfaCode() {
+    await requestVisibleRecaptcha(async (recaptchaToken) => {
+      if (!userEmail) throw new Error('missing_email');
+      setMfaCode(await requestVerificationCode(userEmail, recaptchaToken, 'checkbox'));
+    });
+  }
+
+  async function resendAuthCode() {
+    await requestVisibleRecaptcha(async (recaptchaToken) => {
+      if (!userEmail) throw new Error('missing_email');
+      setAuthCode(await requestVerificationCode(userEmail, recaptchaToken, 'checkbox'));
+    });
+  }
+
   function handleForgotPin() {
     if (userEmail) {
       void sendPinResetEmail(userEmail);
@@ -239,6 +308,8 @@ export function App() {
           onBack={() => setScreen('landing')}
           onLogoClick={() => setScreen('landing')}
           onContinue={() => setScreen('my-account')}
+          onResend={resendAuthCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -255,6 +326,8 @@ export function App() {
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('mfa-setup')}
           onContinue={() => setScreen('mfa-complete')}
+          onResend={resendMfaCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -285,6 +358,8 @@ export function App() {
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-otp')}
           onContinue={() => setScreen('link-success')}
+          onResend={resendLinkCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -355,6 +430,8 @@ export function App() {
           onCancel={() => setScreen('update-account')}
           onSignIn={() => setScreen('sign-in')}
           onContinue={() => setScreen('link-services')}
+          onResend={resendCreateAccountCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -405,6 +482,8 @@ export function App() {
           onBack={() => setScreen('landing')}
           onLogoClick={() => setScreen('landing')}
           onContinue={() => setScreen('my-account')}
+          onResend={resendAuthCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -432,6 +511,8 @@ export function App() {
           expectedCode={mfaCode || undefined}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('mfa-complete')}
+          onResend={resendMfaCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -453,6 +534,8 @@ export function App() {
           expectedCode={linkCode || undefined}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('link-success')}
+          onResend={resendLinkCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -520,6 +603,8 @@ export function App() {
           onBack={() => setScreen('landing')}
           onSignIn={() => setScreen('sign-in')}
           onContinue={() => setScreen('link-services')}
+          onResend={resendCreateAccountCode}
+          onSecurityCheck={handleCodeSecurityCheck}
         />
       );
     }
@@ -544,6 +629,9 @@ export function App() {
         }
       `}</style>
       {isMobile ? renderMobile() : renderDesktop()}
+      {pendingVisibleRecaptcha && (
+        <CaptchaModal onClose={handleVisibleRecaptchaClose} onVerified={handleVisibleRecaptchaVerified} />
+      )}
     </>
   );
 }

@@ -24,7 +24,7 @@ let widgetId: number | null = null;
 let widgetContainer: HTMLDivElement | null = null;
 let pendingResolve: ((token: string) => void) | null = null;
 let pendingReject: ((error: Error) => void) | null = null;
-let executeQueue: Promise<string> | null = null;
+let widgetRenderPromise: Promise<number> | null = null;
 let hasExecuted = false;
 
 function loadRecaptcha(): Promise<RecaptchaApi> {
@@ -59,21 +59,27 @@ function settlePending(error?: Error, token?: string) {
 
 async function renderInvisibleWidget(): Promise<number> {
   if (widgetId !== null) return widgetId;
-  const recaptcha = await loadRecaptcha();
+  if (widgetRenderPromise) return widgetRenderPromise;
 
-  widgetContainer = document.createElement('div');
-  widgetContainer.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(widgetContainer);
+  widgetRenderPromise = (async () => {
+    const recaptcha = await loadRecaptcha();
 
-  widgetId = recaptcha.render(widgetContainer, {
-    sitekey: SITE_KEY,
-    size: 'invisible',
-    callback: (token) => settlePending(undefined, token),
-    'expired-callback': () => settlePending(new Error('recaptcha_expired')),
-    'error-callback': () => settlePending(new Error('recaptcha_failed')),
-  });
+    widgetContainer = document.createElement('div');
+    widgetContainer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(widgetContainer);
 
-  return widgetId;
+    widgetId = recaptcha.render(widgetContainer, {
+      sitekey: SITE_KEY,
+      size: 'invisible',
+      callback: (token) => settlePending(undefined, token),
+      'expired-callback': () => settlePending(new Error('recaptcha_expired')),
+      'error-callback': () => settlePending(new Error('recaptcha_failed')),
+    });
+
+    return widgetId;
+  })();
+
+  return widgetRenderPromise;
 }
 
 async function executeInvisibleRecaptcha(): Promise<string> {
@@ -94,6 +100,6 @@ async function executeInvisibleRecaptcha(): Promise<string> {
 }
 
 export function executeRecaptcha(): Promise<string> {
-  executeQueue = (executeQueue || Promise.resolve('')).catch(() => undefined).then(() => executeInvisibleRecaptcha());
-  return executeQueue;
+  settlePending(new Error('recaptcha_replaced'));
+  return executeInvisibleRecaptcha();
 }

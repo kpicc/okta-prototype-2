@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../src';
 import { useDelayedAction } from './useDelayedAction.js';
+import { useCodeEntryActions } from './useCodeEntryActions.js';
 import './OktaVerifyEmailMobile.css';
 
 interface OktaVerifyEmailMobileProps {
@@ -9,19 +10,26 @@ interface OktaVerifyEmailMobileProps {
   onBack: () => void;
   onSignIn?: () => void;
   onContinue?: () => void;
+  onResend?: () => void | Promise<void>;
+  onSecurityCheck?: () => void | Promise<void>;
 }
 
-export function OktaVerifyEmailMobile({ email = 'e***l@address.com', expectedCode = '222222', onBack, onSignIn, onContinue }: OktaVerifyEmailMobileProps) {
+export function OktaVerifyEmailMobile({ email = 'e***l@address.com', expectedCode = '222222', onBack, onSignIn, onContinue, onResend, onSecurityCheck }: OktaVerifyEmailMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
   const codeError = showError && code !== expectedCode;
   const codeErrorMessage = codeError ? (code.trim() === '' ? 'This field cannot be left blank' : 'Invalid code. Please try again.') : '';
+  const { canValidateCode, handleInvalidCode, handleResend, resetCodeSecurity, securityChecking } = useCodeEntryActions(onSecurityCheck, onResend);
 
-  function handleContinue() {
+  async function handleContinue() {
     setShowError(true);
+    if (!(await canValidateCode())) return;
     if (code === expectedCode) {
+      resetCodeSecurity();
       trigger(() => onContinue?.());
+    } else {
+      handleInvalidCode();
     }
   }
 
@@ -94,7 +102,7 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', expectedCod
                 </div>
               )}
             </div>
-            <a href="#" className="okta-verify-mobile__resend-row" onClick={(e) => e.preventDefault()}>
+            <a href="#" className="okta-verify-mobile__resend-row" onClick={(e) => { e.preventDefault(); void handleResend(); }}>
               <span className="okta-verify-mobile__resend-text">Didn't receive the code?</span>
               <span className="okta-verify-mobile__resend-link">Resend</span>
               <img src="/okta/icon-chevron-right.svg" alt="" width={24} height={24} />
@@ -102,7 +110,7 @@ export function OktaVerifyEmailMobile({ email = 'e***l@address.com', expectedCod
           </div>
 
           <div className="okta-verify-mobile__actions">
-            <Button size="large" className="okta-verify-mobile__continue-btn" loading={loading} onClick={handleContinue}>
+            <Button size="large" className="okta-verify-mobile__continue-btn" loading={loading || securityChecking} onClick={handleContinue}>
               Continue
             </Button>
             <a href="#" className="okta-verify-mobile__account-link" onClick={(e) => { e.preventDefault(); (onSignIn ?? onBack)(); }}>

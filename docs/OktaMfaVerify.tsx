@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../src';
 import { useDelayedAction } from './useDelayedAction.js';
+import { useCodeEntryActions } from './useCodeEntryActions.js';
 import './OktaLinkServices.css';
 import './OktaLinkCode.css';
 
@@ -9,17 +10,26 @@ interface OktaMfaVerifyProps {
   onBack: () => void;
   onCancel: () => void;
   onContinue?: () => void;
+  onResend?: () => void | Promise<void>;
+  onSecurityCheck?: () => void | Promise<void>;
 }
 
-export function OktaMfaVerify({ expectedCode = '222222', onBack, onCancel, onContinue }: OktaMfaVerifyProps) {
+export function OktaMfaVerify({ expectedCode = '222222', onBack, onCancel, onContinue, onResend, onSecurityCheck }: OktaMfaVerifyProps) {
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
   const codeError = showError && code !== expectedCode;
+  const { canValidateCode, handleInvalidCode, handleResend, resetCodeSecurity, securityChecking } = useCodeEntryActions(onSecurityCheck, onResend);
 
-  function handleContinue() {
+  async function handleContinue() {
     setShowError(true);
-    if (code === expectedCode) trigger(() => onContinue?.());
+    if (!(await canValidateCode())) return;
+    if (code === expectedCode) {
+      resetCodeSecurity();
+      trigger(() => onContinue?.());
+    } else {
+      handleInvalidCode();
+    }
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -89,12 +99,12 @@ export function OktaMfaVerify({ expectedCode = '222222', onBack, onCancel, onCon
             </div>
             <p className="okta-lcode__resend-text">
               Didn't receive the code?{' '}
-              <a href="#" className="okta-lcode__resend-link" onClick={(e) => e.preventDefault()}>Resend</a>
+              <a href="#" className="okta-lcode__resend-link" onClick={(e) => { e.preventDefault(); void handleResend(); }}>Resend</a>
             </p>
           </div>
 
           <div className="okta-lcode__actions">
-            <Button size="large" className="okta-lcode__continue-btn" loading={loading} onClick={handleContinue}>
+            <Button size="large" className="okta-lcode__continue-btn" loading={loading || securityChecking} onClick={handleContinue}>
               Continue
             </Button>
             <a href="#" className="okta-lcode__cancel-link" onClick={(e) => { e.preventDefault(); onCancel(); }}>

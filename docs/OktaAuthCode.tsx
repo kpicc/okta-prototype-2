@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../src';
 import { useDelayedAction } from './useDelayedAction.js';
+import { useCodeEntryActions } from './useCodeEntryActions.js';
 import './OktaAuthCode.css';
 
 interface OktaAuthCodeProps {
@@ -9,6 +10,8 @@ interface OktaAuthCodeProps {
   onBack: () => void;
   onLogoClick: () => void;
   onContinue: () => void;
+  onResend?: () => void | Promise<void>;
+  onSecurityCheck?: () => void | Promise<void>;
 }
 
 export function OktaAuthCode({
@@ -17,15 +20,24 @@ export function OktaAuthCode({
   onBack,
   onLogoClick,
   onContinue,
+  onResend,
+  onSecurityCheck,
 }: OktaAuthCodeProps) {
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
   const { loading, trigger } = useDelayedAction();
+  const { canValidateCode, handleInvalidCode, handleResend, resetCodeSecurity, securityChecking } = useCodeEntryActions(onSecurityCheck, onResend);
   const codeError = showError && code !== expectedCode;
 
-  function handleContinue() {
+  async function handleContinue() {
     setShowError(true);
-    if (code === expectedCode) trigger(onContinue);
+    if (!(await canValidateCode())) return;
+    if (code === expectedCode) {
+      resetCodeSecurity();
+      trigger(onContinue);
+    } else {
+      handleInvalidCode();
+    }
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -85,7 +97,10 @@ export function OktaAuthCode({
               <a
                 href="#"
                 className="okta-auth-code__resend-link"
-                onClick={(event) => event.preventDefault()}
+                onClick={(event) => {
+                  event.preventDefault();
+                  void handleResend();
+                }}
               >
                 Resend
               </a>
@@ -93,7 +108,7 @@ export function OktaAuthCode({
           </div>
 
           <div className="okta-auth-code__actions">
-            <Button size="large" className="okta-auth-code__submit" loading={loading} onClick={handleContinue}>
+            <Button size="large" className="okta-auth-code__submit" loading={loading || securityChecking} onClick={handleContinue}>
               Continue
             </Button>
             <a

@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { sendVerificationCodeHandler } from './api/lib/sendVerificationCodeHandler.mjs';
 import { sendPinResetHandler } from './api/lib/sendPinResetHandler.mjs';
 import { sendPasswordResetHandler } from './api/lib/sendPasswordResetHandler.mjs';
+import { verifyRecaptchaHandler } from './api/lib/verifyRecaptchaHandler.mjs';
 
 type PostHandler = (body: unknown) => Promise<{ status: number; body: unknown }>;
 
@@ -44,6 +45,7 @@ function verificationApiPlugin() {
       mountJsonPost(server, '/api/send-verification-code', sendVerificationCodeHandler);
       mountJsonPost(server, '/api/send-pin-reset', sendPinResetHandler);
       mountJsonPost(server, '/api/send-password-reset', sendPasswordResetHandler);
+      mountJsonPost(server, '/api/verify-recaptcha', verifyRecaptchaHandler);
     },
   };
 }
