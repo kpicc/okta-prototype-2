@@ -1,115 +1,114 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './CaptchaModal.css';
 
 interface CaptchaModalProps {
   onClose: () => void;
-  onVerified: () => void;
+  onVerified: (token: string) => Promise<boolean>;
 }
 
-interface CaptchaChallenge {
-  id: string;
-  prompt: string;
-  image: string;
+interface RecaptchaApi {
+  render: (container: HTMLElement, options: {
+    sitekey: string;
+    callback: (token: string) => void;
+    'expired-callback': () => void;
+    'error-callback': () => void;
+  }) => number;
+  reset: (widgetId?: number) => void;
 }
 
-/**
- * Pool of 5 image challenges. One is picked randomly per session.
- * Add/remove items here to grow or shrink the challenge library.
- */
-const CHALLENGE_POOL: readonly CaptchaChallenge[] = [
-  { id: 'crosswalks', prompt: 'crosswalks', image: '/okta/captcha-crosswalk.jpg' },
-  { id: 'traffic-lights', prompt: 'traffic lights', image: '/okta/captcha-trafficlight.jpg' },
-  { id: 'buses', prompt: 'buses', image: '/okta/captcha-bus.jpg' },
-  { id: 'bicycles', prompt: 'bicycles', image: '/okta/captcha-bicycle.jpg' },
-  { id: 'fire-hydrants', prompt: 'fire hydrants', image: '/okta/captcha-hydrant.jpg' },
-];
+declare global {
+  interface Window {
+    grecaptcha?: RecaptchaApi;
+    __oktaRecaptchaOnLoad?: () => void;
+  }
+}
 
-const GRID_SIZE = 4;
-const TILE_COUNT = GRID_SIZE * GRID_SIZE;
+const SITE_KEY = (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_RECAPTCHA_SITE_KEY || '';
+let recaptchaScriptPromise: Promise<RecaptchaApi> | null = null;
 
-function pickRandomChallenge(): CaptchaChallenge {
-  return CHALLENGE_POOL[Math.floor(Math.random() * CHALLENGE_POOL.length)];
+function loadRecaptcha(): Promise<RecaptchaApi> {
+  if (window.grecaptcha) return Promise.resolve(window.grecaptcha);
+  if (recaptchaScriptPromise) return recaptchaScriptPromise;
+
+  recaptchaScriptPromise = new Promise((resolve, reject) => {
+    window.__oktaRecaptchaOnLoad = () => {
+      if (window.grecaptcha) resolve(window.grecaptcha);
+      else reject(new Error('recaptcha_unavailable'));
+    };
+
+    const script = document.createElement('script');
+    script.src = 'https://www.google.com/recaptcha/api.js?onload=__oktaRecaptchaOnLoad&render=explicit';
+    script.async = true;
+    script.defer = true;
+    script.onerror = () => reject(new Error('recaptcha_script_failed'));
+    document.head.appendChild(script);
+  });
+
+  return recaptchaScriptPromise;
 }
 
 export function CaptchaModal({ onClose, onVerified }: CaptchaModalProps) {
-  const [challenge, setChallenge] = useState<CaptchaChallenge>(() => pickRandomChallenge());
-  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const containerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<number | null>(null);
+  const recaptchaRef = useRef<RecaptchaApi | null>(null);
+  const onVerifiedRef = useRef(onVerified);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
-  function toggleTile(index: number) {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
-      return next;
-    });
-  }
+  onVerifiedRef.current = onVerified;
 
-  function reload() {
-    setChallenge(pickRandomChallenge());
-    setSelected(new Set());
-  }
+  useEffect(() => {
+    if (!SITE_KEY) {
+      setError('reCAPTCHA is not configured. Add VITE_RECAPTCHA_SITE_KEY and RECAPTCHA_SECRET_KEY.');
+      return;
+    }
 
-  const hasSelection = selected.size > 0;
-  const tiles = useMemo(() => Array.from({ length: TILE_COUNT }, (_, i) => i), []);
+    let cancelled = false;
+    loadRecaptcha()
+      .then((recaptcha) => {
+        if (cancelled || !containerRef.current) return;
+        recaptchaRef.current = recaptcha;
+        widgetIdRef.current = recaptcha.render(containerRef.current, {
+          sitekey: SITE_KEY,
+          callback: (token) => {
+            setError('');
+            setSubmitting(true);
+            void onVerifiedRef.current(token)
+              .then((verified) => {
+                if (!verified) {
+                  setSubmitting(false);
+                  setError('Verification failed. Please try again.');
+                  if (widgetIdRef.current !== null) recaptchaRef.current?.reset(widgetIdRef.current);
+                }
+              })
+              .catch(() => {
+                setSubmitting(false);
+                setError('Verification failed. Please try again.');
+                if (widgetIdRef.current !== null) recaptchaRef.current?.reset(widgetIdRef.current);
+              });
+          },
+          'expired-callback': () => setError('reCAPTCHA expired. Please try again.'),
+          'error-callback': () => setError('reCAPTCHA could not be verified. Please try again.'),
+        });
+      })
+      .catch(() => setError('reCAPTCHA could not be loaded. Check your connection and try again.'));
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
-    <div className="okta-captcha__overlay" role="dialog" aria-modal="true" aria-label="Security verification" onClick={onClose}>
-      <div className="okta-captcha__box" onClick={(e) => e.stopPropagation()}>
-        <div className="okta-captcha__header">
-          <p className="okta-captcha__prompt">Select all squares with</p>
-          <p className="okta-captcha__prompt okta-captcha__prompt--strong">{challenge.prompt}</p>
-        </div>
-
-        <div className="okta-captcha__grid">
-          {tiles.map((index) => {
-            const col = index % GRID_SIZE;
-            const row = Math.floor(index / GRID_SIZE);
-            const isSelected = selected.has(index);
-            return (
-              <button
-                key={`${challenge.id}-${index}`}
-                type="button"
-                className={`okta-captcha__tile${isSelected ? ' okta-captcha__tile--selected' : ''}`}
-                aria-pressed={isSelected}
-                aria-label={`Tile ${index + 1}`}
-                onClick={() => toggleTile(index)}
-                style={{
-                  backgroundImage: `url(${challenge.image})`,
-                  backgroundPosition: `${(col * 100) / (GRID_SIZE - 1)}% ${(row * 100) / (GRID_SIZE - 1)}%`,
-                }}
-              >
-                {isSelected && (
-                  <svg className="okta-captcha__tile-check" width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" fill="#FFFFFF" opacity="0.9" />
-                    <path d="M7 12l3 3 7-7" stroke="#1A73E8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="okta-captcha__footer">
-          <div className="okta-captcha__footer-icons">
-            <button type="button" className="okta-captcha__icon-btn" aria-label="Get a new challenge" onClick={reload}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 4v6h6M20 20v-6h-6M4 10a8 8 0 0114-3.5M20 14a8 8 0 01-14 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <button type="button" className="okta-captcha__icon-btn" aria-label="Audio challenge">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M12 3a9 9 0 00-9 9v5a2 2 0 002 2h2v-7H5v-0.001A7 7 0 0119 12v0.999h-2V19h2a2 2 0 002-2v-5a9 9 0 00-9-9z" fill="currentColor" />
-              </svg>
-            </button>
-            <button type="button" className="okta-captcha__icon-btn" aria-label="More information">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 8v.01M12 11v5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
-          <button type="button" className="okta-captcha__submit" onClick={onVerified}>
-            {hasSelection ? 'VERIFY' : 'SKIP'}
+    <div className="okta-captcha__overlay" role="dialog" aria-modal="true" aria-label="Security verification" onClick={() => { if (!submitting) onClose(); }}>
+      <div className="okta-captcha__box" onClick={(event) => event.stopPropagation()}>
+        <div className="okta-captcha__content">
+          <h2 className="okta-captcha__title">Security check</h2>
+          <p className="okta-captcha__subtitle">Complete the reCAPTCHA below to send your verification code.</p>
+          {SITE_KEY ? <div ref={containerRef} className="okta-captcha__widget" /> : null}
+          {submitting && <p className="okta-captcha__status">Sending verification code…</p>}
+          {error && <p className="okta-captcha__error" role="alert">{error}</p>}
+          <button type="button" className="okta-captcha__cancel" onClick={onClose} disabled={submitting}>
+            Cancel
           </button>
         </div>
       </div>

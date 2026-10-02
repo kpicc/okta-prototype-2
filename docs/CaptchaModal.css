@@ -10,117 +10,75 @@
 }
 
 .okta-captcha__box {
-  background: #FFFFFF;
-  border-radius: 8px;
-  width: 320px;
+  background: #ffffff;
+  border-radius: 12px;
+  width: 360px;
   max-width: 100%;
   box-sizing: border-box;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
   font-family: var(--font-family-sans);
 }
 
-.okta-captcha__header {
-  background: #4285F4;
-  color: #FFFFFF;
-  padding: 20px 20px 24px;
+.okta-captcha__content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.okta-captcha__prompt {
-  margin: 0;
+.okta-captcha__title {
+  margin: 0 0 8px;
+  align-self: flex-start;
+  color: #191919;
+  font-size: 24px;
+  font-weight: var(--font-weight-medium);
+  line-height: 28px;
+}
+
+.okta-captcha__subtitle {
+  margin: 0 0 20px;
+  align-self: flex-start;
+  color: #4e4e4e;
   font-size: 16px;
   line-height: 22px;
 }
 
-.okta-captcha__prompt--strong {
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 30px;
-  margin-top: 2px;
-}
-
-.okta-captcha__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-  background: #FFFFFF;
-  padding: 0;
-}
-
-.okta-captcha__tile {
-  aspect-ratio: 1 / 1;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  position: relative;
-  background-size: 400% 400%;
-  background-repeat: no-repeat;
-  outline: none;
-  transition: transform 120ms ease;
-}
-
-.okta-captcha__tile:focus-visible {
-  outline: 2px solid #1A73E8;
-  outline-offset: -2px;
-}
-
-.okta-captcha__tile--selected {
-  transform: scale(0.92);
-}
-
-.okta-captcha__tile-check {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.okta-captcha__footer {
+.okta-captcha__widget {
+  min-height: 78px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  border-top: 1px solid #E5E5E5;
-  background: #FFFFFF;
+  justify-content: center;
 }
 
-.okta-captcha__footer-icons {
-  display: flex;
-  gap: 4px;
-  color: #5F6368;
+.okta-captcha__status {
+  margin: 16px 0 0;
+  color: #4e4e4e;
+  font-size: 14px;
+  line-height: 20px;
 }
 
-.okta-captcha__icon-btn {
-  width: 32px;
-  height: 32px;
+.okta-captcha__error {
+  margin: 16px 0 0;
+  color: #b42318;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.okta-captcha__cancel {
+  margin-top: 20px;
   padding: 0;
   border: 0;
   background: transparent;
-  color: inherit;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-}
-
-.okta-captcha__icon-btn:hover {
-  background: #F1F3F4;
-}
-
-.okta-captcha__submit {
-  background: #1A73E8;
-  color: #FFFFFF;
-  border: 0;
-  border-radius: 4px;
-  padding: 8px 20px;
+  color: #2f7dc1;
   font-family: var(--font-family-sans);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-size: 16px;
+  font-weight: var(--font-weight-medium);
+  line-height: 24px;
+  text-decoration: underline;
   cursor: pointer;
 }
 
-.okta-captcha__submit:hover {
-  background: #1557B0;
+.okta-captcha__cancel:disabled {
+  color: #8a8a8a;
+  cursor: default;
 }

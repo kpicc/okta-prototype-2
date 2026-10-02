@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
-import { CaptchaModal } from './CaptchaModal.js';
 import { useDelayedAction } from './useDelayedAction.js';
-
-const CAPTCHA_THRESHOLD = 3;
 import './OktaVerifyEmail.css';
 
 interface OktaVerifyEmailProps {
@@ -26,35 +23,14 @@ export function OktaVerifyEmail({ email = 'email@address.com', expectedCode = '2
   const { loading, trigger } = useDelayedAction();
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
-  const [attempts, setAttempts] = useState(0);
-  const [captchaOpen, setCaptchaOpen] = useState(false);
   const codeError = showError && code !== expectedCode;
   const codeErrorMessage = codeError ? (code.trim() === '' ? 'This field cannot be left blank' : 'Invalid code. Please try again.') : '';
 
-  function processCode() {
+  function handleContinue() {
     setShowError(true);
     if (code === expectedCode) {
       trigger(() => onContinue?.());
-    } else {
-      setAttempts((n) => n + 1);
     }
-  }
-
-  function handleContinue() {
-    console.log('[verify-email] handleContinue attempts=', attempts);
-    if (attempts >= CAPTCHA_THRESHOLD) {
-      const delay = 200 + Math.random() * 1300;
-      console.log('[verify-email] triggering captcha in', delay, 'ms');
-      window.setTimeout(() => setCaptchaOpen(true), delay);
-      return;
-    }
-    processCode();
-  }
-
-  function handleCaptchaVerified() {
-    setCaptchaOpen(false);
-    setAttempts(0);
-    processCode();
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -149,9 +125,6 @@ export function OktaVerifyEmail({ email = 'email@address.com', expectedCode = '2
         </div>
       </main>
 
-      {captchaOpen && (
-        <CaptchaModal onClose={() => setCaptchaOpen(false)} onVerified={handleCaptchaVerified} />
-      )}
     </div>
   );
 }

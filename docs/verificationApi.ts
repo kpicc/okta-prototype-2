@@ -1,12 +1,12 @@
-export async function requestVerificationCode(email: string): Promise<string> {
+export async function requestVerificationCode(email: string, recaptchaToken: string): Promise<string> {
   const response = await fetch('/api/send-verification-code', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, recaptchaToken }),
   });
 
   const data = (await response.json().catch(() => null)) as { code?: string } | null;
-  if (!data?.code) {
+  if (!response.ok || !data?.code) {
     throw new Error('verification_code_unavailable');
   }
 

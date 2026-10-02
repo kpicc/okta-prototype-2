@@ -42,11 +42,18 @@ import { OktaPinReset } from './OktaPinReset.js';
 import { OktaPinResetSuccess } from './OktaPinResetSuccess.js';
 import { OktaPinResetMobile } from './OktaPinResetMobile.js';
 import { OktaPinResetSuccessMobile } from './OktaPinResetSuccessMobile.js';
+import { CaptchaModal } from './CaptchaModal.js';
 import { requestVerificationCode, sendPinResetEmail, sendPasswordResetEmail } from './verificationApi.js';
 
 const MOBILE_BREAKPOINT = 768;
 
 type Screen = 'landing' | 'sign-in' | 'forgot-password' | 'forgot-password-success' | 'password-reset' | 'password-reset-success' | 'auth-verify' | 'auth-code' | 'update-account' | 'verify-email' | 'link-services' | 'link-verify' | 'link-otp' | 'link-code' | 'link-success' | 'mfa-setup' | 'mfa-verify' | 'mfa-complete' | 'my-account' | 'forgot-pin' | 'forgot-pin-check' | 'pin-reset' | 'pin-reset-success';
+
+type PendingVerificationRequest = {
+  email: string;
+  resolve: (code: string) => void;
+  reject: (error: Error) => void;
+};
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
@@ -148,27 +155,51 @@ export function App() {
       sessionStorage.removeItem('oktaLinkCodeDestination');
     }
   };
+  const [pendingVerification, setPendingVerification] = useState<PendingVerificationRequest | null>(null);
+
+  function requestVerificationCodeWithCaptcha(email: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      setPendingVerification({ email, resolve, reject });
+    });
+  }
+
+  async function handleCaptchaVerified(token: string): Promise<boolean> {
+    if (!pendingVerification) return false;
+    try {
+      const code = await requestVerificationCode(pendingVerification.email, token);
+      pendingVerification.resolve(code);
+      setPendingVerification(null);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function handleCaptchaClose() {
+    pendingVerification?.reject(new Error('captcha_cancelled'));
+    setPendingVerification(null);
+  }
 
   async function handleCreateAccount(email: string, password: string) {
     setUserEmail(email);
     setUserPassword(password);
     try {
-      const code = await requestVerificationCode(email);
+      const code = await requestVerificationCodeWithCaptcha(email);
       setVerificationCode(code);
+      setScreen('verify-email');
     } catch {
-      setVerificationCode('222222');
+      return;
     }
-    setScreen('verify-email');
   }
 
   async function handleLinkOtpMethod(method: 'email' | 'phone', destination: string) {
     setLinkCodeDestination(destination);
     if (method === 'email' && userEmail) {
       try {
-        const code = await requestVerificationCode(userEmail);
+        const code = await requestVerificationCodeWithCaptcha(userEmail);
         setLinkCode(code);
       } catch {
-        setLinkCode('222222');
+        return;
       }
     } else {
       setLinkCode('222222');
@@ -176,32 +207,26 @@ export function App() {
   }
 
   async function handleMfaSetupContinue() {
-    if (userEmail) {
-      try {
-        const code = await requestVerificationCode(userEmail);
-        setMfaCode(code);
-      } catch {
-        setMfaCode('222222');
-      }
-    } else {
-      setMfaCode('222222');
+    if (!userEmail) return;
+    try {
+      const code = await requestVerificationCodeWithCaptcha(userEmail);
+      setMfaCode(code);
+      setScreen('mfa-verify');
+    } catch {
+      return;
     }
-    setScreen('mfa-verify');
   }
 
   async function handleAuthVerifyContinue(contact: string) {
     setAuthContact(contact);
-    if (userEmail) {
-      try {
-        const code = await requestVerificationCode(userEmail);
-        setAuthCode(code);
-      } catch {
-        setAuthCode('222222');
-      }
-    } else {
-      setAuthCode('222222');
+    if (!userEmail) return;
+    try {
+      const code = await requestVerificationCodeWithCaptcha(userEmail);
+      setAuthCode(code);
+      setScreen('auth-code');
+    } catch {
+      return;
     }
-    setScreen('auth-code');
   }
 
   function handleForgotPin() {
@@ -551,6 +576,9 @@ export function App() {
         }
       `}</style>
       {isMobile ? renderMobile() : renderDesktop()}
+      {pendingVerification && (
+        <CaptchaModal onClose={handleCaptchaClose} onVerified={handleCaptchaVerified} />
+      )}
     </>
   );
 }
