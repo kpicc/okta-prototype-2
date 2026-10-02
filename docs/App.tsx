@@ -189,6 +189,21 @@ export function App() {
     setScreen('mfa-verify');
   }
 
+  async function handleAuthVerifyContinue(contact: string) {
+    setAuthContact(contact);
+    if (userEmail) {
+      try {
+        const code = await requestVerificationCode(userEmail);
+        setAuthCode(code);
+      } catch {
+        setAuthCode('222222');
+      }
+    } else {
+      setAuthCode('222222');
+    }
+    setScreen('auth-code');
+  }
+
   function handleForgotPin() {
     if (userEmail) {
       void sendPinResetEmail(userEmail);
@@ -219,25 +234,7 @@ export function App() {
           phone="(***) ***-**90"
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
-          onSelect={async (method, contact) => {
-            setAuthContact(contact);
-            if (method === 'email' || !authCode) {
-              if (userEmail) {
-                try {
-                  const code = await requestVerificationCode(userEmail);
-                  setAuthCode(code);
-                } catch {
-                  setAuthCode('222222');
-                }
-              } else {
-                setAuthCode('222222');
-              }
-            }
-          }}
-          onContinue={(contact) => {
-            setAuthContact(contact);
-            setScreen('auth-code');
-          }}
+          onContinue={handleAuthVerifyContinue}
         />
       );
     }
@@ -246,7 +243,7 @@ export function App() {
         <OktaAuthCode
           contact={authContact}
           expectedCode={authCode || undefined}
-          onBack={() => setScreen('sign-in')}
+          onBack={() => setScreen('landing')}
           onLogoClick={() => setScreen('landing')}
           onContinue={() => setScreen('my-account')}
         />
@@ -403,25 +400,7 @@ export function App() {
           phone="(***) ***-**90"
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
-          onSelect={async (method, contact) => {
-            setAuthContact(contact);
-            if (method === 'email' || !authCode) {
-              if (userEmail) {
-                try {
-                  const code = await requestVerificationCode(userEmail);
-                  setAuthCode(code);
-                } catch {
-                  setAuthCode('222222');
-                }
-              } else {
-                setAuthCode('222222');
-              }
-            }
-          }}
-          onContinue={(contact) => {
-            setAuthContact(contact);
-            setScreen('auth-code');
-          }}
+          onContinue={handleAuthVerifyContinue}
         />
       );
     }
@@ -430,7 +409,7 @@ export function App() {
         <OktaAuthCode
           contact={authContact}
           expectedCode={authCode || undefined}
-          onBack={() => setScreen('sign-in')}
+          onBack={() => setScreen('landing')}
           onLogoClick={() => setScreen('landing')}
           onContinue={() => setScreen('my-account')}
         />

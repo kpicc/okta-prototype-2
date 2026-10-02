@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '../src';
 import './OktaAuthVerify.css';
 
@@ -7,8 +7,7 @@ interface OktaAuthVerifyProps {
   phone?: string;
   onBack: () => void;
   onLogoClick: () => void;
-  onContinue: (contact: string) => void;
-  onSelect?: (method: 'phone' | 'email', contact: string) => void;
+  onContinue: (contact: string) => void | Promise<void>;
 }
 
 function maskEmail(value: string): string {
@@ -24,11 +23,10 @@ export function OktaAuthVerify({
   onBack,
   onLogoClick,
   onContinue,
-  onSelect,
 }: OktaAuthVerifyProps) {
   const [selected, setSelected] = useState<'phone' | 'email' | null>('phone');
   const [showError, setShowError] = useState(false);
-  const sentRef = useRef(false);
+  const [sending, setSending] = useState(false);
 
   const getContact = (value: 'phone' | 'email') =>
     value === 'phone' ? phone.replace(/[^*\d]/g, '') : maskEmail(email);
@@ -36,22 +34,19 @@ export function OktaAuthVerify({
   function handleSelect(value: 'phone' | 'email') {
     setSelected(value);
     setShowError(false);
-    onSelect?.(value, getContact(value));
   }
 
-  useEffect(() => {
-    if (!sentRef.current && selected) {
-      sentRef.current = true;
-      onSelect?.(selected, getContact(selected));
-    }
-  }, []);
-
-  function handleContinue() {
+  async function handleContinue() {
     if (!selected) {
       setShowError(true);
       return;
     }
-    onContinue(getContact(selected));
+    setSending(true);
+    try {
+      await onContinue(getContact(selected));
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -118,7 +113,7 @@ export function OktaAuthVerify({
           )}
 
           <div className="okta-auth__actions">
-            <Button size="large" className="okta-auth__submit" onClick={handleContinue}>
+            <Button size="large" className="okta-auth__submit" loading={sending} onClick={handleContinue}>
               Continue
             </Button>
             <a href="#" className="okta-auth__link" onClick={(event) => event.preventDefault()}>

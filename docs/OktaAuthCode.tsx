@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '../src';
+import { useDelayedAction } from './useDelayedAction.js';
 import './OktaAuthCode.css';
 
 interface OktaAuthCodeProps {
@@ -19,11 +20,12 @@ export function OktaAuthCode({
 }: OktaAuthCodeProps) {
   const [code, setCode] = useState('');
   const [showError, setShowError] = useState(false);
+  const { loading, trigger } = useDelayedAction();
   const codeError = showError && code !== expectedCode;
 
   function handleContinue() {
     setShowError(true);
-    if (code === expectedCode) onContinue();
+    if (code === expectedCode) trigger(onContinue);
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -41,7 +43,7 @@ export function OktaAuthCode({
             onClick={onLogoClick}
           />
           <Button size="medium" className="okta-auth-code__back" onClick={onBack}>
-            Back to sign in
+            Back
           </Button>
         </div>
       </header>
@@ -91,7 +93,7 @@ export function OktaAuthCode({
           </div>
 
           <div className="okta-auth-code__actions">
-            <Button size="large" className="okta-auth-code__submit" onClick={handleContinue}>
+            <Button size="large" className="okta-auth-code__submit" loading={loading} onClick={handleContinue}>
               Continue
             </Button>
             <a
