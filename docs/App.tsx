@@ -42,18 +42,11 @@ import { OktaPinReset } from './OktaPinReset.js';
 import { OktaPinResetSuccess } from './OktaPinResetSuccess.js';
 import { OktaPinResetMobile } from './OktaPinResetMobile.js';
 import { OktaPinResetSuccessMobile } from './OktaPinResetSuccessMobile.js';
-import { CaptchaModal } from './CaptchaModal.js';
 import { requestVerificationCode, sendPinResetEmail, sendPasswordResetEmail } from './verificationApi.js';
 
 const MOBILE_BREAKPOINT = 768;
 
 type Screen = 'landing' | 'sign-in' | 'forgot-password' | 'forgot-password-success' | 'password-reset' | 'password-reset-success' | 'auth-verify' | 'auth-code' | 'update-account' | 'verify-email' | 'link-services' | 'link-verify' | 'link-otp' | 'link-code' | 'link-success' | 'mfa-setup' | 'mfa-verify' | 'mfa-complete' | 'my-account' | 'forgot-pin' | 'forgot-pin-check' | 'pin-reset' | 'pin-reset-success';
-
-type PendingVerificationRequest = {
-  email: string;
-  resolve: (code: string) => void;
-  reject: (error: Error) => void;
-};
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
@@ -155,36 +148,11 @@ export function App() {
       sessionStorage.removeItem('oktaLinkCodeDestination');
     }
   };
-  const [pendingVerification, setPendingVerification] = useState<PendingVerificationRequest | null>(null);
-
-  function requestVerificationCodeWithCaptcha(email: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      setPendingVerification({ email, resolve, reject });
-    });
-  }
-
-  async function handleCaptchaVerified(token: string): Promise<boolean> {
-    if (!pendingVerification) return false;
-    try {
-      const code = await requestVerificationCode(pendingVerification.email, token);
-      pendingVerification.resolve(code);
-      setPendingVerification(null);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function handleCaptchaClose() {
-    pendingVerification?.reject(new Error('captcha_cancelled'));
-    setPendingVerification(null);
-  }
-
   async function handleCreateAccount(email: string, password: string) {
     setUserEmail(email);
     setUserPassword(password);
     try {
-      const code = await requestVerificationCodeWithCaptcha(email);
+      const code = await requestVerificationCode(email);
       setVerificationCode(code);
       setScreen('verify-email');
     } catch {
@@ -196,7 +164,7 @@ export function App() {
     setLinkCodeDestination(destination);
     if (method === 'email' && userEmail) {
       try {
-        const code = await requestVerificationCodeWithCaptcha(userEmail);
+        const code = await requestVerificationCode(userEmail);
         setLinkCode(code);
       } catch {
         return;
@@ -209,7 +177,7 @@ export function App() {
   async function handleMfaSetupContinue() {
     if (!userEmail) return;
     try {
-      const code = await requestVerificationCodeWithCaptcha(userEmail);
+      const code = await requestVerificationCode(userEmail);
       setMfaCode(code);
       setScreen('mfa-verify');
     } catch {
@@ -221,7 +189,7 @@ export function App() {
     setAuthContact(contact);
     if (!userEmail) return;
     try {
-      const code = await requestVerificationCodeWithCaptcha(userEmail);
+      const code = await requestVerificationCode(userEmail);
       setAuthCode(code);
       setScreen('auth-code');
     } catch {
@@ -576,9 +544,6 @@ export function App() {
         }
       `}</style>
       {isMobile ? renderMobile() : renderDesktop()}
-      {pendingVerification && (
-        <CaptchaModal onClose={handleCaptchaClose} onVerified={handleCaptchaVerified} />
-      )}
     </>
   );
 }

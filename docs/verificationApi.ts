@@ -1,4 +1,7 @@
-export async function requestVerificationCode(email: string, recaptchaToken: string): Promise<string> {
+import { executeRecaptcha } from './recaptchaApi.js';
+
+export async function requestVerificationCode(email: string): Promise<string> {
+  const recaptchaToken = await executeRecaptcha();
   const response = await fetch('/api/send-verification-code', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
