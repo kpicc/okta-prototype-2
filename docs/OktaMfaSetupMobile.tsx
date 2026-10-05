@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '../src';
-import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServicesMobile.css';
 import './OktaMfaSetupMobile.css';
@@ -12,12 +11,6 @@ interface OktaMfaSetupMobileProps {
   onContinue?: () => void;
 }
 
-const PHONE_MAP: Record<string, string> = {
-  '(***) ***-**90': '1234567890',
-  '(***) ***-**01': '1234567801',
-  '(***) ***-**12': '1234567812',
-};
-
 const footerLinks = [
   { label: 'CONTACT', items: ['Contact us', 'Find a store'] },
   { label: 'SUPPORT', items: ['All support', 'Account & billing', 'Network & coverage', 'Phones & devices', 'Plans & services', 'Home internet', 'Device repair', 'Device care'] },
@@ -26,7 +19,7 @@ const footerLinks = [
 ];
 
 export function OktaMfaSetupMobile({
-  phones = ['(***) ***-**90', '(***) ***-**01'],
+  phones = ['(123) 456-7890', '(123) 456-7801'],
   onBack,
   onCancel,
   onContinue,
@@ -35,25 +28,14 @@ export function OktaMfaSetupMobile({
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [confirmation, setConfirmation] = useState('');
   const [showSelectionError, setShowSelectionError] = useState(false);
-  const [showConfirmationError, setShowConfirmationError] = useState(false);
 
   function handleContinue() {
     if (!selected) {
       setShowSelectionError(true);
       return;
     }
-    const expectedDigits = PHONE_MAP[selected];
-    if (!confirmation.trim() || (expectedDigits && confirmation.replace(/\D/g, '') !== expectedDigits)) {
-      setShowConfirmationError(true);
-      return;
-    }
     trigger(() => onContinue?.());
-  }
-
-  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -128,7 +110,7 @@ export function OktaMfaSetupMobile({
                   <button
                     key={phone}
                     className="okta-mfa-mobile__dropdown-option"
-                    onClick={() => { setSelected(phone); setConfirmation(''); setDropdownOpen(false); setShowSelectionError(false); setShowConfirmationError(false); }}
+                    onClick={() => { setSelected(phone); setDropdownOpen(false); setShowSelectionError(false); }}
                   >
                     {phone}
                   </button>
@@ -138,21 +120,6 @@ export function OktaMfaSetupMobile({
             {showSelectionError && <span id="mfa-mobile-selection-error" className="okta-mfa-mobile__field-error" role="alert">Select a phone number.</span>}
           </div>
 
-          {selected && (
-            <div className="okta-mfa-mobile__confirm-group">
-              <input
-                type="tel"
-                maxLength={14}
-                className={`okta-mfa-mobile__confirm-input${showConfirmationError ? ' okta-mfa-mobile__confirm-input--error' : ''}`}
-                placeholder="Re-enter selected phone number"
-                value={confirmation}
-                onChange={(event) => { setConfirmation(formatPhone(event.target.value)); setShowConfirmationError(false); }}
-                onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
-                aria-invalid={showConfirmationError}
-                aria-describedby={showConfirmationError ? 'mfa-mobile-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
-              {showConfirmationError && <span id="mfa-mobile-confirm-error" className="okta-mfa-mobile__field-error" role="alert">Phone numbers do not match.</span>}
-            </div>
-          )}
           </div>
 
           <div className="okta-mfa-mobile__actions">

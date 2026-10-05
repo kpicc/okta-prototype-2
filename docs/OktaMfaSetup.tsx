@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '../src';
-import { formatPhone } from './formatPhone.js';
 import { useDelayedAction } from './useDelayedAction.js';
 import './OktaLinkServices.css';
 import './OktaLinkOtp.css';
@@ -13,14 +12,8 @@ interface OktaMfaSetupProps {
   onContinue?: () => void;
 }
 
-const PHONE_MAP: Record<string, string> = {
-  '(***) ***-**90': '1234567890',
-  '(***) ***-**01': '1234567801',
-  '(***) ***-**12': '1234567812',
-};
-
 export function OktaMfaSetup({
-  phones = ['(***) ***-**90', '(***) ***-**01', '(***) ***-**12'],
+  phones = ['(123) 456-7890', '(123) 456-7801', '(123) 456-7812'],
   onBack,
   onCancel,
   onContinue,
@@ -28,16 +21,12 @@ export function OktaMfaSetup({
   const { loading, trigger } = useDelayedAction();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [confirmation, setConfirmation] = useState('');
   const [showSelectionError, setShowSelectionError] = useState(false);
-  const [showConfirmationError, setShowConfirmationError] = useState(false);
 
   function handleSelect(value: string) {
     setSelected(value);
-    setConfirmation('');
     setDropdownOpen(false);
     setShowSelectionError(false);
-    setShowConfirmationError(false);
   }
 
   function handleContinue() {
@@ -45,16 +34,7 @@ export function OktaMfaSetup({
       setShowSelectionError(true);
       return;
     }
-    const expectedDigits = PHONE_MAP[selected];
-    if (!confirmation.trim() || (expectedDigits && confirmation.replace(/\D/g, '') !== expectedDigits)) {
-      setShowConfirmationError(true);
-      return;
-    }
     trigger(() => onContinue?.());
-  }
-
-  function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Enter') handleContinue();
   }
 
   return (
@@ -146,26 +126,6 @@ export function OktaMfaSetup({
             )}
             {showSelectionError && <span id="mfa-selection-error" className="okta-otp__field-error" role="alert">Select an authentication method.</span>}
           </div>
-
-          {selected && (
-            <div className="okta-otp__confirm-group">
-              <div className="okta-otp__confirm-field">
-                <input
-                  id="mfa-confirm"
-                  type="tel"
-                  maxLength={14}
-                  className={`okta-otp__confirm-input${showConfirmationError ? ' okta-otp__confirm-input--error' : ''}`}
-                  placeholder=" "
-                  value={confirmation}
-                  onChange={(event) => { setConfirmation(formatPhone(event.target.value)); setShowConfirmationError(false); }}
-                  onBlur={() => { if (!confirmation.trim()) setShowConfirmationError(true); }}
-                  aria-invalid={showConfirmationError}
-                  aria-describedby={showConfirmationError ? 'mfa-confirm-error' : undefined} onKeyDown={onEnterSubmit} />
-                <label htmlFor="mfa-confirm" className="okta-otp__confirm-label">Re-enter selected phone number</label>
-              </div>
-              {showConfirmationError && <span id="mfa-confirm-error" className="okta-otp__field-error" role="alert">Phone numbers do not match.</span>}
-            </div>
-          )}
 
           <div className="okta-mfa__actions">
             <Button size="large" className="okta-mfa__continue-btn" loading={loading} onClick={handleContinue}>
