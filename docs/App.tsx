@@ -305,7 +305,7 @@ export function App() {
       return (
         <OktaAuthVerify
           email={userEmail}
-          phone="(***) ***-**90"
+          phone={maskedLinkedPhone}
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
           onContinue={handleAuthVerifyContinue}
@@ -483,7 +483,7 @@ export function App() {
       return (
         <OktaAuthVerify
           email={userEmail}
-          phone="(***) ***-**90"
+          phone={maskedLinkedPhone}
           onBack={() => setScreen('sign-in')}
           onLogoClick={() => setScreen('landing')}
           onContinue={handleAuthVerifyContinue}
