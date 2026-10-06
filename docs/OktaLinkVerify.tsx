@@ -9,7 +9,7 @@ interface OktaLinkVerifyProps {
   expectedPin?: string;
   onBack: () => void;
   onCancel: () => void;
-  onContinue?: () => void;
+  onContinue?: (phone: string) => void;
   onForgotPin?: () => void;
 }
 
@@ -28,7 +28,7 @@ export function OktaLinkVerify({ expectedPin = '1234', onBack, onCancel, onConti
     setSubmitted(true);
     setTouched({ phone: true, pin: true });
     setLoginError(phoneDigits.length === 10 && /^\d{4}$/.test(pin) && pin !== expectedPin);
-    if (phoneDigits.length === 10 && pin === expectedPin) trigger(() => onContinue?.());
+    if (phoneDigits.length === 10 && pin === expectedPin) trigger(() => onContinue?.(phone));
   }
 
   function onEnterSubmit(event: React.KeyboardEvent<HTMLInputElement>) {

@@ -155,6 +155,18 @@ export function App() {
       sessionStorage.removeItem('oktaLinkCodeDestination');
     }
   };
+  const [linkedPhone, setLinkedPhoneState] = useState(() => sessionStorage.getItem('oktaLinkedPhone') || '');
+  const setLinkedPhone = (value: string) => {
+    setLinkedPhoneState(value);
+    if (value) {
+      sessionStorage.setItem('oktaLinkedPhone', value);
+    } else {
+      sessionStorage.removeItem('oktaLinkedPhone');
+    }
+  };
+  const linkedPhoneDigits = linkedPhone.replace(/\D/g, '');
+  const maskedLinkedPhone = linkedPhoneDigits.length === 10 ? `(***) ***-**${linkedPhoneDigits.slice(-2)}` : '(***) ***-**90';
+  const mfaPhoneOptions = [...new Set([linkedPhone, '(123) 456-7801', '(123) 456-7812'].filter(Boolean))];
   const [pendingVisibleRecaptcha, setPendingVisibleRecaptcha] = useState<PendingVisibleRecaptcha | null>(null);
 
   function requestVisibleRecaptcha(action: (token: string) => Promise<void>): Promise<void> {
@@ -199,15 +211,15 @@ export function App() {
 
   async function handleLinkOtpMethod(method: 'email' | 'phone', destination: string) {
     setLinkCodeDestination(destination);
-    if (method === 'email' && userEmail) {
-      try {
-        const code = await requestVerificationCode(userEmail);
-        setLinkCode(code);
-      } catch {
-        return;
-      }
-    } else {
-      setLinkCode('222222');
+    if (!userEmail) {
+      setLinkCode(method === 'phone' ? '222222' : '');
+      return;
+    }
+    try {
+      const code = await requestVerificationCode(userEmail);
+      setLinkCode(code);
+    } catch {
+      return;
     }
   }
 
@@ -334,6 +346,7 @@ export function App() {
     if (screen === 'mfa-setup') {
       return (
         <OktaMfaSetup
+          phones={mfaPhoneOptions}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-success')}
           onContinue={() => { void handleMfaSetupContinue(); }}
@@ -344,6 +357,7 @@ export function App() {
       return (
         <OktaLinkSuccess
           email={userEmail || 'email@address.com'}
+          phone={linkedPhone || undefined}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-code')}
           onContinue={() => setScreen('mfa-setup')}
@@ -366,6 +380,8 @@ export function App() {
     if (screen === 'link-otp') {
       return (
         <OktaLinkOtp
+          phone={maskedLinkedPhone}
+          expectedPhoneDigits={linkedPhoneDigits || undefined}
           email={userEmail || undefined}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-verify')}
@@ -408,7 +424,7 @@ export function App() {
           expectedPin={accountPin || undefined}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-services')}
-          onContinue={() => setScreen('link-otp')}
+          onContinue={(phone) => { setLinkedPhone(phone); setScreen('link-otp'); }}
           onForgotPin={() => setScreen('forgot-pin')}
         />
       );
@@ -491,6 +507,7 @@ export function App() {
       return (
         <OktaLinkSuccessMobile
           email={userEmail || 'email@address.com'}
+          phone={linkedPhone || undefined}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('mfa-setup')}
         />
@@ -499,6 +516,7 @@ export function App() {
     if (screen === 'mfa-setup') {
       return (
         <OktaMfaSetupMobile
+          phones={mfaPhoneOptions}
           onBack={() => setScreen('landing')}
           onCancel={() => setScreen('link-success')}
           onContinue={() => { void handleMfaSetupContinue(); }}
@@ -542,6 +560,8 @@ export function App() {
     if (screen === 'link-otp') {
       return (
         <OktaLinkOtpMobile
+          phone={maskedLinkedPhone}
+          expectedPhoneDigits={linkedPhoneDigits || undefined}
           email={userEmail || undefined}
           onBack={() => setScreen('landing')}
           onContinue={() => setScreen('link-code')}
@@ -582,7 +602,7 @@ export function App() {
         <OktaLinkVerifyMobile
           expectedPin={accountPin || undefined}
           onBack={() => setScreen('landing')}
-          onContinue={() => setScreen('link-otp')}
+          onContinue={(phone) => { setLinkedPhone(phone); setScreen('link-otp'); }}
           onForgotPin={() => setScreen('forgot-pin')}
         />
       );

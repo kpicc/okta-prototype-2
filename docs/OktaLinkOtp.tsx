@@ -7,6 +7,7 @@ import './OktaLinkOtp.css';
 
 interface OktaLinkOtpProps {
   phone?: string;
+  expectedPhoneDigits?: string;
   email?: string;
   onBack: () => void;
   onCancel: () => void;
@@ -22,6 +23,7 @@ const maskEmail = (value: string) => {
 
 export function OktaLinkOtp({
   phone = '(***) ***-**90',
+  expectedPhoneDigits = '1234567890',
   email,
   onBack,
   onCancel,
@@ -52,7 +54,7 @@ export function OktaLinkOtp({
       setShowSelectionError(true);
       return;
     }
-    if (selected === phone && confirmation.replace(/\D/g, '') !== '1234567890') {
+    if (selected === phone && confirmation.replace(/\D/g, '') !== expectedPhoneDigits) {
       setShowConfirmationError(true);
       return;
     }

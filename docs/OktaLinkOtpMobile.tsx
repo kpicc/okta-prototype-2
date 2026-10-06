@@ -6,6 +6,8 @@ import './OktaLinkServicesMobile.css';
 import './OktaLinkOtpMobile.css';
 
 interface OktaLinkOtpMobileProps {
+  phone?: string;
+  expectedPhoneDigits?: string;
   email?: string;
   onBack: () => void;
   onContinue?: () => void;
@@ -25,7 +27,7 @@ const footerLinks = [
   { label: 'MORE', items: ['Terms of service', 'Terms & conditions', 'Privacy policy', 'Wireless code of conduct', 'Internet code'] },
 ];
 
-export function OktaLinkOtpMobile({ email, onBack, onContinue, onSelectMethod }: OktaLinkOtpMobileProps) {
+export function OktaLinkOtpMobile({ phone = '(***) ***-**90', expectedPhoneDigits = '1234567890', email, onBack, onContinue, onSelectMethod }: OktaLinkOtpMobileProps) {
   const { loading, trigger } = useDelayedAction();
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -36,7 +38,7 @@ export function OktaLinkOtpMobile({ email, onBack, onContinue, onSelectMethod }:
 
   const maskedEmail = email ? maskEmail(email) : null;
   const options = [
-    { label: '(***) ***-**90', value: '(***) ***-**90' },
+    { label: phone, value: phone },
     ...(maskedEmail ? [{ label: maskedEmail, value: maskedEmail }] : []),
   ];
 
@@ -47,7 +49,7 @@ export function OktaLinkOtpMobile({ email, onBack, onContinue, onSelectMethod }:
       setShowSelectionError(true);
       return;
     }
-    if (!selected.value.includes('@') && confirmation.replace(/\D/g, '') !== '1234567890') {
+    if (!selected.value.includes('@') && confirmation.replace(/\D/g, '') !== expectedPhoneDigits) {
       setShowConfirmationError(true);
       return;
     }
