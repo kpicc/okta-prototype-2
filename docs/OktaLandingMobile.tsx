@@ -120,13 +120,9 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
 
           {/* Content */}
           <div className="okta-mobile__content">
-            <span className="okta-mobile__eyebrow">Create your account</span>
             <h1 className="okta-mobile__title">
-              We've updated your login experience.
+              We've updated your login experience for better security.
             </h1>
-            <p className="okta-mobile__description">
-              Phone number and username sign-in are no longer available. To keep using My Account, create an email and password login. Your services, plan, and billing information will stay the same.
-            </p>
           </div>
         </div>
 
