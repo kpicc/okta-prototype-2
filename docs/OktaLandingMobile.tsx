@@ -84,7 +84,7 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
                     strokeLinejoin="round"
                   />
                 </svg>
-                <strong className="okta-mobile__toast-title">Action required.</strong>
+                <strong className="okta-mobile__toast-title">New!</strong>
                 <button
                   className="okta-mobile__toast-close"
                   onClick={() => setToastVisible(false)}
@@ -94,7 +94,7 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
                 </button>
               </div>
               <p className="okta-mobile__toast-text">
-                Phone number and username sign-in are retired. Update to an email + password login now.{" "}
+                Signing in just got easier. Use your email address and password to access your account. No PIN required.{" "}
                 <a
                   href="#"
                   className="okta-mobile__toast-link"
@@ -103,7 +103,7 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
                     onUpdateAccount();
                   }}
                 >
-                  Update my login
+                  Update my account login
                 </a>
               </p>
             </div>

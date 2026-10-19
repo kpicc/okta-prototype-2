@@ -78,8 +78,8 @@ export function OktaLanding({ onUpdateAccount, onSignIn }: OktaLandingProps) {
                 height={20}
               />
               <p className="okta-landing__toast-text">
-                <strong>Action required.</strong>
-                {' '}Phone number and username sign-in are retired. Update to an email + password login now.{' '}
+                <strong>New!</strong>
+                {' '}Signing in just got easier. Use your email address and password to access your account. No PIN required.{' '}
                 <a
                   href="#"
                   className="okta-landing__toast-link"
@@ -88,7 +88,7 @@ export function OktaLanding({ onUpdateAccount, onSignIn }: OktaLandingProps) {
                     onUpdateAccount?.();
                   }}
                 >
-                  Update my login
+                  Update my account login
                 </a>
               </p>
             </div>
