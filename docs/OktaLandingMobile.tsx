@@ -121,15 +121,18 @@ export function OktaLandingMobile({ onUpdateAccount, onSignIn }: OktaLandingMobi
           {/* Content */}
           <div className="okta-mobile__content">
             <h1 className="okta-mobile__title">
-              We've updated your login experience for better security.
+              We've updated your login experience.
             </h1>
+            <p className="okta-mobile__description">
+              Phone number and PIN sign-in have been replaced with email and password. Complete a one-time update to keep using My Account. Nothing else changes, including your plan and billing.
+            </p>
           </div>
         </div>
 
         {/* Bottom section */}
         <div className="okta-mobile__bottom">
           <Button size="large" className="okta-mobile__cta" loading={updateLoading} onClick={handleUpdateAccount}>
-            Update my account login
+            Update My Account login
           </Button>
 
           <div className="okta-mobile__signin-sticky">

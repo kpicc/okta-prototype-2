@@ -118,11 +118,14 @@ export function OktaLanding({ onUpdateAccount, onSignIn }: OktaLandingProps) {
             <div className="okta-landing__left-content">
               <div className="okta-landing__left-header">
                 <h1 className="okta-landing__left-title">
-                  We've updated your login experience for better security.
+                  We've updated your login experience.
                 </h1>
               </div>
+              <p className="okta-landing__left-copy">
+                Phone number and PIN sign-in have been replaced with email and password. Complete a one-time update to keep using My Account. Nothing else changes, including your plan and billing.
+              </p>
               <Button size="large" className="okta-landing__left-cta" loading={updateLoading} onClick={handleUpdateAccount}>
-                Update my account login
+                Update My Account login
               </Button>
             </div>
           </div>
